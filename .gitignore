@@ -15,4 +15,4 @@ celerybeat*
 .env
 config/settings/local.py
 staticfiles/
-
+local.py
