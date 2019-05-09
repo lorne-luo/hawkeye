@@ -1,12 +1,9 @@
-from datetime import datetime
-
 import boto3
+import csv
 from urllib.parse import unquote_plus
-import pandas as pd
-import numpy
 
 s3 = boto3.client('s3')
-dynamodb = boto3.client('dynamodb')
+dynamodb = boto3.resource('dynamodb')
 
 
 def lambda_handler(event, context):
@@ -14,28 +11,58 @@ def lambda_handler(event, context):
     key = unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
     download_path = '/tmp/copy.csv'
 
+    if key != 'hawkeye/asx.csv':
+        return 'SKIP'
+
     s3.download_file(bucket, key, download_path)
-    # s3.upload_file(download_path, bucket, 'hawkeye/asx_copy2.csv')
+    # s3.upload_file(download_path, bucket, 'hawkeye/asx_copy.csv')
 
-    df = pd.read_csv(download_path, skiprows=1)
+    industry_table = dynamodb.Table('industry')
     company_table = dynamodb.Table('company')
+    industry_set = set()
 
-    for i in range(len(df)):
-        name = df.iloc[i]['Company name']
-        code = df.iloc[i]['ASX code']
-        industry = df.iloc[i]['GICS industry group']
+    with open(download_path) as f:
+        reader = csv.reader(f)
+        next(reader)
+        next(reader)
+        headers = next(reader)
+        for row in reader:
+            name = row[0]
+            code = row[1]
+            industry = row[2]
+            industry_set.add(industry)
 
-        company_table.put_item(
-            Item={
-                'code': code,
-                'name': name,
-                'industry': industry,
-                'last_active': datetime.now().strftime('%Y-%m-%d'),
-            })
-
-    for i in df['GICS industry group'].unique():
-        industry_table = dynamodb.Table('company')
-        industry_table.put_item(
-            Item={
-                'name': i,
-            })
+            # company_table.put_item(
+            #     Item={
+            #         'code': code,
+            #         'name': name,
+            #         'industry': industry,
+            #         'last_active': datetime.now().strftime('%Y-%m-%d'),
+            #     })
+        for i in industry_set:
+            industry_table.put_item(
+                Item={
+                    'name': i,
+                })
+        return 'DONE'
+#
+# if __name__ == '__main__':
+#     import requests
+#     download_path = '/Users/taoluo/Workspace/hawkeye/ASXListedCompanies.csv'
+#     asx_url = 'https://www.asx.com.au/asx/research/ASXListedCompanies.csv'
+#     asx_data = requests.get(asx_url).content
+#
+#     industry_set = set()
+#     with open(download_path) as f:
+#         reader = csv.reader(f)
+#         next(reader)
+#         next(reader)
+#         headers = next(reader)
+#         print(headers)
+#         for row in reader:
+#             name = row[0]
+#             code = row[1]
+#             industry = row[2]
+#             industry_set.add(industry)
+#
+#         print(len(industry_set))
