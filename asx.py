@@ -28,7 +28,7 @@ def get_price(symbol, outputsize='compact'):
 
 if __name__ == '__main__':
     df = get_asx_df()
-    company_table = dynamodb.Table('asx_company')
+    company_table = dynamodb.Table('company')
 
     for i in range(len(df)):
         name = df.iloc[i]['Company name']
