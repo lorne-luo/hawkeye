@@ -16,3 +16,4 @@ celerybeat*
 config/settings/local.py
 staticfiles/
 local.py
+.zip

@@ -6,7 +6,9 @@ from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
 
 import settings
-from aws import dynamodb
+from aws import dynamodb, dynamodb_batch_push
+
+BATCH_LIMIT = 25
 
 
 def get_asx_df():
@@ -27,23 +29,24 @@ def get_price(symbol, outputsize='compact'):
     return df, meta_data
 
 
+def push_industry(df):
+    industry_set = df['GICS industry group'].unique()
+    items = [{'name': i} for i in industry_set]
+
+    dynamodb_batch_push('industry', items)
+
+
+def push_company(df):
+    items = [{'code': df.iloc[i]['ASX code'],
+              'name': df.iloc[i]['Company name'],
+              'industry': df.iloc[i]['GICS industry group'],
+              'last_active': datetime.now().strftime('%Y-%m-%d')}
+             for i in range(len(df))]
+
+    dynamodb_batch_push('industry', items)
+
+
 if __name__ == '__main__':
     df = get_asx_df()
-    company_table = dynamodb.Table('company')
-
-    for i in range(len(df)):
-        name = df.iloc[i]['Company name']
-        code = df.iloc[i]['ASX code']
-        industry = df.iloc[i]['GICS industry group']
-
-        company_table.put_item(
-            Item={
-                'code': code,
-                'name': name,
-                'industry': industry,
-                'last_active': datetime.now().strftime('%Y-%m-%d'),
-            })
-        print(name, code, industry)
-
-    for i in df['GICS industry group'].unique():
-        print(i)
+    push_industry(df)
+    push_company(df)
