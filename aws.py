@@ -15,6 +15,8 @@ s3 = boto3.client('s3',
 
 
 def dynamodb_batch_push(table, items):
+    print(f'Push {len(items)} items to table {table}.')
+
     request = [{
         'PutRequest': {
             'Item': item
@@ -27,3 +29,4 @@ def dynamodb_batch_push(table, items):
             table: request[i:i + BATCH_LIMIT]
         })
         i += BATCH_LIMIT
+        print(f'Table {table} request #{int(i/BATCH_LIMIT)}')
