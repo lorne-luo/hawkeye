@@ -5,6 +5,7 @@ import requests
 from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
 
+import settings
 from aws import dynamodb
 
 
@@ -16,7 +17,7 @@ def get_asx_df():
     return asx_df
 
 
-ts = TimeSeries(key=os.environ['ALPHA_VANTAGE_API_KEY'], output_format='pandas', indexing_type='date')
+ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date')
 
 
 def get_price(symbol, outputsize='compact'):
@@ -35,11 +36,6 @@ if __name__ == '__main__':
         code = df.iloc[i]['ASX code']
         industry = df.iloc[i]['GICS industry group']
 
-        company_table.delete_item(
-            Key={
-                'code': code,
-            })
-
         company_table.put_item(
             Item={
                 'code': code,
@@ -48,3 +44,6 @@ if __name__ == '__main__':
                 'last_active': datetime.now().strftime('%Y-%m-%d'),
             })
         print(name, code, industry)
+
+    for i in df['GICS industry group'].unique():
+        print(i)
