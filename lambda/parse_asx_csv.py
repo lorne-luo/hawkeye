@@ -45,24 +45,3 @@ def lambda_handler(event, context):
                     'name': i,
                 })
         return 'DONE'
-#
-# if __name__ == '__main__':
-#     import requests
-#     download_path = '/Users/taoluo/Workspace/hawkeye/ASXListedCompanies.csv'
-#     asx_url = 'https://www.asx.com.au/asx/research/ASXListedCompanies.csv'
-#     asx_data = requests.get(asx_url).content
-#
-#     industry_set = set()
-#     with open(download_path) as f:
-#         reader = csv.reader(f)
-#         next(reader)
-#         next(reader)
-#         headers = next(reader)
-#         print(headers)
-#         for row in reader:
-#             name = row[0]
-#             code = row[1]
-#             industry = row[2]
-#             industry_set.add(industry)
-#
-#         print(len(industry_set))
