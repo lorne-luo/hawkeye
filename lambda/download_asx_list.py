@@ -27,7 +27,7 @@ def lambda_handler(event, context):
     bucket = 'lorne'
     asx_url = 'https://www.asx.com.au/asx/research/ASXListedCompanies.csv'
     local_path = '/tmp/asx.csv'
-    key = 'hawkeye/asx.csv'
+    key = 'hawkeye/asx/asx.csv'
     urllib.request.urlretrieve(asx_url, '/tmp/asx.csv')
 
     s3.upload_file(local_path, bucket, key)

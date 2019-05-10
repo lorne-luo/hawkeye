@@ -11,7 +11,7 @@ def lambda_handler(event, context):
     key = unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
     download_path = '/tmp/copy.csv'
 
-    if key != 'hawkeye/asx.csv':
+    if key != 'hawkeye/asx/asx.csv':
         return 'SKIP'
 
     s3.download_file(bucket, key, download_path)
