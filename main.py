@@ -120,6 +120,7 @@ if __name__ == '__main__':
                 result = process_stock(code, name)
             except Exception as ex:
                 print(f'{code} raise error: {ex}')
+                time.sleep(12)
                 continue
             spamwriter.writerow((code,) + result)
             time.sleep(12)
