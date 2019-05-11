@@ -92,6 +92,7 @@ def process_stock(code, name):
     plt.title(f"Final price distribution for {name} Stock after %s {days}", weight='bold')
 
     plt.savefig(f'{result_path}{code}.png', format='png')
+    plt.clf()
     print(code, start_price, simulations.mean(), float(start_price - percent99))
     return start_price, simulations.mean(), Decimal(simulations.mean() - start_price).quantize(Decimal('0.0000001')), \
            Decimal(start_price - percent99).quantize(Decimal('0.00000001')), \
