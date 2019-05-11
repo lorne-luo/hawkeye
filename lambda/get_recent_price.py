@@ -1,19 +1,18 @@
 from __future__ import print_function
 
-import os
 import base64
+import boto3
 import csv
 import json
-import boto3
+import os
 from alpha_vantage.timeseries import TimeSeries
-
 
 s3 = boto3.client('s3')
 bucket = 'lorne'
 ts = TimeSeries(key=os.environ.get('ALPHA_VANTAGE_API_KEY'), output_format='csv', indexing_type='date', retries=3)
 
 
-def download_price(code):
+def download_price(code, upload_s3=True):
     print(f'download price for {code}')
     tmp_file = f'/tmp/{code}.csv'
     key = f'hawkeye/recent_price/{code}.csv'
@@ -24,12 +23,13 @@ def download_price(code):
         for i in price:
             writer.writerow(i)
 
-    s3.upload_file(tmp_file, bucket, key)
+    if upload_s3:
+        s3.upload_file(tmp_file, bucket, key)
 
 
 def lambda_handler(event, context):
     # print("Received event: " + json.dumps(event, indent=2))
-    result=[]
+    result = []
     for record in event['Records']:
         # Kinesis data is base64 encoded so decode here
         payload = base64.b64decode(record['kinesis']['data'])
@@ -43,3 +43,6 @@ def lambda_handler(event, context):
         result.append(code)
     return result  # 'Successfully processed {} records.'.format(len(event['Records']))
 
+
+if __name__ == '__main__':
+    download_price('MOQ', upload_s3=False)
