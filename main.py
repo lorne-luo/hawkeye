@@ -11,6 +11,8 @@ from asx import get_asx_df
 
 ts = TimeSeries(key=os.environ.get('ALPHA_VANTAGE_API_KEY'), output_format='pandas', indexing_type='date', retries=3)
 
+result_path = './pic/'
+
 
 def stock_monte_carlo(start_price, days, mu, sigma):
     ''' This function takes in starting stock price, days of simulation,mu,sigma, and returns simulated price array'''
@@ -89,7 +91,7 @@ def process_stock(code, name):
     plt.axvline(x=percent60, linewidth=1, color='r')
     plt.title(f"Final price distribution for {name} Stock after %s {days}", weight='bold')
 
-    plt.savefig(f'./pic/{code}.png', format='png')
+    plt.savefig(f'{result_path}{code}.png', format='png')
     print(code, start_price, simulations.mean(), float(start_price - percent99))
     return start_price, simulations.mean(), Decimal(simulations.mean() - start_price).quantize(Decimal('0.0000001')), \
            Decimal(start_price - percent99).quantize(Decimal('0.00000001')), \
@@ -100,16 +102,21 @@ def process_stock(code, name):
 if __name__ == '__main__':
     df = get_asx_df()
 
-    with open('./pic/result.csv', 'w', newline='') as csvfile:
+    with open('{result_path}result.csv', 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile)
         spamwriter.writerow(
-            ['code', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99', 'percent90', 'percent80',
+            ['code', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99', 'percent90',
+             'percent80',
              'percent70',
              'percent60'])
 
         for i in range(len(df)):
             code = df.iloc[i]['ASX code']
             name = df.iloc[i]['Company name']
+
+            if os.path.exists(f'{result_path}{code}.png'):
+                continue
+
             result = process_stock(code, name)
             spamwriter.writerow((code,) + result)
             time.sleep(12)

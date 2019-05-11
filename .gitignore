@@ -5,6 +5,7 @@
 node_modules
 venv
 env
+pic
 __pycache__
 *.sqlite3
 .backup
