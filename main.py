@@ -70,7 +70,6 @@ def process_stock(code, name):
     # print(percent99, percent90, percent80, percent70, percent60)
     # print(sim_mean, var)
 
-    plt.figure(figsize=(16, 6))
     # define q as the 1% empirical qunatile, this basically means that 99% of the values should fall between here
 
     # plot the distribution of the end prices
@@ -93,6 +92,9 @@ def process_stock(code, name):
 
     plt.savefig(f'{result_path}{code}.png', format='png')
     plt.clf()
+    plt.cla()
+    plt.close()
+
     print(code, start_price, simulations.mean(), float(start_price - percent99))
     return start_price, simulations.mean(), Decimal(simulations.mean() - start_price).quantize(Decimal('0.0000001')), \
            Decimal(start_price - percent99).quantize(Decimal('0.00000001')), \
@@ -111,9 +113,13 @@ if __name__ == '__main__':
              'percent70',
              'percent60'])
 
+        plt.figure(figsize=(16, 6))
+
         for i in range(len(df)):
             code = df.iloc[i]['ASX code']
             name = df.iloc[i]['Company name']
+            if i < 135:
+                continue
 
             if os.path.exists(f'{result_path}{code}.png'):
                 continue
