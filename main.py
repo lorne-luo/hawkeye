@@ -116,8 +116,11 @@ if __name__ == '__main__':
 
             if os.path.exists(f'{result_path}{code}.png'):
                 continue
-
-            result = process_stock(code, name)
+            try:
+                result = process_stock(code, name)
+            except Exception as ex:
+                print(f'{code} raise error: {ex}')
+                continue
             spamwriter.writerow((code,) + result)
             time.sleep(12)
             if i > 500:
