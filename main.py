@@ -8,6 +8,7 @@ from alpha_vantage.timeseries import TimeSeries
 from decimal import Decimal
 
 from asx import get_asx_df
+import pandas as pd
 
 ts = TimeSeries(key=os.environ.get('ALPHA_VANTAGE_API_KEY'), output_format='pandas', indexing_type='date', retries=3)
 
@@ -44,9 +45,18 @@ def monte_carlo_simulations(start_price, days, mu, sigma, runs=10000):
     return simulations
 
 
+def download_csv(code, local_priori=False):
+    path = f'./price/{code}.csv'
+    if local_priori and os.path.exists(path):
+        df = pd.read_csv(path, index_col='date')
+    else:
+        df, meta_data = ts.get_daily_adjusted(symbol=f'{code}.AUS')
+        df.to_csv(path)
+    return df
+
+
 def process_stock(code, name):
-    df, meta_data = ts.get_daily_adjusted(symbol=f'{code}.AUS')
-    df.to_csv(f'./price/{code}.csv')
+    df = download_csv(code)
 
     df['return'] = df['5. adjusted close'].pct_change(1)
     df = df.dropna()
@@ -97,7 +107,8 @@ def process_stock(code, name):
     plt.close()
 
     # print(code, start_price, simulations.mean(), float(start_price - percent99))
-    return start_price, simulations.mean(), Decimal(simulations.mean() - start_price).quantize(Decimal('0.000000000000001')), \
+    return start_price, simulations.mean(), Decimal(simulations.mean() - start_price).quantize(
+        Decimal('0.000000000000001')), \
            Decimal(start_price - percent99).quantize(Decimal('0.000000000000001')), \
            Decimal((start_price - percent99) / start_price * 100).quantize(
                Decimal('0.001')), percent99, percent90, percent80, percent70, percent60
@@ -119,7 +130,7 @@ if __name__ == '__main__':
     for i in range(len(df)):
         code = df.iloc[i]['ASX code']
         name = df.iloc[i]['Company name']
-        if i < 818:
+        if i < 1073:
             continue
 
         if os.path.exists(f'{result_path}{code}.png'):
@@ -136,5 +147,3 @@ if __name__ == '__main__':
 
         print(i, code, result)
         time.sleep(31)
-        if i > 1800:
-            break
