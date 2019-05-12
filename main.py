@@ -46,6 +46,7 @@ def monte_carlo_simulations(start_price, days, mu, sigma, runs=10000):
 
 def process_stock(code, name):
     df, meta_data = ts.get_daily_adjusted(symbol=f'{code}.AUS')
+    df.to_csv(f'./price/{code}.csv')
 
     df['return'] = df['5. adjusted close'].pct_change(1)
     df = df.dropna()
@@ -95,7 +96,7 @@ def process_stock(code, name):
     plt.cla()
     plt.close()
 
-    print(code, start_price, simulations.mean(), float(start_price - percent99))
+    # print(code, start_price, simulations.mean(), float(start_price - percent99))
     return start_price, simulations.mean(), Decimal(simulations.mean() - start_price).quantize(Decimal('0.0000001')), \
            Decimal(start_price - percent99).quantize(Decimal('0.00000001')), \
            Decimal((start_price - percent99) / start_price * 100).quantize(
@@ -105,31 +106,35 @@ def process_stock(code, name):
 if __name__ == '__main__':
     df = get_asx_df()
 
-    with open('{result_path}result.csv', 'w', newline='') as csvfile:
-        spamwriter = csv.writer(csvfile)
-        spamwriter.writerow(
+    with open('{result_path}result.csv', 'a') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(
             ['code', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99', 'percent90',
              'percent80',
              'percent70',
              'percent60'])
 
-        plt.figure(figsize=(16, 6))
+    plt.figure(figsize=(16, 6))
 
-        for i in range(len(df)):
-            code = df.iloc[i]['ASX code']
-            name = df.iloc[i]['Company name']
-            if i < 135:
-                continue
+    for i in range(len(df)):
+        code = df.iloc[i]['ASX code']
+        name = df.iloc[i]['Company name']
+        if i < 806:
+            continue
 
-            if os.path.exists(f'{result_path}{code}.png'):
-                continue
-            try:
-                result = process_stock(code, name)
-            except Exception as ex:
-                print(f'{code} raise error: {ex}')
-                time.sleep(12)
-                continue
-            spamwriter.writerow((code,) + result)
-            time.sleep(12)
-            if i > 500:
-                break
+        if os.path.exists(f'{result_path}{code}.png'):
+            continue
+        try:
+            result = process_stock(code, name)
+        except Exception as ex:
+            print(f'{i}. {code} raise error: {ex}')
+            time.sleep(31)
+            continue
+        with open('{result_path}result.csv', 'a') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow((code,) + result)
+
+        print(i, code, result)
+        time.sleep(31)
+        if i > 1400:
+            break
