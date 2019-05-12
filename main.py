@@ -97,10 +97,10 @@ def process_stock(code, name):
     plt.close()
 
     # print(code, start_price, simulations.mean(), float(start_price - percent99))
-    return start_price, simulations.mean(), Decimal(simulations.mean() - start_price).quantize(Decimal('0.0000001')), \
-           Decimal(start_price - percent99).quantize(Decimal('0.00000001')), \
+    return start_price, simulations.mean(), Decimal(simulations.mean() - start_price).quantize(Decimal('0.000000000000001')), \
+           Decimal(start_price - percent99).quantize(Decimal('0.000000000000001')), \
            Decimal((start_price - percent99) / start_price * 100).quantize(
-               Decimal('0.0001')), percent99, percent90, percent80, percent70, percent60
+               Decimal('0.001')), percent99, percent90, percent80, percent70, percent60
 
 
 if __name__ == '__main__':
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     for i in range(len(df)):
         code = df.iloc[i]['ASX code']
         name = df.iloc[i]['Company name']
-        if i < 806:
+        if i < 818:
             continue
 
         if os.path.exists(f'{result_path}{code}.png'):
@@ -130,11 +130,11 @@ if __name__ == '__main__':
             print(f'{i}. {code} raise error: {ex}')
             time.sleep(31)
             continue
-        with open('{result_path}result.csv', 'a') as csvfile:
+        with open(f'{result_path}result.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow((code,) + result)
 
         print(i, code, result)
         time.sleep(31)
-        if i > 1400:
+        if i > 1800:
             break
