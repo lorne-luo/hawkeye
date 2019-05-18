@@ -1,16 +1,15 @@
-import time
-
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 from decimal import Decimal
 
+import settings
 from asx import get_asx_df
-import pandas as pd
 
-ts = TimeSeries(key=os.environ.get('ALPHA_VANTAGE_API_KEY'), output_format='pandas', indexing_type='date', retries=3)
+ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
 
 result_path = './pic/'
 
@@ -56,7 +55,7 @@ def download_csv(code, local_priori=False):
 
 
 def process_stock(code, name):
-    df = download_csv(code)
+    df = download_csv(code, True)
 
     df['return'] = df['5. adjusted close'].pct_change(1)
     df = df.dropna()
@@ -91,8 +90,8 @@ def process_stock(code, name):
     # Starting Price
     plt.figtext(0.6, 0.8, s="Start price: $%.2f" % start_price)
     # Mean ending price
-    plt.figtext(0.6, 0.7, "Mean final price: $%.2f" % simulations.mean())
-    plt.figtext(0.6, 0.6, "VaR(0.99): $%.2f" % (start_price - percent99,))
+    plt.figtext(0.6, 0.7, "Mean final price: $%.2f" % sim_mean)
+    plt.figtext(0.6, 0.6, "VaR(0.99): $%.2f" % (var,))
     plt.figtext(0.15, 0.6, "q(0.99): $%.2f" % percent99)
     plt.axvline(x=percent99, linewidth=1, color='r')
     plt.axvline(x=percent90, linewidth=1, color='r')
@@ -106,21 +105,22 @@ def process_stock(code, name):
     plt.cla()
     plt.close()
 
-    # print(code, start_price, simulations.mean(), float(start_price - percent99))
-    return start_price, simulations.mean(), Decimal(simulations.mean() - start_price).quantize(
+    # print(code, start_price, sim_mean, float(var))
+    return df.iloc[-1].name, start_price, sim_mean, Decimal(sim_mean - start_price).quantize(
         Decimal('0.000000000000001')), \
-           Decimal(start_price - percent99).quantize(Decimal('0.000000000000001')), \
-           Decimal((start_price - percent99) / start_price * 100).quantize(
+           Decimal(var).quantize(Decimal('0.000000000000001')), \
+           Decimal((var) / start_price * 100).quantize(
                Decimal('0.001')), percent99, percent90, percent80, percent70, percent60
 
 
 if __name__ == '__main__':
     df = get_asx_df()
 
-    with open('{result_path}result.csv', 'a') as csvfile:
+    with open(f'{result_path}result.csv', 'a') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(
-            ['code', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99', 'percent90',
+            ['code', 'last_date', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99',
+             'percent90',
              'percent80',
              'percent70',
              'percent60'])
@@ -130,20 +130,19 @@ if __name__ == '__main__':
     for i in range(len(df)):
         code = df.iloc[i]['ASX code']
         name = df.iloc[i]['Company name']
-        if i < 1073:
+        path = f'./price/{code}.csv'
+
+        if not os.path.exists(path):
+            print(i, code, 'No data skipped.')
             continue
 
-        if os.path.exists(f'{result_path}{code}.png'):
-            continue
         try:
             result = process_stock(code, name)
         except Exception as ex:
             print(f'{i}. {code} raise error: {ex}')
-            time.sleep(31)
             continue
         with open(f'{result_path}result.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow((code,) + result)
 
         print(i, code, result)
-        time.sleep(31)
