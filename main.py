@@ -110,7 +110,7 @@ def process_stock(code, name):
         Decimal('0.000000000000001')), \
            Decimal(var).quantize(Decimal('0.000000000000001')), \
            Decimal((var) / start_price * 100).quantize(
-               Decimal('0.001')), percent99, percent90, percent80, percent70, percent60
+               Decimal('0.001')), percent99, percent90, percent80, percent70, percent60, volume_mean
 
 
 if __name__ == '__main__':
@@ -123,7 +123,8 @@ if __name__ == '__main__':
              'percent90',
              'percent80',
              'percent70',
-             'percent60'])
+             'percent60',
+             'volume_mean'])
 
     plt.figure(figsize=(16, 6))
 
