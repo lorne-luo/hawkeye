@@ -12,8 +12,7 @@ import settings
 from asx import get_asx_df
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
-
-result_path = './pic/'
+folder = './data'
 
 
 def stock_monte_carlo(start_price, days, mu, sigma):
@@ -56,7 +55,8 @@ def download_csv(code, local_priori=False):
     return df
 
 
-def process_stock(code, name):
+def process_stock(code, name=None):
+    name = name or code
     df = download_csv(code, True)
 
     df['return'] = df['5. adjusted close'].pct_change(1)
@@ -102,7 +102,7 @@ def process_stock(code, name):
     plt.axvline(x=percent60, linewidth=1, color='r')
     plt.title(f"Final price distribution for {name} Stock after %s {days}", weight='bold')
 
-    plt.savefig(f'{result_path}{code}.png', format='png')
+    plt.savefig(f'{folder}/pic/{code}.png', format='png')
     plt.clf()
     plt.cla()
     plt.close()
@@ -117,38 +117,44 @@ def process_stock(code, name):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        process_stock(sys.argv[1], sys.argv[1])
-    else:
-        df = get_asx_df()
+        arg = sys.argv[1]
+        if (len(arg) == 3):
+            result = process_stock(arg)
+            print((arg,) + result)
+            exit(0)
+        else:
+            folder = os.path.join(folder, arg)
+            print(f'Output to {folder}')
 
-        with open(f'{result_path}result.csv', 'a') as csvfile:
+    df = get_asx_df()
+    with open(f'{folder}/result.csv', 'a') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(
+            ['code', 'last_date', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99',
+             'percent90',
+             'percent80',
+             'percent70',
+             'percent60',
+             'volume_mean'])
+
+    plt.figure(figsize=(16, 6))
+
+    for i in range(len(df)):
+        code = df.iloc[i]['ASX code']
+        name = df.iloc[i]['Company name']
+        path = f'./price/{code}.csv'
+
+        if not os.path.exists(path):
+            print(i, code, 'No data skipped.')
+            continue
+
+        try:
+            result = process_stock(code, name)
+        except Exception as ex:
+            print(f'{i}. {code} raise error: {ex}')
+            continue
+        with open(f'{folder}/result.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow(
-                ['code', 'last_date', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99',
-                 'percent90',
-                 'percent80',
-                 'percent70',
-                 'percent60',
-                 'volume_mean'])
+            writer.writerow((code,) + result)
 
-        plt.figure(figsize=(16, 6))
-
-        for i in range(len(df)):
-            code = df.iloc[i]['ASX code']
-            name = df.iloc[i]['Company name']
-            path = f'./price/{code}.csv'
-
-            if not os.path.exists(path):
-                print(i, code, 'No data skipped.')
-                continue
-
-            try:
-                result = process_stock(code, name)
-            except Exception as ex:
-                print(f'{i}. {code} raise error: {ex}')
-                continue
-            with open(f'{result_path}result.csv', 'a') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow((code,) + result)
-
-            print(i, code, result)
+        print(i, code, result)

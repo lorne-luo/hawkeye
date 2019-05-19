@@ -9,12 +9,11 @@ import settings
 from asx import get_asx_df
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
-
-result_path = './pic/'
+folder = './data'
 
 
 def download_csv(code, local_priori=False):
-    path = f'./price/{code}.csv'
+    path = f'{folder}/price/{code}.csv'
     if local_priori and os.path.exists(path):
         df = pd.read_csv(path, index_col='date')
     else:
@@ -25,24 +24,29 @@ def download_csv(code, local_priori=False):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        download_csv(sys.argv[1])
-    else:
-        df = get_asx_df()
+        arg = sys.argv[1]
+        if (len(arg) == 3):
+            download_csv(arg)
+            exit(0)
+        else:
+            folder = os.path.join(folder, arg)
+            print(f'Output to {folder}')
 
-        for i in range(len(df)):
-            code = df.iloc[i]['ASX code']
-            name = df.iloc[i]['Company name']
-            path = f'./price/{code}.csv'
+    df = get_asx_df()
+    for i in range(len(df)):
+        code = df.iloc[i]['ASX code']
+        name = df.iloc[i]['Company name']
+        path = f'{folder}/price/{code}.csv'
 
-            # if os.path.exists(path):
-            #     continue
+        # if os.path.exists(path):
+        #     continue
 
-            try:
-                download_csv(code, True)
-            except Exception as ex:
-                print(f'{i}. {code} raise error: {ex}')
-                time.sleep(21)
-                continue
-
-            print(i, code)
+        try:
+            download_csv(code, True)
+        except Exception as ex:
+            print(f'{i}. {code} raise error: {ex}')
             time.sleep(21)
+            continue
+
+        print(i, code)
+        time.sleep(21)
