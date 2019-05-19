@@ -108,7 +108,7 @@ def process_stock(code, name=None):
     plt.close()
 
     # print(code, start_price, sim_mean, float(var))
-    return df.iloc[-1].name, start_price, sim_mean, Decimal(sim_mean - start_price).quantize(
+    return df.index.max(), start_price, sim_mean, Decimal(sim_mean - start_price).quantize(
         Decimal('0.000000000000001')), \
            Decimal(var).quantize(Decimal('0.000000000000001')), \
            Decimal((var) / start_price * 100).quantize(

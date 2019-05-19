@@ -47,8 +47,8 @@ if __name__ == '__main__':
             download_csv(code, True)
         except Exception as ex:
             print(f'{i}. {code} raise error: {ex}')
-            time.sleep(21)
+            time.sleep(15)
             continue
 
         print(i, code)
-        time.sleep(21)
+        time.sleep(15)
