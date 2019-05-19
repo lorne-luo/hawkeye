@@ -1,3 +1,4 @@
+import sys
 import time
 
 import os
@@ -23,22 +24,25 @@ def download_csv(code, local_priori=False):
 
 
 if __name__ == '__main__':
-    df = get_asx_df()
+    if len(sys.argv) > 1:
+        download_csv(sys.argv[1])
+    else:
+        df = get_asx_df()
 
-    for i in range(len(df)):
-        code = df.iloc[i]['ASX code']
-        name = df.iloc[i]['Company name']
-        path = f'./price/{code}.csv'
+        for i in range(len(df)):
+            code = df.iloc[i]['ASX code']
+            name = df.iloc[i]['Company name']
+            path = f'./price/{code}.csv'
 
-        # if os.path.exists(path):
-        #     continue
+            # if os.path.exists(path):
+            #     continue
 
-        try:
-            download_csv(code, True)
-        except Exception as ex:
-            print(f'{i}. {code} raise error: {ex}')
+            try:
+                download_csv(code, True)
+            except Exception as ex:
+                print(f'{i}. {code} raise error: {ex}')
+                time.sleep(21)
+                continue
+
+            print(i, code)
             time.sleep(21)
-            continue
-
-        print(i, code)
-        time.sleep(21)

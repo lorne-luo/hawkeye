@@ -1,3 +1,5 @@
+import sys
+
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -114,36 +116,39 @@ def process_stock(code, name):
 
 
 if __name__ == '__main__':
-    df = get_asx_df()
+    if len(sys.argv) > 1:
+        process_stock(sys.argv[1], sys.argv[1])
+    else:
+        df = get_asx_df()
 
-    with open(f'{result_path}result.csv', 'a') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(
-            ['code', 'last_date', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99',
-             'percent90',
-             'percent80',
-             'percent70',
-             'percent60',
-             'volume_mean'])
-
-    plt.figure(figsize=(16, 6))
-
-    for i in range(len(df)):
-        code = df.iloc[i]['ASX code']
-        name = df.iloc[i]['Company name']
-        path = f'./price/{code}.csv'
-
-        if not os.path.exists(path):
-            print(i, code, 'No data skipped.')
-            continue
-
-        try:
-            result = process_stock(code, name)
-        except Exception as ex:
-            print(f'{i}. {code} raise error: {ex}')
-            continue
         with open(f'{result_path}result.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow((code,) + result)
+            writer.writerow(
+                ['code', 'last_date', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99',
+                 'percent90',
+                 'percent80',
+                 'percent70',
+                 'percent60',
+                 'volume_mean'])
 
-        print(i, code, result)
+        plt.figure(figsize=(16, 6))
+
+        for i in range(len(df)):
+            code = df.iloc[i]['ASX code']
+            name = df.iloc[i]['Company name']
+            path = f'./price/{code}.csv'
+
+            if not os.path.exists(path):
+                print(i, code, 'No data skipped.')
+                continue
+
+            try:
+                result = process_stock(code, name)
+            except Exception as ex:
+                print(f'{i}. {code} raise error: {ex}')
+                continue
+            with open(f'{result_path}result.csv', 'a') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow((code,) + result)
+
+            print(i, code, result)
