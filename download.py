@@ -9,11 +9,11 @@ import settings
 from asx import get_asx_df
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
-folder = './data'
+base_path = os.path.join(os.getcwd(), 'data')
 
 
 def download_csv(code, local_priori=False):
-    path = f'{folder}/price/{code}.csv'
+    path = f'{base_path}/price/{code}.csv'
     if local_priori and os.path.exists(path):
         df = pd.read_csv(path, index_col='date')
     else:
@@ -24,19 +24,21 @@ def download_csv(code, local_priori=False):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
+        print(os.getcwd())
+        exit(0)
         arg = sys.argv[1]
         if (len(arg) == 3):
             download_csv(arg)
             exit(0)
         else:
-            folder = os.path.join(folder, arg)
-            print(f'Output to {folder}')
+            base_path = os.path.join(base_path, arg)
+            print(f'Output to {base_path}')
 
     df = get_asx_df()
     for i in range(len(df)):
         code = df.iloc[i]['ASX code']
         name = df.iloc[i]['Company name']
-        path = f'{folder}/price/{code}.csv'
+        path = f'{base_path}/price/{code}.csv'
 
         # if os.path.exists(path):
         #     continue

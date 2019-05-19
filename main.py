@@ -12,7 +12,7 @@ import settings
 from asx import get_asx_df
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
-folder = './data'
+base_path = os.path.join(os.getcwd(), 'data')
 
 
 def stock_monte_carlo(start_price, days, mu, sigma):
@@ -102,7 +102,7 @@ def process_stock(code, name=None):
     plt.axvline(x=percent60, linewidth=1, color='r')
     plt.title(f"Final price distribution for {name} Stock after %s {days}", weight='bold')
 
-    plt.savefig(f'{folder}/pic/{code}.png', format='png')
+    plt.savefig(f'{base_path}/pic/{code}.png', format='png')
     plt.clf()
     plt.cla()
     plt.close()
@@ -123,11 +123,11 @@ if __name__ == '__main__':
             print((arg,) + result)
             exit(0)
         else:
-            folder = os.path.join(folder, arg)
-            print(f'Output to {folder}')
+            base_path = os.path.join(base_path, arg)
+            print(f'Output to {base_path}')
 
     df = get_asx_df()
-    with open(f'{folder}/result.csv', 'a') as csvfile:
+    with open(f'{base_path}/result.csv', 'a') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(
             ['code', 'last_date', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99',
@@ -153,7 +153,7 @@ if __name__ == '__main__':
         except Exception as ex:
             print(f'{i}. {code} raise error: {ex}')
             continue
-        with open(f'{folder}/result.csv', 'a') as csvfile:
+        with open(f'{base_path}/result.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow((code,) + result)
 
