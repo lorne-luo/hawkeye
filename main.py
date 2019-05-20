@@ -61,6 +61,9 @@ def process_stock(code, name=None):
 
     df['return'] = df['5. adjusted close'].pct_change(1)
     df = df.dropna()
+    if len(df) < 60:
+        return None
+
     volume_mean = df['6. volume'].mean()
     return_mean = df['return'].mean()
     return_sigma = df['return'].std()
@@ -108,11 +111,9 @@ def process_stock(code, name=None):
     plt.close()
 
     # print(code, start_price, sim_mean, float(var))
-    return df.index.max(), start_price, sim_mean, Decimal(sim_mean - start_price).quantize(
-        Decimal('0.000000000000001')), \
-           Decimal(var).quantize(Decimal('0.000000000000001')), \
-           Decimal((var) / start_price * 100).quantize(
-               Decimal('0.001')), percent99, percent90, percent80, percent70, percent60, volume_mean
+    return df.index.max(), start_price, round(sim_mean, 2), sim_mean - start_price, \
+           round(var, 4), round(var / start_price * 100, 4), \
+           volume_mean, return_mean, return_sigma, percent99, percent90, percent80, percent70, percent60
 
 
 if __name__ == '__main__':
@@ -130,12 +131,8 @@ if __name__ == '__main__':
     with open(f'{base_path}/result.csv', 'a') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(
-            ['code', 'last_date', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'percent99',
-             'percent90',
-             'percent80',
-             'percent70',
-             'percent60',
-             'volume_mean'])
+            ['code', 'last_date', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'volume_mean',
+             'return_mean', 'return_sigma', 'percent99', 'percent90', 'percent80', 'percent70', 'percent60'])
 
     plt.figure(figsize=(16, 6))
 
@@ -153,6 +150,10 @@ if __name__ == '__main__':
         except Exception as ex:
             print(f'{i}. {code} raise error: {ex}')
             continue
+
+        if not result:
+            continue
+
         with open(f'{base_path}/result.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow((code,) + result)
