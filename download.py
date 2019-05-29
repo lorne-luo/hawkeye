@@ -83,12 +83,12 @@ if __name__ == '__main__':
 
         try:
             res = download_csv(code, path)
-            if not res.empty:
-                done += 1
-                print(i, code, path, 'Done')
-            else:
+            if res is None or res.empty:
                 failure += 1
                 print(i, code, path, 'Empty')
+            else:
+                done += 1
+                print(i, code, path, 'Done')
 
         except Exception as ex:
             failure += 1
