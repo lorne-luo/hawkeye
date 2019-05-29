@@ -16,7 +16,7 @@ base_path = os.path.join(os.getcwd(), 'data')
 
 def get_csv_path(code, date=None):
     date = date or 'price'
-    folder = os.path.join(base_path, str(date))
+    folder = os.path.join(base_path, str(date), 'csv')
     if not os.path.isdir(folder):
         os.makedirs(folder)
     path = os.path.join(folder, f'{code}.csv')
@@ -102,4 +102,3 @@ if __name__ == '__main__':
         time.sleep(15)
 
     print(f'Download finished, done = {done}, failure = {failure}')
-
