@@ -1,6 +1,8 @@
 import sys
 
 import csv
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -9,10 +11,14 @@ from alpha_vantage.timeseries import TimeSeries
 from decimal import Decimal
 
 import settings
-from asx import get_asx_df
+from asx import get_asx_df, get_last_friday
+from download import get_csv_path
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
-base_path = os.path.join(os.getcwd(), 'data')
+friday = get_last_friday()
+friday = friday.year * 10000 + friday.month * 100 + friday.day
+base_path = os.path.join(os.getcwd(), 'data', str(friday))
+pic_folder = os.path.join(base_path, 'pic')
 
 
 def stock_monte_carlo(start_price, days, mu, sigma):
@@ -45,19 +51,25 @@ def monte_carlo_simulations(start_price, days, mu, sigma, runs=10000):
     return simulations
 
 
-def download_csv(code, local_priori=False):
-    path = f'./price/{code}.csv'
-    if local_priori and os.path.exists(path):
+def get_csv(code, download=False):
+    path = get_csv_path(code, friday)
+    if os.path.exists(path):
         df = pd.read_csv(path, index_col='date')
-    else:
+    elif download:
         df, meta_data = ts.get_daily_adjusted(symbol=f'{code}.AUS')
         df.to_csv(path)
+    else:
+        df = None
     return df
 
 
 def process_stock(code, name=None):
     name = name or code
-    df = download_csv(code, True)
+    df = get_csv(code)
+
+    if df is None or df.empty:
+        print(f'{code} have no data, skipped.')
+        return None
 
     df['return'] = df['5. adjusted close'].pct_change(1)
     df = df.dropna()
@@ -105,12 +117,11 @@ def process_stock(code, name=None):
     plt.axvline(x=percent60, linewidth=1, color='r')
     plt.title(f"Final price distribution for {name} Stock after %s {days}", weight='bold')
 
-    plt.savefig(f'{base_path}/pic/{code}.png', format='png')
+    plt.savefig(os.path.join(pic_folder, f'{code}.png'), format='png')
     plt.clf()
     plt.cla()
     plt.close()
 
-    # print(code, start_price, sim_mean, float(var))
     return df.index.max(), start_price, round(sim_mean, 2), sim_mean - start_price, \
            round(var, 4), round(var / start_price * 100, 4), \
            volume_mean, return_mean, return_sigma, percent99, percent90, percent80, percent70, percent60
@@ -120,42 +131,59 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         arg = sys.argv[1]
         if (len(arg) == 3):
-            result = process_stock(arg)
-            print((arg,) + result)
+            code = arg.upper()
+            friday = get_last_friday()
+            friday = friday.year * 10000 + friday.month * 100 + friday.day
+            friday = sys.argv[2] if len(sys.argv) > 2 else friday
+            result = process_stock(code)
+            print((code,) + result)
             exit(0)
-        else:
-            base_path = os.path.join(base_path, arg)
-            print(f'Output to {base_path}')
+
+    print('')
+    print(f'############ {datetime.now()} ############')
+    print(f'Result save to {base_path}')
+    plt.figure(figsize=(16, 6))
+    done = 0
+    failure = 0
+
+    if not os.path.isdir(pic_folder):
+        os.makedirs(pic_folder)
 
     df = get_asx_df()
-    with open(f'{base_path}/result.csv', 'a') as csvfile:
+    result_path=os.path.join(base_path, 'result.csv')
+    with open(result_path, 'a') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(
-            ['code', 'last_date', 'start price', 'mean', 'mean diff', 'VaR 99%', 'VaR 99% Percent', 'volume_mean',
+            ['code', 'last_date', 'start price', 'sim_mean', 'sim_diff', 'VaR 99%', 'VaR 99% Percent', 'volume_mean',
              'return_mean', 'return_sigma', 'percent99', 'percent90', 'percent80', 'percent70', 'percent60'])
 
-    plt.figure(figsize=(16, 6))
+        for i in range(len(df)):
+            code = df.iloc[i]['ASX code']
+            name = df.iloc[i]['Company name']
+            path = get_csv_path(code, friday)
 
-    for i in range(len(df)):
-        code = df.iloc[i]['ASX code']
-        name = df.iloc[i]['Company name']
-        path = f'./price/{code}.csv'
+            if not os.path.exists(path):
+                failure += 1
+                print(i, code, 'No data skipped.')
+                continue
 
-        if not os.path.exists(path):
-            print(i, code, 'No data skipped.')
-            continue
+            try:
+                result = process_stock(code, name)
+                done += 1
+            except Exception as ex:
+                failure += 1
+                print(f'{i}. {code} raise error: {ex}')
+                continue
 
-        try:
-            result = process_stock(code, name)
-        except Exception as ex:
-            print(f'{i}. {code} raise error: {ex}')
-            continue
+            if not result:
+                failure += 1
+                print(f'{i}. {code} got None')
+                continue
 
-        if not result:
-            continue
-
-        with open(f'{base_path}/result.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow((code,) + result)
+            csvfile.flush()
+            print(i, code, result)
 
-        print(i, code, result)
+    print(f'Download finished, done = {done}, failure = {failure}')
+    print(result_path)
