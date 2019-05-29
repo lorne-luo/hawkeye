@@ -70,7 +70,7 @@ if __name__ == '__main__':
         os.makedirs(folder)
 
     print('')
-    print('')
+    print(f'############ {datetime.now()} ############')
     print(f'Download to {folder}')
     print(f'Stock count = {len(codes)}')
 
