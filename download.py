@@ -2,19 +2,30 @@ import sys
 import time
 
 import os
+from datetime import datetime
+
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 
 import settings
-from asx import get_asx_df
+from asx import get_asx_df, codes1, codes2, get_last_friday
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
 base_path = os.path.join(os.getcwd(), 'data')
 
 
-def download_csv(code, local_priori=False):
-    path = f'{base_path}/price/{code}.csv'
-    if local_priori and os.path.exists(path):
+def get_csv_path(code, date=None):
+    date = date or 'price'
+    folder = os.path.join(base_path, str(date))
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+    path = os.path.join(folder, f'{code}.csv')
+    return path
+
+
+def download_csv(code, path=None):
+    path = path or get_csv_path(code)
+    if os.path.exists(path):
         df = pd.read_csv(path, index_col='date')
     else:
         df, meta_data = ts.get_daily_adjusted(symbol=f'{code}.AUS')
@@ -22,33 +33,73 @@ def download_csv(code, local_priori=False):
     return df
 
 
+def get_codes():
+    if datetime.now().weekday() == 5:
+        # return high value stocks
+        return codes1
+    elif datetime.now().weekday() == 6:
+        # return secondary value stocks
+        return codes2
+    else:
+        # return all
+        df = get_asx_df()
+        return df['ASX code'].values
+
+
 if __name__ == '__main__':
+    date = get_last_friday()
+    date = date.year * 10000 + date.month * 100 + date.day
+
+    done = 0
+    failure = 0
+
     if len(sys.argv) > 1:
-        print(os.getcwd())
-        exit(0)
         arg = sys.argv[1]
         if (len(arg) == 3):
-            download_csv(arg)
+            code = arg.upper()
+            download_csv(code)
+            path = get_csv_path(code)
+            print(f'Download {code} to {path}')
             exit(0)
-        else:
-            base_path = os.path.join(base_path, arg)
-            print(f'Output to {base_path}')
+        elif arg.isdigit():
+            date = int(arg)
 
-    df = get_asx_df()
-    for i in range(len(df)):
-        code = df.iloc[i]['ASX code']
-        name = df.iloc[i]['Company name']
-        path = f'{base_path}/price/{code}.csv'
+    codes = get_codes()
+    folder = os.path.join(base_path, str(date))
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
 
-        # if os.path.exists(path):
-        #     continue
+    print('')
+    print('')
+    print(f'Download to {folder}')
+    print(f'Stock count = {len(codes)}')
+
+    for i in range(len(codes)):
+        code = codes[i]
+        path = get_csv_path(code, date)
+
+        if os.path.exists(path):
+            continue
 
         try:
-            download_csv(code, True)
+            res = download_csv(code, path)
+            if not res.empty:
+                done += 1
+                print(i, code, path, 'Done')
+            else:
+                failure += 1
+                print(i, code, path, 'Empty')
+
         except Exception as ex:
+            failure += 1
             print(f'{i}. {code} raise error: {ex}')
             time.sleep(15)
             continue
 
-        print(i, code)
+        if done > 490:
+            break
+
         time.sleep(15)
+
+    print(f'Download finished, done = {done}, failure = {failure}')
+
