@@ -8,7 +8,7 @@ import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 
 import settings
-from asx import get_asx_df, codes1, codes2, get_last_friday
+from asx import get_asx_df, codes1, codes2, get_last_friday, codes3
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
 base_path = os.path.join(os.getcwd(), 'data')
@@ -34,12 +34,15 @@ def download_csv(code, path=None):
 
 
 def get_codes():
-    if datetime.now().weekday() == 5:
+    if datetime.now().weekday() == 4:
         # return high value stocks
         return codes1
-    elif datetime.now().weekday() == 6:
+    elif datetime.now().weekday() == 5:
         # return secondary value stocks
         return codes2
+    elif datetime.now().weekday() == 6:
+        # return all stocks
+        return codes3
     else:
         # return all
         df = get_asx_df()
