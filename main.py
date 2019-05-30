@@ -13,42 +13,13 @@ from decimal import Decimal
 import settings
 from asx import get_asx_df, get_last_friday
 from download import get_csv_path
+from mcmc import monte_carlo_simulations
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
 friday = get_last_friday()
 friday = friday.year * 10000 + friday.month * 100 + friday.day
 base_path = os.path.join(os.getcwd(), 'data', str(friday))
 pic_folder = os.path.join(base_path, 'pic')
-
-
-def stock_monte_carlo(start_price, days, mu, sigma):
-    ''' This function takes in starting stock price, days of simulation,mu,sigma, and returns simulated price array'''
-    dt = 1 / days
-    price = np.zeros(days)
-    price[0] = start_price
-
-    shock = np.zeros(days)
-    drift = np.zeros(days)
-
-    for x in range(1, days):
-        shock[x] = np.random.normal(loc=mu * dt, scale=sigma * np.sqrt(dt))
-        drift[x] = mu * dt
-        price[x] = price[x - 1] + (price[x - 1] * (drift[x] + shock[x]))
-    return price
-
-
-def monte_carlo_simulations(start_price, days, mu, sigma, runs=10000):
-    # Create an empty matrix to hold the end price data
-    simulations = np.zeros(runs)
-
-    # Set the print options of numpy to only display 0-5 points from an array to suppress output
-    np.set_printoptions(threshold=5)
-
-    for run in range(runs):
-        # Set the simulation data point as the last stock price for that run
-        simulations[run] = stock_monte_carlo(start_price, days, mu, sigma)[days - 1]
-
-    return simulations
 
 
 def get_csv(code, download=False):
@@ -61,6 +32,10 @@ def get_csv(code, download=False):
     else:
         df = None
     return df
+
+
+def get_pic_path(code):
+    return os.path.join(pic_folder, f'{code}.png')
 
 
 def process_stock(code, name=None):
@@ -76,6 +51,15 @@ def process_stock(code, name=None):
     if len(df) < 60:
         return None
 
+    # draw price line chart
+    df['4. close'].plot()
+    plt.legend(['code'], loc='upper right')
+    plt.title(f"{code} price movement.", weight='bold')
+    plt.savefig(os.path.join(pic_folder, f'{code}_line.png'), format='png')
+    plt.clf()
+    plt.cla()
+    plt.close()
+
     volume_mean = df['6. volume'].mean()
     return_mean = df['return'].mean()
     return_sigma = df['return'].std()
@@ -85,6 +69,7 @@ def process_stock(code, name=None):
     days = 30
     simulations = monte_carlo_simulations(start_price, days, return_mean, return_sigma)
 
+    # define q as the 1% empirical qunatile, this basically means that 99% of the values should fall between here
     percent99 = np.percentile(simulations, 1)
     percent90 = np.percentile(simulations, 10)
     percent80 = np.percentile(simulations, 20)
@@ -93,11 +78,6 @@ def process_stock(code, name=None):
 
     sim_mean = simulations.mean()
     var = start_price - percent99
-
-    # print(percent99, percent90, percent80, percent70, percent60)
-    # print(sim_mean, var)
-
-    # define q as the 1% empirical qunatile, this basically means that 99% of the values should fall between here
 
     # plot the distribution of the end prices
     plt.hist(simulations, bins=200)
@@ -115,9 +95,10 @@ def process_stock(code, name=None):
     plt.axvline(x=percent80, linewidth=1, color='r')
     plt.axvline(x=percent70, linewidth=1, color='r')
     plt.axvline(x=percent60, linewidth=1, color='r')
-    plt.title(f"Final price distribution for {name} Stock after %s {days}", weight='bold')
+    plt.title(f"Price distribution for {name} after {days} days", weight='bold')
 
-    plt.savefig(os.path.join(pic_folder, f'{code}.png'), format='png')
+    pic_path = get_pic_path(code)
+    plt.savefig(pic_path, format='png')
     plt.clf()
     plt.cla()
     plt.close()
@@ -139,23 +120,29 @@ if __name__ == '__main__':
             print((code,) + result)
             exit(0)
 
+    force = '-f' in sys.argv
+
     print('')
     print(f'############ {datetime.now()} ############')
     print(f'Result save to {base_path}')
     plt.figure(figsize=(16, 6))
     done = 0
+    skipped = 0
     failure = 0
 
     if not os.path.isdir(pic_folder):
         os.makedirs(pic_folder)
 
     df = get_asx_df()
-    result_path=os.path.join(base_path, 'result.csv')
+    result_path = os.path.join(base_path, 'result.csv')
+    result_exists = os.path.exists(result_path)
     with open(result_path, 'a') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(
-            ['code', 'last_date', 'start price', 'sim_mean', 'sim_diff', 'VaR 99%', 'VaR 99% Percent', 'volume_mean',
-             'return_mean', 'return_sigma', 'percent99', 'percent90', 'percent80', 'percent70', 'percent60'])
+        if not result_exists:
+            writer.writerow(
+                ['code', 'last_date', 'start price', 'sim_mean', 'sim_diff', 'VaR 99%', 'VaR 99% Percent',
+                 'volume_mean',
+                 'return_mean', 'return_sigma', 'percent99', 'percent90', 'percent80', 'percent70', 'percent60'])
 
         for i in range(len(df)):
             code = df.iloc[i]['ASX code']
@@ -168,6 +155,11 @@ if __name__ == '__main__':
                 continue
 
             try:
+                pic_path = get_pic_path(code)
+                if not force and os.path.exists(pic_path):
+                    skipped += 1
+                    print(i, code, 'exist and skipped')
+                    continue
                 result = process_stock(code, name)
                 done += 1
             except Exception as ex:
@@ -185,5 +177,5 @@ if __name__ == '__main__':
             csvfile.flush()
             print(i, code, result)
 
-    print(f'Download finished, done = {done}, failure = {failure}')
+    print(f'Download finished, done = {done}, skipped = {skipped}, failure = {failure}')
     print(result_path)
