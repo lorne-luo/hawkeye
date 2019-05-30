@@ -48,6 +48,7 @@ def process_stock(code, name=None):
 
     df['return'] = df['5. adjusted close'].pct_change(1)
     df = df.dropna()
+    df.drop(df[df['1. open'] == 0].index, inplace=True)
     if len(df) < 60:
         return None
 
