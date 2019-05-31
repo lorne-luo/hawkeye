@@ -23,9 +23,9 @@ def get_csv_path(code, date=None):
     return path
 
 
-def download_csv(code, path=None):
+def download_csv(code, path=None, force=False):
     path = path or get_csv_path(code)
-    if os.path.exists(path):
+    if os.path.exists(path) and not force:
         df = pd.read_csv(path, index_col='date')
     else:
         df, meta_data = ts.get_daily_adjusted(symbol=f'{code}.AUS')
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         arg = sys.argv[1]
         if (len(arg) == 3):
             code = arg.upper()
-            download_csv(code)
+            download_csv(code, force=True)
             path = get_csv_path(code)
             print(f'Download {code} to {path}')
             exit(0)
@@ -71,6 +71,8 @@ if __name__ == '__main__':
     folder = os.path.join(base_path, str(date))
     if not os.path.isdir(folder):
         os.makedirs(folder)
+
+    force = '-f' in sys.argv
 
     print('')
     print(f'############ {datetime.now()} ############')
@@ -85,7 +87,7 @@ if __name__ == '__main__':
             continue
 
         try:
-            res = download_csv(code, path)
+            res = download_csv(code, path, True)
             if res is None or res.empty:
                 failure += 1
                 print(i, code, path, 'Empty')
