@@ -119,10 +119,12 @@ if __name__ == '__main__':
             friday = sys.argv[2] if len(sys.argv) > 2 else friday
             result = process_stock(code)
             print((code,) + result)
-            exit(0)
+        else:
+            friday = arg
+            base_path = os.path.join(os.getcwd(), 'data', str(friday))
+            pic_folder = os.path.join(base_path, 'pic')
 
     force = '-f' in sys.argv
-
     print('')
     print(f'############ {datetime.now()} ############')
     print(f'Result save to {base_path}')
