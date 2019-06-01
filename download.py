@@ -2,13 +2,12 @@ import sys
 import time
 
 import os
-from datetime import datetime
-
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
+from datetime import datetime
 
 import settings
-from asx import get_asx_df, codes1, codes2, get_last_friday, codes3
+from asx import get_asx_df, codes1, codes2, get_last_friday
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
 base_path = os.path.join(os.getcwd(), 'data')
@@ -33,8 +32,11 @@ def download_csv(code, path=None, force=False):
     return df
 
 
-def get_codes():
-    if datetime.now().weekday() == 4:
+def get_codes(all=False):
+    if all:
+        df = get_asx_df()
+        return df['ASX code'].values
+    elif datetime.now().weekday() == 4:
         # return high value stocks
         return codes1
     elif datetime.now().weekday() == 5:
@@ -42,7 +44,9 @@ def get_codes():
         return codes2
     elif datetime.now().weekday() == 6:
         # return all stocks
-        return codes3
+        # return codes3
+        df = get_asx_df()
+        return df['ASX code'].values
     else:
         # return all
         df = get_asx_df()
@@ -67,7 +71,7 @@ if __name__ == '__main__':
         elif arg.isdigit():
             date = int(arg)
 
-    codes = get_codes()
+    codes = get_codes(all=True) if 'all' in sys.argv else get_codes()
     folder = os.path.join(base_path, str(date))
     if not os.path.isdir(folder):
         os.makedirs(folder)
