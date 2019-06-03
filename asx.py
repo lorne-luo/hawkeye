@@ -22,10 +22,16 @@ def get_asx_df():
 
 
 def get_asx_200_df():
+    # s = requests.session()
+    # s.config['keep_alive'] = False
+    requests.session().close()
     last_month = datetime.now() - relativedelta(months=1)
     month = last_month.strftime('%Y%m01')
     asx_url = f'https://www.asx200list.com/uploads/csv/{month}-asx200.csv'
-    asx_data = requests.get(asx_url).content
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    asx_data = requests.get(asx_url, headers=headers).content
+    requests.session().close()
     asx_df = pd.read_csv(io.StringIO(asx_data.decode('utf-8')), skiprows=1, usecols=[
         'Code', 'Company', 'Sector', 'Market Cap', 'Weight(%)'
     ], index_col='Code')
@@ -39,10 +45,14 @@ def get_asx_200_list():
 
 
 def get_asx_20_df():
+    requests.session().close()
     last_month = datetime.now() - relativedelta(months=1)
     month = last_month.strftime('%Y%m01')
     asx_url = f'https://www.asx20list.com/uploads/csv/{month}-asx20.csv'
-    asx_data = requests.get(asx_url).content
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    asx_data = requests.get(asx_url, headers=headers).content
+    requests.session().close()
     asx_df = pd.read_csv(io.StringIO(asx_data.decode('utf-8')), skiprows=1, usecols=[
         'Code', 'Company', 'Sector', 'Market Cap', 'Weight(%)'
     ], index_col='Code')
