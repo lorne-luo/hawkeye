@@ -21,6 +21,40 @@ def get_asx_df():
     return asx_df
 
 
+def get_asx_200_df():
+    last_month = datetime.now() - relativedelta(months=1)
+    month = last_month.strftime('%Y%m01')
+    asx_url = f'https://www.asx200list.com/uploads/csv/{month}-asx200.csv'
+    asx_data = requests.get(asx_url).content
+    asx_df = pd.read_csv(io.StringIO(asx_data.decode('utf-8')), skiprows=1, usecols=[
+        'Code', 'Company', 'Sector', 'Market Cap', 'Weight(%)'
+    ], index_col='Code')
+
+    return asx_df
+
+
+def get_asx_200_list():
+    df = get_asx_200_df()
+    return df.index.values
+
+
+def get_asx_20_df():
+    last_month = datetime.now() - relativedelta(months=1)
+    month = last_month.strftime('%Y%m01')
+    asx_url = f'https://www.asx20list.com/uploads/csv/{month}-asx20.csv'
+    asx_data = requests.get(asx_url).content
+    asx_df = pd.read_csv(io.StringIO(asx_data.decode('utf-8')), skiprows=1, usecols=[
+        'Code', 'Company', 'Sector', 'Market Cap', 'Weight(%)'
+    ], index_col='Code')
+
+    return asx_df
+
+
+def get_asx_20_list():
+    df = get_asx_20_df()
+    return df.index.values
+
+
 def get_price(symbol, outputsize='compact'):
     aus_symbol = '%s.AUS' % symbol
     df, meta_data = ts.get_daily_adjusted(symbol=aus_symbol, outputsize=outputsize)
@@ -161,42 +195,80 @@ codes2 = codes1 + ['MEI', 'RDS', 'INP', 'MRP', 'CKA', 'IDZ', 'HSC', 'AVQ', '9SP'
                    'DTZ', 'BUD', 'HYD', 'FOD', 'RMP', 'SIT', 'NAG', 'NET', 'GED', 'BAT', 'LAA', 'HPR', 'SKN', 'VMS',
                    'YOW', 'KIN', 'IBG', 'VIV', 'FAR', 'SOR', 'CDX', 'ZLD', 'FRN', 'AMD', 'SM8']
 
-codes3 = codes2 + ['LRS', 'ATX', 'RDF', 'BYI', 'STN', 'CIO', 'LHB', 'RTE', 'KZA', 'BAH', 'SEQ', 'CAQ', 'HOT', 'ZER', 'AJC',
-                'RMX', 'VBS', 'YAL', 'ASW', 'NCC', 'AQS', 'DME', 'CGO', 'GTE', 'CVC', 'MCX', 'WIC', '4CE', 'LRM', 'AER',
-                'CVS', 'BUG', 'AKP', 'FRI', 'RLC', 'HOR', 'CL8', 'GPP', 'DW8', 'KSC', 'DDD', 'RD1', 'ELT', 'XPL', 'LMW',
-                'TWD', 'AVW', 'AWV', 'HGH', 'RDH', 'QGL', 'BRI', 'AQC', 'MDI', 'DAU', 'AQR', 'IVR', 'LIN', 'LYL', 'JRL',
-                'DAF', 'TAO', 'ZEL', 'DFM', 'AOU', 'AIV', 'BEL', 'ETE', 'MAG', 'ANR', 'RNX', 'SCN', 'BAU', 'EMH', 'CY5',
-                'WOA', 'STG', 'CAV', 'KAT', 'SFY', 'QFY', 'AGG', 'FGG', 'KAM', 'XPE', 'JJF', 'IKW', 'BOA', 'HCT', 'EGN',
-                'GLH', 'LNY', 'EBG', 'COY', 'KPT', 'TMK', 'SND', 'AHK', 'TPD', 'HGM', 'KOV', 'AXI', 'SPT', 'MOT', 'EBO',
-                'ABA', 'MZN', 'LI3', 'MVT', 'AMT', 'SRI', 'AYI', 'ONT', 'FSI', 'IVT', 'JAY', 'CYQ', 'EDC', 'KGM', 'SNZ',
-                'E2E', 'RAG', 'FE8', 'SHK', 'DTM', 'GNE', 'CDP', 'ELO', 'IPC', 'EFE', 'NAE', 'EXO', 'ICG', 'BGP', 'T3D',
-                'REV', 'AGJ', 'WHF', 'WBE', 'WLL', 'KWR', 'KPC', 'RDN', 'RYD', 'VML', 'ARN', 'KLA', 'SXX', 'SFC', 'NSE',
-                'CMD', 'CCJ', 'LLO', 'CLZ', 'SYT', 'SUH', 'DLC', 'N1H', 'AEE', 'CLY', 'GLB', 'IVQ', 'GES', 'ARO', 'AIB',
-                'FEI', 'AYZ', 'RCW', 'FSA', 'CHK', 'AKG', 'IAU', 'FAM', 'DDT', 'NZK', 'HLA', 'GGE', 'BSM', 'PSI', 'CTE',
-                'AWN', 'MRL', 'SFL', 'MWR', 'AU1', 'WCN', 'RKN', 'AYM', 'CD2', 'MKG', 'PCH', 'MTB', 'VEC', 'KRX', 'SCI',
-                'CZN', 'ABL', 'SPQ', 'EGY', 'AUL', 'MAX', 'MNC', 'ECL', 'DBF', 'BST', 'IRD', 'CNL', 'EOF', 'RNY', 'DHR',
-                'WWI', 'WQG', 'AYK', 'CBY', 'NAC', 'TDL', 'MRR', 'DAV', 'HNG', 'NGE', 'KBC', 'IAB', 'KLO', 'CD3', 'GGX',
-                'APZ', 'ALT', 'MAQ', 'AO1', 'SLF', 'GCI', 'MZZ', 'EX1', 'AUI', 'SAU', 'RHI', 'ROG', 'NCL', 'GMC', 'SHI',
-                'RXH', 'SLM', 'SAN', '1AD', 'HWK', 'CIW', 'IBN', 'IKE', 'GDG', 'SUR', 'DGH', 'GTK', 'MGT', 'AMO', 'BNR',
-                'CGM', 'SOM', 'ATM', 'LML', 'BLY', 'RRS', 'MQR', 'MMR', 'AAP', 'FPC', '8VI', 'DRE', 'MPH', 'GLE', 'GFL',
-                'BLK', 'RND', 'FGO', 'SSL', 'FPL', 'CVL', 'ACS', 'CGA', 'SIO', 'ADN', 'CR1', 'TRL', 'MTH', 'SVS', '8IH',
-                'CDT', 'EVE', 'FFI', 'MBK', 'EER', 'BBL', 'EMP', 'GCM', 'BGH', 'QPR', 'SF1', 'ANL', 'ATR', 'KEY', 'CBC',
-                'MRZ', 'SKO', 'BIS', 'GO2', 'GBZ', 'GUL', 'MCM', 'DKM', 'NSB', 'GME', 'MSR', 'JYC', 'ERL', 'BDI', 'KKL',
-                'VIC', 'AOA', 'BAS', 'ARC', 'VLS', 'EQT', 'MAR', 'IVO', 'VGL', 'SBR', 'MRN', 'MCT', 'GCR', 'JDR', 'BUY',
-                'EMB', 'CUP', 'ADD', 'SL1', 'AX8', 'AAJ', 'AMS', 'IFT', 'IAM', 'MRQ', 'AYF', 'FIJ', 'CXU', 'KGD', 'CAD',
-                'ADV', '8EC', 'REX', 'AYR', 'IMS', 'ERF', 'BPH', 'RXL', 'SPO', 'NTL', 'VII', 'MHI', 'CVF', 'CTM', 'SUD',
-                'HRN', 'NME', 'GPS', 'SEA', 'GLV', 'SI6', 'SMC', 'CGS', 'PRO', 'WRM', 'LSX', 'E25', 'RCO', 'EPM', 'EVZ',
-                'MEC', 'CML', 'PLX', 'CRS', 'RCL', 'ERG', 'BWR', 'FGR', 'BTC', 'GBE', 'HHY', 'GBP', 'LVE', 'CTO', 'MSI',
-                'DTR', 'CRM', 'CXZ', 'AUT', 'RIM', 'SFM', 'MDX', 'DGO', 'CHR', 'XST', 'NC6', 'KME', 'GLA', 'EFF', 'FAU',
-                'ESK', 'IPT', 'INV', 'VP7', 'SRN', 'KPE', 'BYH', 'HHM', '360', 'LCY', 'LSA', 'CII', 'KTE', 'HGL', 'RFN',
-                'ZIM', 'FND', 'VAL', 'SST', 'LKO', 'PGR', 'TMX', 'SRY', 'EAS', 'FML', 'SGH', 'R3D', 'FRX', 'A1G', 'KPG',
-                'LIO', 'NES', 'MPX', 'NAM', 'FGF', 'MSE', 'CUX', 'SRO', 'CRO', 'CEN', 'TZN', 'AGE', 'AIQ', 'FTC', 'AIR',
-                'CSE', 'CAG', 'FPP', 'IDA', 'SMD', 'HT8', 'YRL', 'SDX', 'EME', 'SNC', 'ENE', 'FCC', 'FSF', 'S66', 'LRT',
-                'AUH', 'CLB', 'SMI', 'ZMI', 'EQX', 'SER', 'EQE', 'FZR', 'GZL', 'EAF', 'YPB', 'IXU', 'ARX', 'ED1', 'CG1',
-                'BHL', 'WAA', 'XTE', 'FID', 'BBC', 'DVN', 'BNL', 'HCO', 'MRD', 'MAM', 'CA8', 'BOC', 'RIE', 'MHC', 'ID8',
-                'QTG', 'GSM', 'NXS', 'ADI', 'HIP', 'RDY', 'VIG', 'RFR', 'AHL', 'ICS', 'BWF', 'MPP', 'MLS', 'AKN', 'RCT',
-                'GDF', 'TCN', 'PO3', 'SNL', 'CYC', 'AMB', 'AUP', 'QRI', 'CLF', 'TAR', 'LSR', 'APW', 'CLT', 'VMG', 'AZI',
-                'IS3', 'FNT', 'LMG', 'FFC', 'VAR', 'CIN', 'DEM', 'APG', 'AFP', 'ICU', 'MMJ', 'ECG', 'ENX', 'ARA', 'POW',
-                'SRH', 'CLX', 'SPB', 'CT1', 'JPR', 'MRV', 'SCL', 'EOL', 'CXL', 'ADX', 'FTT', 'AVC', 'KLH', 'KKT', 'AFA',
-                'REY', 'EGF', 'BIR', 'GRV', 'GOW', 'AGM', 'HIT', 'MCY', 'ENT', 'AGD', 'WAT', 'AJJ', 'TBL', 'JCI', 'FGX',
-                'LHM', 'NMS', 'A1C']
+codes3 = codes2 + ['LRS', 'ATX', 'RDF', 'BYI', 'STN', 'CIO', 'LHB', 'RTE', 'KZA', 'BAH', 'SEQ', 'CAQ', 'HOT', 'ZER',
+                   'AJC',
+                   'RMX', 'VBS', 'YAL', 'ASW', 'NCC', 'AQS', 'DME', 'CGO', 'GTE', 'CVC', 'MCX', 'WIC', '4CE', 'LRM',
+                   'AER',
+                   'CVS', 'BUG', 'AKP', 'FRI', 'RLC', 'HOR', 'CL8', 'GPP', 'DW8', 'KSC', 'DDD', 'RD1', 'ELT', 'XPL',
+                   'LMW',
+                   'TWD', 'AVW', 'AWV', 'HGH', 'RDH', 'QGL', 'BRI', 'AQC', 'MDI', 'DAU', 'AQR', 'IVR', 'LIN', 'LYL',
+                   'JRL',
+                   'DAF', 'TAO', 'ZEL', 'DFM', 'AOU', 'AIV', 'BEL', 'ETE', 'MAG', 'ANR', 'RNX', 'SCN', 'BAU', 'EMH',
+                   'CY5',
+                   'WOA', 'STG', 'CAV', 'KAT', 'SFY', 'QFY', 'AGG', 'FGG', 'KAM', 'XPE', 'JJF', 'IKW', 'BOA', 'HCT',
+                   'EGN',
+                   'GLH', 'LNY', 'EBG', 'COY', 'KPT', 'TMK', 'SND', 'AHK', 'TPD', 'HGM', 'KOV', 'AXI', 'SPT', 'MOT',
+                   'EBO',
+                   'ABA', 'MZN', 'LI3', 'MVT', 'AMT', 'SRI', 'AYI', 'ONT', 'FSI', 'IVT', 'JAY', 'CYQ', 'EDC', 'KGM',
+                   'SNZ',
+                   'E2E', 'RAG', 'FE8', 'SHK', 'DTM', 'GNE', 'CDP', 'ELO', 'IPC', 'EFE', 'NAE', 'EXO', 'ICG', 'BGP',
+                   'T3D',
+                   'REV', 'AGJ', 'WHF', 'WBE', 'WLL', 'KWR', 'KPC', 'RDN', 'RYD', 'VML', 'ARN', 'KLA', 'SXX', 'SFC',
+                   'NSE',
+                   'CMD', 'CCJ', 'LLO', 'CLZ', 'SYT', 'SUH', 'DLC', 'N1H', 'AEE', 'CLY', 'GLB', 'IVQ', 'GES', 'ARO',
+                   'AIB',
+                   'FEI', 'AYZ', 'RCW', 'FSA', 'CHK', 'AKG', 'IAU', 'FAM', 'DDT', 'NZK', 'HLA', 'GGE', 'BSM', 'PSI',
+                   'CTE',
+                   'AWN', 'MRL', 'SFL', 'MWR', 'AU1', 'WCN', 'RKN', 'AYM', 'CD2', 'MKG', 'PCH', 'MTB', 'VEC', 'KRX',
+                   'SCI',
+                   'CZN', 'ABL', 'SPQ', 'EGY', 'AUL', 'MAX', 'MNC', 'ECL', 'DBF', 'BST', 'IRD', 'CNL', 'EOF', 'RNY',
+                   'DHR',
+                   'WWI', 'WQG', 'AYK', 'CBY', 'NAC', 'TDL', 'MRR', 'DAV', 'HNG', 'NGE', 'KBC', 'IAB', 'KLO', 'CD3',
+                   'GGX',
+                   'APZ', 'ALT', 'MAQ', 'AO1', 'SLF', 'GCI', 'MZZ', 'EX1', 'AUI', 'SAU', 'RHI', 'ROG', 'NCL', 'GMC',
+                   'SHI',
+                   'RXH', 'SLM', 'SAN', '1AD', 'HWK', 'CIW', 'IBN', 'IKE', 'GDG', 'SUR', 'DGH', 'GTK', 'MGT', 'AMO',
+                   'BNR',
+                   'CGM', 'SOM', 'ATM', 'LML', 'BLY', 'RRS', 'MQR', 'MMR', 'AAP', 'FPC', '8VI', 'DRE', 'MPH', 'GLE',
+                   'GFL',
+                   'BLK', 'RND', 'FGO', 'SSL', 'FPL', 'CVL', 'ACS', 'CGA', 'SIO', 'ADN', 'CR1', 'TRL', 'MTH', 'SVS',
+                   '8IH',
+                   'CDT', 'EVE', 'FFI', 'MBK', 'EER', 'BBL', 'EMP', 'GCM', 'BGH', 'QPR', 'SF1', 'ANL', 'ATR', 'KEY',
+                   'CBC',
+                   'MRZ', 'SKO', 'BIS', 'GO2', 'GBZ', 'GUL', 'MCM', 'DKM', 'NSB', 'GME', 'MSR', 'JYC', 'ERL', 'BDI',
+                   'KKL',
+                   'VIC', 'AOA', 'BAS', 'ARC', 'VLS', 'EQT', 'MAR', 'IVO', 'VGL', 'SBR', 'MRN', 'MCT', 'GCR', 'JDR',
+                   'BUY',
+                   'EMB', 'CUP', 'ADD', 'SL1', 'AX8', 'AAJ', 'AMS', 'IFT', 'IAM', 'MRQ', 'AYF', 'FIJ', 'CXU', 'KGD',
+                   'CAD',
+                   'ADV', '8EC', 'REX', 'AYR', 'IMS', 'ERF', 'BPH', 'RXL', 'SPO', 'NTL', 'VII', 'MHI', 'CVF', 'CTM',
+                   'SUD',
+                   'HRN', 'NME', 'GPS', 'SEA', 'GLV', 'SI6', 'SMC', 'CGS', 'PRO', 'WRM', 'LSX', 'E25', 'RCO', 'EPM',
+                   'EVZ',
+                   'MEC', 'CML', 'PLX', 'CRS', 'RCL', 'ERG', 'BWR', 'FGR', 'BTC', 'GBE', 'HHY', 'GBP', 'LVE', 'CTO',
+                   'MSI',
+                   'DTR', 'CRM', 'CXZ', 'AUT', 'RIM', 'SFM', 'MDX', 'DGO', 'CHR', 'XST', 'NC6', 'KME', 'GLA', 'EFF',
+                   'FAU',
+                   'ESK', 'IPT', 'INV', 'VP7', 'SRN', 'KPE', 'BYH', 'HHM', '360', 'LCY', 'LSA', 'CII', 'KTE', 'HGL',
+                   'RFN',
+                   'ZIM', 'FND', 'VAL', 'SST', 'LKO', 'PGR', 'TMX', 'SRY', 'EAS', 'FML', 'SGH', 'R3D', 'FRX', 'A1G',
+                   'KPG',
+                   'LIO', 'NES', 'MPX', 'NAM', 'FGF', 'MSE', 'CUX', 'SRO', 'CRO', 'CEN', 'TZN', 'AGE', 'AIQ', 'FTC',
+                   'AIR',
+                   'CSE', 'CAG', 'FPP', 'IDA', 'SMD', 'HT8', 'YRL', 'SDX', 'EME', 'SNC', 'ENE', 'FCC', 'FSF', 'S66',
+                   'LRT',
+                   'AUH', 'CLB', 'SMI', 'ZMI', 'EQX', 'SER', 'EQE', 'FZR', 'GZL', 'EAF', 'YPB', 'IXU', 'ARX', 'ED1',
+                   'CG1',
+                   'BHL', 'WAA', 'XTE', 'FID', 'BBC', 'DVN', 'BNL', 'HCO', 'MRD', 'MAM', 'CA8', 'BOC', 'RIE', 'MHC',
+                   'ID8',
+                   'QTG', 'GSM', 'NXS', 'ADI', 'HIP', 'RDY', 'VIG', 'RFR', 'AHL', 'ICS', 'BWF', 'MPP', 'MLS', 'AKN',
+                   'RCT',
+                   'GDF', 'TCN', 'PO3', 'SNL', 'CYC', 'AMB', 'AUP', 'QRI', 'CLF', 'TAR', 'LSR', 'APW', 'CLT', 'VMG',
+                   'AZI',
+                   'IS3', 'FNT', 'LMG', 'FFC', 'VAR', 'CIN', 'DEM', 'APG', 'AFP', 'ICU', 'MMJ', 'ECG', 'ENX', 'ARA',
+                   'POW',
+                   'SRH', 'CLX', 'SPB', 'CT1', 'JPR', 'MRV', 'SCL', 'EOL', 'CXL', 'ADX', 'FTT', 'AVC', 'KLH', 'KKT',
+                   'AFA',
+                   'REY', 'EGF', 'BIR', 'GRV', 'GOW', 'AGM', 'HIT', 'MCY', 'ENT', 'AGD', 'WAT', 'AJJ', 'TBL', 'JCI',
+                   'FGX',
+                   'LHM', 'NMS', 'A1C']
