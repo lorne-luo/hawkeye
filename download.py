@@ -7,7 +7,7 @@ from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
 
 import settings
-from asx import get_asx_df, codes1, codes2, get_last_friday
+from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
 base_path = os.path.join(os.getcwd(), 'data')
@@ -38,15 +38,14 @@ def get_codes(all=False):
         return df['ASX code'].values
     elif datetime.now().weekday() == 4:
         # return high value stocks
-        return codes1
+        return get_codes1()
     elif datetime.now().weekday() == 5:
         # return secondary value stocks
-        return codes2
+        return get_codes2()
     elif datetime.now().weekday() == 6:
         # return all stocks
         # return codes3
-        df = get_asx_df()
-        return df['ASX code'].values
+        return get_all_codes()
     else:
         # return all
         df = get_asx_df()
@@ -105,7 +104,7 @@ if __name__ == '__main__':
             time.sleep(15)
             continue
 
-        if done > 490:
+        if done > 495:
             break
 
         time.sleep(15)
