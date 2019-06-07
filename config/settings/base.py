@@ -10,8 +10,8 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 from __future__ import absolute_import, unicode_literals
 
-import os
 import environ
+import os
 from wagtail.embeds.oembed_providers import youtube, vimeo
 
 root = environ.Path(__file__) - 3  # (wagtail-standard/config/settings/base.py - 3 = wagtail-standard/)
@@ -77,7 +77,6 @@ INSTALLED_APPS = [
     # 'cms.custom_settings',
 ]
 
-
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
 
@@ -93,7 +92,6 @@ MIDDLEWARE = [
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
-
 
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -120,7 +118,6 @@ TEMPLATES = [
     },
 ]
 
-
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -139,7 +136,6 @@ DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
 DEBUG = env.bool('DEBUG', False)
 
-
 # URL Configuration
 # ------------------------------------------------------------------------------
 
@@ -147,19 +143,16 @@ ROOT_URLCONF = 'config.urls'
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # EMAIL CONFIGURATION
 # ------------------------------------------------------------------------------
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 
 ADMINS = env.list('ADMINS', default=['dev@luotao.net'])
-
 
 # INTERNATIONALIZATION
 # ------------------------------------------------------------------------------
@@ -203,7 +196,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = root('media')
 MEDIA_URL = '/media/'
 
-
 # WAGTAIL SETTINGS
 # ------------------------------------------------------------------------------
 
@@ -212,11 +204,10 @@ WAGTAIL_USER_EDIT_FORM = 'cms.users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'cms.users.forms.CustomUserCreationForm'
 WAGTAIL_USER_CUSTOM_FIELDS = []
 
-#Project Email Settings
-#------------------------------------------------------------------------------
+# Project Email Settings
+# ------------------------------------------------------------------------------
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='noreply@luotao.net')
 WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = env('WAGTAILADMIN_NOTIFICATION_FROM_EMAIL', default=DEFAULT_FROM_EMAIL)
-
 
 # the model defined to save advanced form settings
 # in the format of 'app_label.model_class'.
@@ -255,3 +246,7 @@ VERIFICATION_CODE_DB_CHANNEL = 3
 # ------------------------------------------------------------------------------
 
 # All your project settings go here
+ALPHA_VANTAGE_API_KEY = os.environ.get('ALPHA_VANTAGE_API_KEY', default='')
+AWS_REGION = os.environ.get('AWS_REGION', default='')
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', default='')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', default='')

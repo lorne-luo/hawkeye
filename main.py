@@ -10,7 +10,7 @@ import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 from decimal import Decimal
 
-import settings
+import config.settings.local as settings
 from asx import get_asx_df, get_last_friday
 from download import get_csv_path
 from mcmc import monte_carlo_simulations

@@ -5,7 +5,7 @@ import requests
 from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
 from dateutil.relativedelta import relativedelta, FR
-import settings
+import config.settings.local as settings
 from aws import dynamodb, dynamodb_batch_push
 
 BATCH_LIMIT = 25

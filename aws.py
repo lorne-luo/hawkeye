@@ -3,7 +3,8 @@ import json
 from random import random
 
 import boto3
-import settings
+import config.settings.local as settings
+
 
 BATCH_LIMIT = 25
 

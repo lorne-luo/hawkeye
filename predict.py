@@ -9,8 +9,8 @@ import os
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 from decimal import Decimal
-
-import settings
+from core.sms.telstra_api_v2 import send_to_admin
+import config.settings.local as settings
 from asx import get_asx_df, get_last_friday
 from download import get_csv_path
 from mcmc import monte_carlo_simulations
@@ -182,3 +182,4 @@ if __name__ == '__main__':
 
     print(f'Download finished, done = {done}, skipped = {skipped}, failure = {failure}')
     print(result_path)
+    send_to_admin(f'Download finished, done = {done}, skipped = {skipped}, failure = {failure}')

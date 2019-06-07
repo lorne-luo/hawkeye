@@ -5,8 +5,8 @@ import os
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
-
-import settings
+from core.sms.telstra_api_v2 import send_to_admin
+import config.settings.local as settings
 from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
@@ -110,3 +110,4 @@ if __name__ == '__main__':
         time.sleep(15)
 
     print(f'Download finished, done = {done}, failure = {failure}')
+    send_to_admin(f'Download finished, done = {done}, failure = {failure}')
