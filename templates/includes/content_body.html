@@ -1,0 +1,111 @@
+{% load wagtailimages_tags %}
+
+{% for content_block in content %}
+    {% if content_block.block_type == 'heading' %}
+        <div class="heading-block">
+            <div class="wrapper">
+                {% if content_block.value.heading_type == "h2" %}
+                    <h2>{{ content_block.value.heading_text }}</h2>
+                {% elif content_block.value.heading_type == "h3" %}
+                    <h3>{{ content_block.value.heading_text }}</h3>
+                {% elif content_block.value.heading_type == "h4" %}
+                    <h4>{{ content_block.value.heading_text }}</h4>
+                {% elif content_block.value.heading_type == "h5" %}
+                    <h5>{{ content_block.value.heading_text }}</h5>
+                {% elif content_block.value.heading_type == "h6" %}
+                    <h6>{{ content_block.value.heading_text }}</h6>
+                {% endif %}
+            </div>
+        </div>
+    {% elif content_block.block_type == 'button' %}
+        <a class="btn {{ content_block.value.button_color }}"
+           href="{{ content_block.value.button_url }}">{{ content_block.value.button_name }}</a><br/>
+    {% elif content_block.block_type == 'accordion' %}
+    <div class="wrapper">
+        <div class="accordion-item">
+            <div class="accordion-item__control-container">
+                <a href="#" class="accordion-item__title-container accordion-item__title-container--toggle-off" title="Click to open!">
+                <span class="accordion-item__title">{{ content_block.value.accordion_heading }}</span>
+                <span class="accordion-item__arrow"></span>
+                </a>
+            </div>
+            <div class="accordion-item__body" style="display: none;">
+                <div class="accordion-item__body-wrapper">
+                    {{ content_block.value.accordion_content }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif content_block.block_type == 'quote' %}
+        <div class="blockquote-block">
+            <div class="wrapper">
+                <blockquote>
+                    {{ content_block.value.quote }}
+                </blockquote>
+            </div>
+        </div>
+    {% elif content_block.block_type == 'table' %}
+<div class="table">
+            <div class="wrapper">
+            {{ content_block }}
+            </div>
+        </div>
+    {% elif content_block.block_type == 'image' %}
+    <div class="image-block">
+        <div class="wrapper">
+            <figure class="image {{ content_block.value.image_position }}">
+                {% image content_block.value.image original %}
+                {% if content_block.value.image_caption %}
+                    <figcaption>{{ content_block.value.image_caption }}</figcaption>
+                {% endif %}
+            </figure>
+        </div>
+    </div>
+    {% elif content_block.block_type == 'banner' %}
+        {# Hero Banner block StreamField  #}
+        {% include "includes/streamblocks/streamblock_hero_banner.html" with content=content_block.value %}
+
+    {% elif content_block.block_type == 'info_block' %}
+        {# Info block image left and right selection StreamField  #}
+        {% include "includes/streamblocks/streamblock_info_block.html" with content=content_block.value %}
+
+    {% elif content_block.block_type == 'multi_blocks' %}
+        {# Multi Blocks Banner StreamField  #}
+        {% include "includes/streamblocks/streamblock_multi_blocks.html" with content=content_block.value %}
+
+    {% elif content_block.block_type == 'info_banner' %}
+        {# Info Banner StreamField  #}
+        {% include "includes/streamblocks/streamblock_info_banner.html" with content=content_block.value %}
+
+    {% elif content_block.block_type == 'progress_steps' %}
+        {# Progress Steps StreamField  #}
+        {% include "includes/streamblocks/streamblock_progress_steps.html" with content=content_block.value %}
+
+    {% elif content_block.block_type == 'checklist' %}
+        {# Checklist StreamField  #}
+        {% include "includes/streamblocks/streamblock_checklist.html" with content=content_block.value %}
+
+    {% elif content_block.block_type == 'testimonial' %}
+        {# Testimonial StreamField  #}
+        {% include "includes/streamblocks/streamblock_testimonial.html" with content=content_block.value %}
+
+    {% elif content_block.block_type == 'multi_testimonials' %}
+        {# Multi-Testimonials StreamField  #}
+        <div class="multi_testimonials">
+            {% if content_block.value.title %}
+                <h4>{{ content_block.value.title }}</h4>
+            {% endif %}
+
+            {% for content in content_block.value.testimonials %}
+                {% include "includes/streamblocks/streamblock_testimonial.html" with content=content %}
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <div class="other-block">
+            <div class="wrapper">
+                {{ content_block }}
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}

@@ -1,0 +1,31 @@
+/*
+==========================================================================
+   #Error Page
+========================================================================== */
+
+.error-page-header {
+    margin: 20px 0;
+}
+
+.error-page-heading {
+    background: #ddd;
+    text-align: center;
+    line-height: 100px;
+
+    h1 {
+        color: $color-error-h1;
+        padding: 88px 0;
+        @include font-size(62px, 62px);
+        font-weight: normal;
+        margin-top: 0;
+    }
+}
+
+.error-page-body {
+    margin-top: 40px;
+
+    h2 {
+        color: $color-error-h2;
+        font-weight: normal;
+    }
+}

@@ -1,0 +1,45 @@
+/// -------------------------------------
+/// $Z-INDEX
+/// -------------------------------------
+
+//exapmle:
+//z-index: z-index(overlay);
+
+$z-layers: (
+    'check-box': 2,
+    'radio': 2,
+    'overlay': 9,
+    'header': 10,
+    'burger-btn': 1001,
+    'burger-menu': 1000,
+    'viewport-size-tag': 9999
+) !default;
+
+/// A function helper to avoid having to type `map-get($z-layers, ...)`
+/// @param [string] $component: the layer to use
+/// @return [number] | [null]
+@function z-index($layer, $sub-layer: '') {
+    @if map-has-key($z-layers, $layer) {
+        @if $sub-layer != '' {
+            @return map-get(map-get($z-layers, $layer), $sub-layer);
+        } @else {
+            @return map-get($z-layers, $layer);
+        }
+    } @else {
+        @warn 'No z-index found in $z-layers map for `#{$layer}`. Property omitted.';
+    }
+}
+
+/// -------------------------------------
+/// Device map
+/// -------------------------------------
+
+@function device-map($map, $device: default) {
+    @if map-has-key($map, $device) {
+        @return map-get($map, $device);
+    } @else if map-has-key($map, default) {
+        @return map-get($map, default);
+    } @else {
+        @warn "No 'default' found for map passed to device-map. Property omitted.";
+    }
+}

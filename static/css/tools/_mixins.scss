@@ -1,0 +1,95 @@
+/*
+==========================================================================
+   #Mixins
+========================================================================== */
+
+// #Breakpoints
+
+@mixin breakpoint($point) {
+    // Main break points
+    @if $point == desktop {
+        @media screen and (min-width: 1200px) {
+            @content;
+        }
+    } @else if $point == tablet {
+        @media screen and (min-width: 768px) and (max-width: 1199px) {
+            @content;
+        }
+    } @else if $point == mobile {
+        @media screen and (max-width: 767px) {
+            @content;
+        }
+    }
+
+    // Extra break points
+    @else if $point == mobile-landscape {
+        @media screen and (min-width: 481px) and (max-width: 767px) {
+            @content;
+        }
+    } @else if $point == mobile-portrait {
+        @media screen and (max-width: 480px) {
+            @content;
+        }
+    } @else if $point == not-desktop {
+        @media screen and (max-width: 1199px) {
+            @content;
+        }
+    } @else if $point == not-mobile {
+        @media screen and (min-width: 768px) {
+            @content;
+        }
+    }
+}
+
+// #Font size
+@mixin font-size($font-size, $line-height) {
+    font-size: $font-size;
+    line-height: $line-height / $font-size;
+}
+
+// #Font family
+@mixin font($group, $id: regular) {
+    @each $font in $font-stack {
+        @if ($group == map-get($font, group) and $id == map-get($font, id)) {
+            font-family: map-get($font, font);
+            font-weight: map-get($font, weight);
+            font-style: map-get($font, style);
+        }
+    }
+}
+
+// add hover effect to all none touch devices and also desktop that has touch screen
+// add active effect to touch devices if screen width is less than desktop
+@mixin hover($text: null, $bcg: null, $border: null) {
+
+    .no-touch & {
+
+        &:hover,
+        &:focus {
+            background-color: $bcg;
+            color: $text;
+            border-color: $border;
+        }
+    }
+
+    .touch & {
+        @include breakpoint(desktop) {
+
+            &:hover,
+            &:focus {
+                background-color: $bcg;
+                color: $text;
+                border-color: $border;
+            }
+        }
+
+        @include breakpoint(not-desktop) {
+
+            &:active {
+                background-color: $bcg;
+                color: $text;
+                border-color: $border;
+            }
+        }
+    }
+}

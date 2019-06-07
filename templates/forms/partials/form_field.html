@@ -1,0 +1,19 @@
+<div class="formRow">
+    {% if field.field.widget.input_type == 'radio' %}
+        <label> {{ field.label}}</label>
+        <div class="radio-wrapper">
+        {% for choice in field %}
+                {{choice.tag}}
+                 <label class="radio-label" for="{{choice.id_for_label}}">
+                     <span>{{ choice.choice_label }}</span>
+                 </label>
+        {% endfor %}
+        </div>
+    {% else %}
+        {{ field.label_tag }}
+        {{ field }}
+    {% endif %}
+
+    {% if field.help_text %}<p class="help-text">{{ field.help_text }}</p>{% endif %}
+    {{ field.errors }}
+</div>

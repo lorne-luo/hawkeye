@@ -1,0 +1,62 @@
+{% load static wagtailuserbar %}
+
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>
+            {% block title %}
+                {% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}
+            {% endblock %}
+            {% block title_suffix %}
+                {% with self.get_site.site_name as site_name %}
+                    {% if site_name %} | {{ site_name }}{% endif %}
+                {% endwith %}
+            {% endblock %}
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {# Global stylesheets #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.min.css' %}">
+        {% block extra_css %}
+            {# Override this in templates to add extra stylesheets #}
+        {% endblock %}
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}">
+
+        {# Header Bloack #}
+        {% block header %}
+            {% include "includes/header.html" with parent=site_root calling_page=self %}
+        {% endblock header %}
+
+        {# Content Bloack #}
+        <div class="page-content">
+            {% block content %}{% endblock %}
+        </div>
+
+        {# Footer Block #}
+        {% block footer %}
+            {% include "includes/footer.html" %}
+        {% endblock footer %}
+
+        {# Global javascript #}
+            <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/accordion-menu.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/shadow-scroller.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/vendor/vendor.min.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/main.min.js' %}"></script>
+
+        {% block extra_js %}
+            {# Override this in templates to add extra javascript #}
+        {% endblock %}
+
+        {% wagtailuserbar %}
+    </body>
+</html>

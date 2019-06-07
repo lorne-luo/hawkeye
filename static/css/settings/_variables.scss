@@ -1,0 +1,51 @@
+/*
+==========================================================================
+   #Variables
+   Only add Global variables(Variables that are being shared between different modules) here. Local variables should be added into the related module
+========================================================================== */
+
+/*
+ * page head
+ */
+$head-height: (
+    default: auto,
+    tablet: 96px,
+    mobile: 96px
+);
+
+/*
+ * Drop-down arrow transition time
+ */
+$arrow-transition-time: .2s;
+
+/*
+ * Global transition time
+ */
+$transition-time: .2s;
+$transition-time-slow: .5s;
+
+/*
+ * Global focus width
+ */
+$focus-border-width: 3px;
+
+/*
+ * Wrapper
+ */
+$wrapper-width: 1200px;
+$wrapper-padding-h: (
+    desktop: 10px,
+    tablet: 30px,
+    mobile: 15px
+);
+
+/*
+ * hr
+ */
+
+$hr-border-width: 1px;
+
+/*
+ * side menu width
+ */
+$side-menu-width: 270px;

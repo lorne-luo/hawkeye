@@ -1,0 +1,23 @@
+/*
+==========================================================================
+   #Wrapper
+========================================================================== */
+
+.wrapper {
+    display: block;
+    width: 100%;
+    max-width: $wrapper-width;
+    padding: 0 device-map($wrapper-padding-h, desktop);
+    margin: auto;
+    box-sizing: border-box;
+
+    @include breakpoint(tablet) {
+        padding-right: device-map($wrapper-padding-h, tablet);
+        padding-left: device-map($wrapper-padding-h, tablet);
+    }
+
+    @include breakpoint(mobile) {
+        padding-right: device-map($wrapper-padding-h, mobile);
+        padding-left: device-map($wrapper-padding-h, mobile);
+    }
+}

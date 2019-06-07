@@ -1,0 +1,21 @@
+/*
+==========================================================================
+   #Links
+========================================================================== */
+
+a {
+    text-decoration: underline;
+    color: inherit;
+    transition: color $transition-time;
+
+    &:focus,
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:focus {
+        outline: $focus-border-width solid $color-focus;
+    }
+
+    @include hover($color-link-hover);
+}

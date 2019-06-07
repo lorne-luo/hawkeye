@@ -1,0 +1,86 @@
+/*
+==========================================================================
+   #icons
+========================================================================== */
+@font-face {
+    font-family: Icons;
+    src: url('../fonts/icon-fonts/Icons.eot');
+    src: url('../fonts/icon-fonts/Icons.eot?#iefix') format('eot'), url('../fonts/icon-fonts/Icons.woff2') format('woff2'), url('../fonts/icon-fonts/Icons.woff') format('woff'), url('../fonts/icon-fonts/Icons.ttf') format('truetype'), url('../fonts/icon-fonts/Icons.svg#Icons') format('svg');
+}
+
+@mixin icon-styles {
+    /* stylelint-disable */
+    font-family: Icons;
+    /* stylelint-enable */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    // speak: none; // only necessary if not using the private unicode range (firstGlyph option)
+    text-decoration: none;
+    text-transform: none;
+}
+
+%icon {
+    @include icon-styles;
+}
+
+@function icon-char($filename) {
+    $char: '';
+
+    @if $filename == arrow-down {
+        $char: '\E001';
+    }
+    @if $filename == arrow-left {
+        $char: '\E002';
+    }
+    @if $filename == arrow-right {
+        $char: '\E003';
+    }
+    @if $filename == butterfly {
+        $char: '\E004';
+    }
+    @if $filename == tick {
+        $char: '\E005';
+    }
+
+    @return $char;
+}
+
+@mixin icon($filename, $insert: before, $extend: true) {
+
+    &:#{$insert} {
+        @if $extend {
+            @extend %icon;
+        } @else {
+            @include icon-styles;
+        }
+        content: icon-char($filename);
+    }
+}
+
+.icon-arrow-down,
+%icon-arrow-down {
+    @include icon(arrow-down);
+}
+
+.icon-arrow-left,
+%icon-arrow-left {
+    @include icon(arrow-left);
+}
+
+.icon-arrow-right,
+%icon-arrow-right {
+    @include icon(arrow-right);
+}
+
+.icon-butterfly,
+%icon-butterfly {
+    @include icon(butterfly);
+}
+
+.icon-tick,
+%icon-tick {
+    @include icon(tick);
+}

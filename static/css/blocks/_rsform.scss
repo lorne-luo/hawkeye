@@ -1,0 +1,228 @@
+/*
+==========================================================================
+   #Rsform
+========================================================================== */
+$label-over-field-spacing: 14px;
+$label-over-field-spacing-mb: 9px;
+$form-block-margin-bottom: 25px;
+$form-row-margin-bottom: 25px;
+
+.formContainer,
+.wcag-responsive {
+    padding: 0;
+    margin: 0;
+    border: 0;
+
+    .formRow {
+        width: 100%;
+        margin-bottom: $form-row-margin-bottom;
+        @extend %clearfix;
+
+        &:before,
+        &:after {
+            line-height: 0;
+        }
+
+        [class*='formSpan'] {
+            display: block;
+            float: left;
+            width: 100%;
+            margin-left: 2.127659574468085%;
+            box-sizing: border-box;
+        }
+
+        .formSpan12 {
+            width: 100%;
+        }
+
+        .formSpan11 {
+            width: 91.48936170212765%;
+        }
+
+        .formSpan10 {
+            width: 82.97872340425532%;
+        }
+
+        .formSpan9 {
+            width: 74.46808510638297%;
+        }
+
+        .formSpan8 {
+            width: 65.95744680851064%;
+        }
+
+        .formSpan7 {
+            width: 57.44680851063829%;
+        }
+
+        .formSpan6 {
+            width: 48.93617021276595%;
+        }
+
+        .formSpan5 {
+            width: 40.42553191489362%;
+        }
+
+        .formSpan4 {
+            width: 31.914893617021278%;
+        }
+
+        .formSpan3 {
+            width: 23.404255319148934%;
+        }
+
+        .formSpan2 {
+            width: 14.893617021276595%;
+        }
+
+        .formSpan1 {
+            width: 6.382978723404255%;
+        }
+
+        [class*='formSpan']:first-child {
+            margin-left: 0;
+        }
+
+        @include breakpoint(mobile) {
+
+            [class*='formSpan'] {
+                width: 100%;
+                float: none;
+                margin-left: 0;
+            }
+        }
+    }
+
+    &.formHorizontal {
+
+        .formValidation {
+            display: block;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .rsform-block {
+            margin-bottom: 18px;
+
+            @include breakpoint(mobile) {
+                float: none;
+                width: auto;
+                padding-top: 0;
+                text-align: left;
+            }
+
+            &:before {
+                display: table;
+                content: '';
+            }
+
+            &:after {
+                display: table;
+                content: '';
+                clear: both;
+            }
+        }
+
+        .formBody {
+            width: 50%;
+            padding-left: 10%;
+
+            @include breakpoint(mobile) {
+                width: 100%;
+                padding-left: 0;
+            }
+
+            input,
+            textarea {
+                width: 100%;
+            }
+        }
+
+        .formControlLabel {
+            float: left;
+            width: 140px;
+            padding-top: 5px;
+            text-align: right;
+            margin-bottom: $label-over-field-spacing;
+
+            @include breakpoint(mobile) {
+                float: none;
+                width: auto;
+                padding-top: 0;
+                text-align: left;
+                margin-bottom: $label-over-field-spacing-mb;
+            }
+        }
+
+        .formControls {
+            margin-left: 160px;
+
+            @include breakpoint(mobile) {
+                margin-left: 0;
+            }
+        }
+
+        p.formDescription {
+            margin-top: 9px;
+            margin-bottom: 0;
+        }
+
+        .form-actions {
+            padding-left: 160px;
+        }
+    }
+
+    fieldset {
+        padding: 0;
+        margin: 0;
+        border: 0;
+    }
+
+    // Fix for horizontal checkbox / radio flow ( vertical flow broken by <br/> elements)
+    // All except the last element of this type.
+
+    input[type='checkbox']:nth-of-type(n-1) + label,
+    input[type='radio']:nth-of-type(n-1) + label {
+        margin-right: 25px;
+    }
+
+    &.formVertical {
+
+        .rsform-block {
+            margin-bottom: $form-block-margin-bottom;
+
+            .formBody {
+                float: none;
+            }
+        }
+
+        .formControlLabel {
+            float: none;
+            text-align: left;
+            padding-top: 0;
+            width: auto;
+            margin-bottom: $label-over-field-spacing;
+
+            @include breakpoint(mobile) {
+                margin-bottom: $label-over-field-spacing-mb;
+            }
+        }
+    }
+
+    .formError {
+        display: block;
+        vertical-align: middle;
+        @include font-size(13px, 16px);
+        font-weight: normal;
+        margin: 3px 5px 3px 0;
+        color: $color-form-error-text;
+    }
+
+    .rsform-error:not(label) {
+        color: $color-form-error-text;
+        border-color: $color-form-border;
+        background-color: $color-form-error-bg;
+    }
+}

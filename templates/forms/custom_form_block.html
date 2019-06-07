@@ -1,0 +1,16 @@
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form class="formContainer" action="{{ value.form_action }}" method="post" novalidate>
+    {% csrf_token %}
+    {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+
+    {% for field in form.visible_fields %}
+        {% include 'forms/partials/form_field.html' %}
+    {% endfor %}
+    <input class="btn btn-primary" type="submit" value="{{ value.form.submit_button_text }}">
+</form>

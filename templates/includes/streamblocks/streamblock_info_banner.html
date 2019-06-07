@@ -1,0 +1,15 @@
+<div class="info-banner">
+    <div class="wrapper {{ content.block_class|default:"" }}" {% if content.block_id %}id="{{ content.block_id }}"{% endif %}>
+        {% if content.info_banner_heading %}
+            <h3 class="info-banner__heading">{{ content.info_banner_heading }}</h3>
+        {% endif %}
+        {% if content.info_banner_text %}
+            <div class="info-banner__content">{{ content.info_banner_text }}</div>
+        {% endif %}
+        {% if content.info_banner_button_name %}
+            <a class="info-banner__btn btn btn-secondary " href="{% if content.info_banner_button_url %}{{ content.info_banner_button_url }}{% endif%}">
+                {{ content.info_banner_button_name }}
+            </a>
+        {% endif %}
+    </div>
+</div>

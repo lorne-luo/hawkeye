@@ -1,0 +1,40 @@
+/*
+==========================================================================
+   #Table
+========================================================================== */
+$table-border-width: 1px;
+$table-padding-v: 8px;
+$table-padding-h: 10px;
+
+table {
+    width: 100%;
+    border: $table-border-width solid $color-table-border;
+    table-layout: fixed;
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin: 0 0 1em;
+}
+
+th,
+td {
+    padding: $table-padding-v $table-padding-h;
+}
+
+td {
+    border: $table-border-width solid $color-table-td-border;
+    color: $color-table-td-text;
+}
+
+th {
+    border: $table-border-width solid $color-table-th-border;
+    background: $color-table-th-bg;
+    color: $color-table-th-text;
+}
+
+tr:nth-child(even) {
+    background: $color-table-tr-even-bg;
+}
+
+tr:nth-child(odd) {
+    background: $color-table-tr-odd-bg;
+}

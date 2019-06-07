@@ -1,0 +1,47 @@
+/*
+==========================================================================
+   #Shadow-scroller
+========================================================================== */
+
+.shadow-scroller {
+    position: relative;
+}
+
+.shadow-scroller__scroll-view {
+    overflow: auto;
+}
+
+.shadow-scroller__shadow-top,
+.shadow-scroller__shadow-right,
+.shadow-scroller__shadow-bottom,
+.shadow-scroller__shadow-left {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.shadow-scroller__shadow-right {
+    top: 0;
+    right: 0;
+    width: 17px;
+    height: 100%;
+    background: linear-gradient(
+        to right, rgba(3, 37, 58, .01) 0%, rgba(3, 37, 58, .38) 100%
+    );
+    transition: all .5s ease-in-out;
+}
+
+.shadow-scroller__shadow-left {
+    top: 0;
+    left: 0;
+    width: 17px;
+    height: 100%;
+    background: linear-gradient(
+        to left, rgba(3, 37, 58, .01) 0%, rgba(3, 37, 58, .38) 100%
+    );
+    transition: all .5s ease-in-out;
+}
+
+.shadow-scroller table {
+    margin: 0;
+}

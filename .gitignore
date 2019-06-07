@@ -5,6 +5,7 @@
 node_modules
 venv
 env
+data
 pic
 price
 __pycache__

@@ -1,0 +1,167 @@
+/*
+==========================================================================
+   #Side Menu
+   ***Note: Add class "menu-side" to module
+========================================================================== */
+
+$side-menu-padding-v: 20px;
+$side-menu-padding-h: 16px;
+
+//indent padding
+$side-menu-padding-indent: 40px;
+
+$side-menu-text: #000;
+$side-menu-text-l1: #fff;
+
+$side-menu-bg-active-default: #fff;
+$side-menu-bg-l1: #324057;
+$side-menu-bg-l1-hover: #3b404a;
+$side-menu-bg-l1-active: #324057;
+$side-menu-bg-l2: #e5e9f2;
+$side-menu-bg-l2-hover: #d9d8da;
+$side-menu-bg-l2-active: #d9d8da;
+$side-menu-bg-l3: #ebebeb;
+$side-menu-bg-l3-hover: #d9d8da;
+$side-menu-bg-l3-active: #d9d8da;
+
+$side-menu-border-color-default: #ccc;
+$side-menu-border: 1px solid $side-menu-border-color-default;
+
+.menu-side {
+    color: $side-menu-text;
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        ul {
+            display: none;
+            width: 100%;
+        }
+    }
+
+    .active > ul {
+        display: block;
+        border-left: $side-menu-border;
+        border-right: $side-menu-border;
+    }
+
+    .menu > li,
+    .level1.active > .icon-indicator {
+        display: none;
+    }
+
+    li {
+        display: flex;
+        flex-wrap: wrap;
+
+        a {
+            display: block;
+            border-bottom: $side-menu-border;
+            flex: 1 0 0;
+            padding: $side-menu-padding-h $side-menu-padding-v;
+            text-decoration: none;
+
+            &:hover,
+            &:focus {
+                color: $side-menu-text;
+            }
+        }
+    }
+
+    .level1 {
+
+        &.current.active > a {
+            background-color: $side-menu-bg-l1-active;
+            text-decoration: none;
+
+            &:hover {
+                background-color: $side-menu-bg-l1-hover;
+                text-decoration: none;
+            }
+        }
+
+        &.active {
+            display: block;
+        }
+
+        > a,
+        span {
+            background: $side-menu-bg-l1;
+            color: $side-menu-text-l1;
+
+            &:hover,
+            &:focus {
+                background: $side-menu-bg-l1-hover;
+                color: $side-menu-text-l1;
+            }
+        }
+    }
+
+    .level2 {
+
+        > a {
+            background: $side-menu-bg-l2;
+
+            &:hover {
+                background: $side-menu-bg-l2-hover;
+            }
+        }
+    }
+
+    .level3 > a {
+        padding-left: $side-menu-padding-indent;
+        background: $side-menu-bg-l3;
+        border-bottom: $side-menu-border;
+
+        &:hover {
+            background: $side-menu-bg-l3-hover;
+        }
+    }
+
+    li.level2.current.active > a,
+    li.level3.current.active > a,
+    li.level4.current.active > a {
+        background-color: $side-menu-bg-active-default;
+    }
+
+    .icon-indicator {
+        display: block;
+        position: relative;
+        width: 54px;
+        right: 0;
+        top: 0;
+        z-index: 6;
+        padding: 0;
+        cursor: pointer;
+        border-left: $side-menu-border;
+        border-bottom: $side-menu-border;
+
+        &.open {
+            background-color: $side-menu-bg-l3;
+
+            &:before {
+                transform: translateY(-50%) rotate(-90deg);
+            }
+        }
+
+        &:hover {
+            background: $side-menu-bg-l2-hover;
+        }
+
+        &:before {
+            @extend %icon, %icon-arrow-right;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            transition: transform $transition-time;
+            @include font-size(14px, 14px);
+            width: 27px; //safari focus state fix
+            margin: auto; //safari focus state fix
+        }
+    }
+}

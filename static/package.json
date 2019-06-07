@@ -1,0 +1,39 @@
+{
+    "name": "standard",
+    "private": true,
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "gulp",
+        "build": "gulp build",
+        "production": "gulp build --production"
+    },
+    "devDependencies": {
+        "del": "^3.0.0",
+        "eslint-config-prettier": "^3.3.0",
+        "eslint-plugin-prettier": "^3.0.0",
+        "gulp-cached": "^1.1.1",
+        "gulp-concat-util": "^0.5.5",
+        "gulp-eslint": "^5.0.0",
+        "gulp-iconfont": "^10.0.2",
+        "gulp-iconfont-css": "^2.3.0",
+        "gulp-imagemin": "^5.0.3",
+        "gulp-plugin-prettier": "^1.1.0",
+        "gulp-stylelint": "^8.0.0",
+        "gulp-uglify": "^3.0.1",
+        "prettier": "^1.15.3",
+        "stylelint": "^9.9.0",
+        "stylelint-declaration-use-variable": "^1.7.0",
+        "stylelint-prettier": "^1.0.5"
+    },
+    "dependencies": {
+        "dependencies": "0.0.1",
+        "gulp": "^3.9.1",
+        "gulp-autoprefixer": "^6.0.0",
+        "gulp-cssnano": "^2.1.3",
+        "gulp-rename": "^1.4.0",
+        "gulp-sass": "^4.0.2",
+        "gulp-sourcemaps": "^2.6.4",
+        "node-sass": "^4.10.0",
+        "yargs": "^12.0.5"
+    }
+}

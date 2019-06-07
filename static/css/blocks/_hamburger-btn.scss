@@ -1,0 +1,106 @@
+/*
+==========================================================================
+   #Button menu
+========================================================================== */
+$burger-icon-width: 27px;
+$burger-icon-height: 18px;
+$burger-icon-bar-height: 3px;
+$burger-icon-padding: 20px;
+$burger-icon-transition-time: .25s;
+$burger-icon-bar-middle-top: (
+    ($burger-icon-height - 3 * $burger-icon-bar-height) / 2
+) + $burger-icon-bar-height;
+$burger-icon-bar-bottom-top: ($burger-icon-height - $burger-icon-bar-height);
+
+// Burger menu icon colors
+$burger-icon-default: #222a36;
+$burger-icon-active: #222a36;
+// Button menu color
+$color-button-menu-bg: #383838;
+
+.btn-menu {
+    display: none;
+
+    @include breakpoint(not-desktop) {
+        display: inline-block;
+        z-index: z-index(burger-btn);
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: $burger-icon-width;
+        height: $burger-icon-height;
+        transition: $burger-icon-transition-time ease-in-out;
+        cursor: pointer;
+
+        span {
+            display: block;
+            position: absolute;
+            left: 0;
+            height: $burger-icon-bar-height;
+            width: 100%;
+            opacity: 1;
+            background-color: $burger-icon-default;
+            transform: rotate(0);
+            transition: $burger-icon-transition-time ease-in-out;
+
+            &:nth-child(1) {
+                top: 0;
+            }
+
+            &:nth-child(2) {
+                top: $burger-icon-bar-middle-top;
+            }
+
+            &:nth-child(3) {
+                top: $burger-icon-bar-bottom-top;
+            }
+
+            &:nth-child(4) {
+                top: $burger-icon-bar-bottom-top;
+            }
+        }
+
+        &.active {
+
+            span {
+                background-color: $burger-icon-active;
+            }
+
+            span:nth-child(1) {
+                top: $burger-icon-bar-middle-top;
+                width: 0;
+                left: 50%;
+            }
+
+            span:nth-child(2) {
+                transform: rotate(45deg);
+            }
+
+            span:nth-child(3) {
+                transform: rotate(-45deg);
+                top: $burger-icon-bar-middle-top;
+            }
+
+            span:nth-child(4) {
+                top: $burger-icon-bar-middle-top;
+                width: 0;
+                left: 50%;
+            }
+        }
+
+        &:after {
+            content: '';
+            display: block;
+            box-sizing: content-box;
+            position: absolute;
+            top: -$burger-icon-padding;
+            left: -$burger-icon-padding;
+            width: 100%;
+            height: 100%;
+            padding: $burger-icon-padding;
+        }
+    }
+}

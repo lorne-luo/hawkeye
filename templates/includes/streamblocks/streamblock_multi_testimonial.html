@@ -1,0 +1,11 @@
+{% load wagtailimages_tags %}
+
+<div class="multi_testimonials {{ content.block_class|default:"" }}" {% if content.block_id %}id="{{ content.block_id }}"{% endif %}>
+    {% if content.title %}
+        <h4>{{ content.title }}</h4>
+    {% endif %}
+
+    {% for testimonial in content.testimonials %}
+        {% include "includes/streamblocks/streamblock_testimonial.html" with content=testimonial %}
+    {% endfor %}
+</div>

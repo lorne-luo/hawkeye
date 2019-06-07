@@ -1,0 +1,37 @@
+/*
+==========================================================================
+   #Page header
+========================================================================== */
+// TODO : remove unused styles and make sure colors are using variables
+$header-padding-v: 20px;
+$header-padding-h: (
+    desktop: 0,
+    tablet: 30px,
+    mobile: 15px
+);
+
+$color-header-bg-default: #fff;
+
+.page-head {
+    padding: $header-padding-v device-map($header-padding-h, desktop);
+    background-color: $color-header-bg-default;
+
+    @include breakpoint(not-desktop) {
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: z-index(header);
+    }
+
+    @include breakpoint(tablet) {
+        padding: $header-padding-v device-map($header-padding-h, tablet);
+    }
+
+    @include breakpoint(mobile) {
+        padding: $header-padding-v device-map($header-padding-h, mobile);
+    }
+}
+
+.page-head-top {
+    position: relative;
+}

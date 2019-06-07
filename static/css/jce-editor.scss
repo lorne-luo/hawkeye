@@ -1,0 +1,17 @@
+/*
+* This stylesheet is used to customize JCE editor style
+* JCE uses your site's Template style sheet to get the list of styles displayed in the 'Styles' drop down list and to style the contents of the editor, so that it appears similar to the final output on the front-end of your site.
+* How to use : copy styles from style.css and paste it into this file
+*/
+
+/*
+ * SETTINGS
+ */
+@import 'settings/defaults';
+@import 'settings/colors';
+@import 'settings/fonts';
+@import 'settings/variables';
+@import 'generic/icon-fonts';
+/** TOOLS **/
+@import 'tools/mixins';
+@import 'objects/buttons';

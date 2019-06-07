@@ -1,0 +1,30 @@
+{% load static wagtailuserbar %}
+{% load wagtailcore_tags %}
+{% load menu_tags %}
+<header class="page-head" role="header">
+    <div class="wrapper">
+        <div class="inner-wrapper">
+            <div class="page-head-top">
+                <a href="/" id="logo">
+                <img
+                    src="{% static '/img/logo.png' %}"
+                    alt="{{ request.site.site_name }} Logo"
+                    class="logo"
+                    width="240px"/>
+                </a>
+                <div class="page-navigation-menu">
+                    {% main_menu template="menus/custom_main_menu.html" %}
+                </div>
+                <div class="btn-menu">
+                    <div class="icons-toggle"><span></span><span></span><span></span><span></span></div>
+                </div>
+            </div>
+
+            <div class="page-head-bottom-menus">
+                <div class="menu-hamburger">
+                    {% main_menu template="menus/custom_main_menu.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

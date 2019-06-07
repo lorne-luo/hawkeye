@@ -1,0 +1,11 @@
+{
+    "tabWidth": 4,
+    "overrides": [
+        {
+            "files": "*.{js,json,yml,babelrc,eslintrc}",
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
+}

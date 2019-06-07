@@ -1,0 +1,13 @@
+/*
+==========================================================================
+   #Font face
+========================================================================== */
+@font-face {
+    font-family: 'PT Serif';
+    font-weight: 400;
+    font-style: normal;
+    src: url('../fonts/PT-Serif-regular/PT-Serif-regular.eot');
+    src: url('../fonts/PT-Serif-regular/PT-Serif-regular.eot?#iefix')
+        format('embedded-opentype'), local('PT Serif'), local('PT-Serif-regular'), url('../fonts/PT-Serif-regular/PT-Serif-regular.woff2') format('woff2'), url('../fonts/PT-Serif-regular/PT-Serif-regular.woff') format('woff'), url('../fonts/PT-Serif-regular/PT-Serif-regular.ttf') format('truetype'), url('../fonts/PT-Serif-regular/PT-Serif-regular.svg#PTSerif')
+        format('svg');
+}

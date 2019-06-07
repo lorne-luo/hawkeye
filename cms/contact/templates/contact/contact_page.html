@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% block body_class %}template-contact{% endblock %}
+
+{% block content %}
+	{% image page.banner_image original as banner_img %}
+	<div class="internal-banner" {% if banner_img %} style="background-image:url({{ banner_img.url }});"{% endif %} >
+		<div class="wrapper">
+			<div class="internal-banner__heading">{{ page.banner_text }}</div>
+		</div>
+	</div>
+	{# Page Title h1 #}
+	<div class="wrapper">
+		<h1 class="page-title">{{ self.title }}</h1>
+	
+		<div class="contact-innerwrapper">
+			<div class="contact-info">
+				<div class ="contact-desc">
+					{{ page.contact_description |safe }}
+				</div>
+				<div class="contact-details">
+					<p class="contact-details__address">{{ page.address }}</p>
+					<p class="contact-details__phone"><a href="tel:{{ page.phone }}">{{ page.phone }}</a></p>
+					<p class="contact-details__email"><a href="mailto:{{ page.email}}">{{ page.email }}</a></p>
+				</div>
+			</div>
+			<div class="contact-form">
+				{% for content_block in page.content %}
+					 {% include_block content_block %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

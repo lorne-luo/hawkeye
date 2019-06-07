@@ -1,0 +1,24 @@
+/*
+==========================================================================
+   #Utilities
+========================================================================== */
+
+// #mobile only classes
+@include breakpoint(desktop) {
+    .desktopHide,.mobileOnly{
+        display:none !important;
+    }
+}
+
+@include breakpoint(tablet) {
+    .tabletHide,.mobileOnly {
+        display:none !important;
+    }
+
+}
+
+@include breakpoint(mobile) {
+    .mobileHide {
+        display: none !important;
+    }
+}

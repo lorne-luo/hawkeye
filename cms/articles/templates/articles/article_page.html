@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+{% block body_class %}template-article{% endblock %}
+
+{% block content %}
+	{% image page.banner_image original as banner_img %}
+	<div class="internal-banner" {% if banner_img %} style="background-image:url({{ banner_img.url }});"{% endif %} >
+		<div class="wrapper">
+			<div class="internal-banner__heading">{{ page.banner_text }}</div>
+		</div>
+	</div>
+	{# Page Title h1 #}
+	<div class="wrapper">
+		<h1 class="page-title">{{ self.title }}</h1>
+	</div>
+	{# Display All StremField block content #}
+	{% include 'includes/content_body.html' with content=page.content %}
+{% endblock %}

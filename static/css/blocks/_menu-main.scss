@@ -1,0 +1,95 @@
+/*
+==========================================================================
+   #Navigation
+========================================================================== */
+// TODO : remove unused styles and update accordingly also make sure colors are using variables
+
+.page-navigation-menu {
+    @include breakpoint(not-desktop) {
+        display: none;
+    }
+
+    ul {
+        list-style-type: none;
+
+        a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        &.menu {
+            padding: 0;
+            margin: 0 0 10px;
+            display: table;
+            width: 100%;
+            background: $color-navbg--level1;
+        }
+    }
+
+    li ul {
+        z-index: 99999;
+        display: block;
+        position: absolute;
+        opacity: 0;
+        visibility: hidden;
+        left: 0;
+        padding: 0;
+        min-width: 250px;
+        background: #fff;
+        transition: opacity 400ms linear;
+    }
+
+    /* Level 1 */
+
+    .level1 {
+        display: table-cell;
+        list-style: none none;
+        position: relative;
+
+        > a {
+            text-align: center;
+            font-size: 16px;
+        }
+    }
+
+    // Level 2
+
+    .level2 > ul {
+        left: 250px;
+        margin-top: -50px;
+    }
+
+    // Hover
+    $color-bg: $color-navbg--level1, $color-navbg--level2, $color-navbg--level3;
+    $color-bg--hover: $color-navbg--level1--hover, $color-navbg--level2--hover,
+        $color-navbg--level3--hover;
+    @for $i from 1 through 3 {
+
+        li.level#{$i} {
+            background: nth($color-bg, $i);
+            padding: 0;
+        }
+
+        li.level#{$i} > a {
+            display: block;
+            padding: 15px;
+            color: $color--white;
+        }
+
+        li.level#{$i}:hover,
+        li.level#{$i}.active {
+            background: nth($color-bg--hover, $i);
+            text-decoration: none;
+            color: $color--white;
+        }
+
+        // Display sub-list on hover
+        @if $i < 3 {
+
+            li.level#{$i}:hover > ul {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    }
+}

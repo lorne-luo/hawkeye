@@ -1,0 +1,28 @@
+{% load wagtailimages_tags %}
+{% load i18n %}
+{% load l10n %}
+
+<div id="{{ attrs.id|unlocalize }}-chooser" class="{% block chooser_class %}gallery-chooser{% endblock %}">
+
+    <ul class="action">
+        <li style="width:50%">
+            {{ collection_selector|safe }}
+        </li>
+        <li>
+            <a style="margin-left: 1em;" data-url="{% url 'wagtailimages:index' %}?collection_id="
+               href="{% if value %}{% url 'wagtailimages:index' %}?collection_id={{ value }}{% endif %}"
+               {% if not value %}style="display:none"{% endif %}
+               class="edit-link button button-small button-secondary"
+               target="_blank">{{ widget.link_to_chosen_text }}</a>
+            <a href="{% url 'wagtailadmin_collections:add' %}"
+               class="add-link button button-small button-secondary"
+               target="_blank">{{ widget.add_one_text }}</a>
+        </li>
+    </ul>
+
+</div>
+<div style="clear:both">
+    <p class="help">Select collection for gallery.</p>
+</div>
+
+{{ original_field_html }}

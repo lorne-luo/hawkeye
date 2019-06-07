@@ -1,0 +1,69 @@
+/*
+==========================================================================
+   #Messages
+========================================================================== */
+$system-alert-border-width: 3px;
+/* System Messages */
+
+#system-message {
+    position: relative;
+    width: 100%;
+    clear: both;
+    padding: 0;
+    margin: 0;
+}
+
+#system-message h4 {
+    display: none;
+}
+
+#system-message .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: block;
+    line-height: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+#system-message .alert {
+    position: relative;
+    padding: 15px 25px 15px 60px;
+    margin-bottom: 20px;
+}
+
+#system-message .alert p {
+    margin: 0;
+}
+
+/* System Standard Messages */
+
+#system-message > .alert-message {
+    color: $color-system-alert-msg-text;
+    background: $color-system-alert-msg-bg url('../img/notice-info.png') 15px
+        center no-repeat;
+    border: $system-alert-border-width solid $color-system-alert-msg-border;
+}
+/* System Error Messages */
+
+#system-message > .alert-error {
+    color: $color-system-alert-error-text;
+    background: $color-system-alert-error-bg url('../img/notice-alert.png') 15px
+        center no-repeat;
+    border: $system-alert-border-width solid $color-system-alert-error-border;
+}
+/* System Notice Messages */
+
+#system-message > .alert-notice,
+#system-message > .alert-warning {
+    color: $color-system-alert-notice-text;
+    background: $color-system-alert-notice-bg url('../img/notice-notice.png')
+        15px center no-repeat;
+    border: $system-alert-border-width solid $color-system-alert-notice-border;
+}
+
+#system-message-container {
+    display: none;
+}

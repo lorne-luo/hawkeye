@@ -1,0 +1,14 @@
+{% load menu_tags %}
+<div class="page-footer">
+	<div class="footer-menu">
+		<div class="wrapper">
+			{% main_menu template="menus/custom_main_menu.html" %}
+		</div>
+	</div>
+	    <div class="wrapper">
+	        <p>© {% now "Y" %} {{ request.site.site_name }} | All right reserved</p>
+	        <div class="footer-bottom-menu">{% flat_menu 'sub-footer-menu' template="menus/custom_main_menu.html" %}</div>
+	         <a target="_blank"
+                   href="http://www.butterfly.com.au/"><span class="icon icon-butterfly">Website by</span></a>
+	    </div>
+</div>

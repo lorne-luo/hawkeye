@@ -1,0 +1,27 @@
+{% load wagtailimages_tags %}
+{% image content.banner_image original as banner_img %}
+<div class="banner {{ content.block_class|default:"" }}" {% if content.block_id %}id="{{ content.block_id }}"{% endif %}
+{% if content.banner_image_position == "bannerimage-bg" %}
+style=" background-image:url({{ banner_img.url }});"
+{% endif %}>
+    <div class="wrapper">
+        <div class="banner__content">
+            {% if content.banner_heading %}
+                <span class="banner__heading">{{ content.banner_heading }}</span>
+            {% endif %}
+            <div class="banner__desc">
+                {% if content.banner_text %}
+                    <span class="banner__text">{{ content.banner_text }}</span>
+                {% endif %}
+                {% if content.banner_button_name %}
+                    <a class="banner__btn btn btn-large" href="{% if content.banner_button_url %}{{content.banner_button_url}}{% endif %}">
+                    {{ content.banner_button_name }}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        {% if content.banner_image_position == "bannerimage-section" %}
+           {% image content.banner_image original %}
+        {% endif %}
+    </div>
+</div>

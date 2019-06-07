@@ -1,0 +1,50 @@
+{% load wagtailimages_tags %}
+ <div class="content-block {{ content.block_class|default:"" }}" {% if content.block_id %}id="{{ content.block_id }}"{% endif %}>
+    <div class="wrapper">
+        <div class="content-block_innerwrapper">
+        {# Info Block Left #}
+        {% if content.info_block_image_position == 'left' %}
+            <div class="content-block_image">{% image content.info_block_image original %}</div>
+            <div class="content-block_content">
+                {% if content.info_block_heading %}
+                    <h3 class="content-block__heading">{{ content.info_block_heading }}</h3>
+                {% endif %}
+                {% if content.info_block_text %}
+                    <div class="content-block__text">{{ content.info_block_text }}</div>
+                {% endif %}
+                <div class="content-block__icon-blocks">
+                    {% for list in content.info_block_icon_section %}
+                        <div class="content-block__icon-blocks">
+                            {% image list.info_block_icon_image original %}
+                            <div class="content-block__icon-blocks_heading">
+                                 {{list.info_block_icon_text}}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {# Info Block Right #}
+        {% else %}
+            <div class="content-block_content">
+                {% if content.info_block_heading %}
+                    <h3 class="content-block__heading">{{ content.info_block_heading }}</h3>
+                {% endif %}
+                {% if content.info_block_text %}
+                    <div class="content-block__text">{{ content.info_block_text }}</div>
+                {% endif %}
+                <div class="content-block__icon-blocks">
+                    {% for list in content.info_block_icon_section %}
+                        <div class="content-block__icon-blocks">
+                            {% image list.info_block_icon_image original %}
+                            <div class="content-block__icon-blocks_heading">
+                                 {{list.info_block_icon_text}}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="content-block__image">{% image content.info_block_image original %}</div>
+        {% endif %}
+        </div>
+    </div>
+</div>

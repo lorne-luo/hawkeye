@@ -1,0 +1,310 @@
+/*
+==========================================================================
+   #Hamburger Menu
+   ***Note: Add class "menu-hamburger" to module
+========================================================================== */
+
+$menu-hamburger-tb-width: 320px;
+$menu-hamburger-indicator-width: 49px;
+
+$menu-hamburger-padding-v: 13px;
+$menu-hamburger-padding-h: 20px;
+$menu-hamburger-padding-l2: 30px;
+$menu-hamburger-padding-l3: 40px;
+$menu-hamburger-padding-l4: 60px;
+$menu-hamburger-border-size: 1px;
+
+$color-menu-hamburger-bg-default: #324057;
+$color-menu-hamburger-bg-active: #fff;
+$color-menu-hamburger-bg-hover: #e52bd2;
+
+$color-menu-hamburger-text-default: #fff;
+$color-menu-hamburger-text-hover: #fff;
+$color-menu-hamburger-text-active: #000;
+$color-menu-hamburger-border-color: #fff;
+
+$color-menu-hamburger-bg-l1: #324057;
+$color-menu-hamburger-border-l1: #1645c7;
+
+$color-menu-hamburger-bg-l2: #444;
+$color-menu-hamburger-border-l2: #ecf00c;
+
+$color-menu-hamburger-bg-l3: #566277;
+$color-menu-hamburger-border-l3: #f31515;
+
+$color-menu-hamburger-bg-l4: #071020;
+$color-menu-hamburger-border-l4: #159bc4;
+
+.page-head-bottom-menus {
+    position: fixed;
+    right: 0;
+    top: device-map($head-height, tablet);
+    height: calc(100vh - #{device-map($head-height, tablet)});
+    transform: translateX(100%);
+    transition: all $transition-time;
+    z-index: z-index(burger-menu);
+    background-color: $color-menu-hamburger-bg-default;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    @include breakpoint(mobile) {
+        top: device-map($head-height, mobile);
+        height: calc(100vh - #{device-map($head-height, mobile)});
+    }
+
+    &.active {
+        visibility: visible;
+        transition: all $transition-time;
+        transform: translateX(0);
+    }
+
+    @include breakpoint(tablet) {
+        width: $menu-hamburger-tb-width;
+        box-sizing: content-box;
+    }
+
+    @include breakpoint(mobile) {
+        width: 100%;
+    }
+}
+
+.menu-hamburger {
+    @include breakpoint(desktop) {
+        display: none;
+    }
+
+    @include breakpoint(not-desktop) {
+        display: block;
+
+        a {
+            @include font-size(16px, 22px);
+            display: block;
+            padding: $menu-hamburger-padding-v $menu-hamburger-padding-h;
+            border-bottom: $menu-hamburger-border-size solid;
+            text-decoration: none;
+            color: $color-menu-hamburger-text-default;
+            flex: 1 0 0;
+            position: relative;
+
+            @include hover(
+                $color-menu-hamburger-text-hover,
+                $color-menu-hamburger-bg-hover
+            );
+
+            &:focus {
+                outline: 0;
+            }
+        }
+
+        ul {
+            padding-left: 0;
+            width: 100%;
+            margin-top: 0;
+        }
+
+        li {
+            display: flex;
+            flex-wrap: wrap;
+
+            &.current > a {
+                background: $color-menu-hamburger-bg-active;
+                color: $color-menu-hamburger-text-active;
+            }
+
+            &.parent ul {
+                display: none;
+            }
+
+            &.active > ul {
+                display: block;
+            }
+        }
+
+        .level1 {
+
+            > a {
+                background: $color-menu-hamburger-bg-l1;
+                border-color: $color-menu-hamburger-border-l1;
+
+                &:after {
+                    border-color: $color-menu-hamburger-border-l1;
+                }
+
+                &.opened {
+                    border-color: $color-menu-hamburger-border-l2;
+                }
+            }
+
+            > .icon-indicator {
+                background: $color-menu-hamburger-bg-l1;
+                border-left-color: $color-menu-hamburger-border-l1;
+                border-bottom-color: $color-menu-hamburger-border-l1;
+
+                &:after {
+                    border-top-color: $color-menu-hamburger-border-l1;
+                }
+
+                &.open:after {
+                    border-top-color: $color-menu-hamburger-border-l2;
+                }
+
+                &.open {
+                    background: $color-menu-hamburger-bg-l2;
+                    border-left-color: $color-menu-hamburger-border-l2;
+                    border-bottom-color: $color-menu-hamburger-border-l2;
+                }
+            }
+        }
+
+        .level2 {
+
+            > a {
+                padding-left: $menu-hamburger-padding-l2;
+                background: $color-menu-hamburger-bg-l2;
+                border-color: $color-menu-hamburger-border-l2;
+
+                &:after {
+                    border-color: $color-menu-hamburger-border-l2;
+                }
+
+                &.opened {
+                    border-color: $color-menu-hamburger-border-l3;
+                }
+            }
+
+            > .icon-indicator {
+                background: $color-menu-hamburger-bg-l2;
+                border-left-color: $color-menu-hamburger-border-l2;
+                border-bottom-color: $color-menu-hamburger-border-l2;
+
+                &:after {
+                    border-top-color: $color-menu-hamburger-border-l2;
+                }
+
+                &.open:after {
+                    border-top-color: $color-menu-hamburger-border-l3;
+                }
+
+                &.open {
+                    background: $color-menu-hamburger-bg-l3;
+                    border-left-color: $color-menu-hamburger-border-l3;
+                    border-bottom-color: $color-menu-hamburger-border-l3;
+                }
+            }
+        }
+
+        .level3 {
+
+            > a {
+                padding-left: $menu-hamburger-padding-l3;
+                background: $color-menu-hamburger-bg-l3;
+                border-color: $color-menu-hamburger-border-l3;
+
+                &:after {
+                    border-color: $color-menu-hamburger-border-l3;
+                }
+
+                &.opened {
+                    border-color: $color-menu-hamburger-border-l4;
+                }
+            }
+
+            > .icon-indicator {
+                background: $color-menu-hamburger-bg-l3;
+                border-left-color: $color-menu-hamburger-border-l3;
+                border-bottom-color: $color-menu-hamburger-border-l3;
+
+                &:after {
+                    border-top-color: $color-menu-hamburger-border-l3;
+                }
+
+                &.open:after {
+                    border-top-color: $color-menu-hamburger-border-l4;
+                }
+
+                &.open {
+                    background: $color-menu-hamburger-bg-l4;
+                    border-left-color: $color-menu-hamburger-border-l4;
+                    border-bottom-color: $color-menu-hamburger-border-l4;
+                }
+            }
+        }
+
+        .level4 {
+
+            > a {
+                padding-left: $menu-hamburger-padding-l4;
+                background: $color-menu-hamburger-bg-l4;
+                border-color: $color-menu-hamburger-border-l4;
+            }
+
+            > a:after {
+                border-color: $color-menu-hamburger-border-l4;
+            }
+
+            > .icon-indicator {
+                background: $color-menu-hamburger-bg-l4;
+                border-left-color: $color-menu-hamburger-border-l4;
+                border-bottom-color: $color-menu-hamburger-border-l4;
+
+                &:after {
+                    border-top-color: $color-menu-hamburger-border-l4;
+                }
+            }
+        }
+
+        .icon-indicator {
+            position: relative;
+            width: $menu-hamburger-indicator-width;
+            right: 0;
+            top: 0;
+            padding: 0;
+            border-bottom: $menu-hamburger-border-size solid;
+            border-left: $menu-hamburger-border-size solid;
+            cursor: pointer;
+
+            &:before {
+                text-align: center;
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                transform: translateY(-50%);
+                transition: transform $transition-time;
+                @include font-size(11px, 11px);
+                color: $color-menu-hamburger-text-default;
+            }
+
+            &.open:before {
+                transform: translateY(-50%) rotate(-90deg);
+            }
+
+            &:after {
+                content: '';
+                height: $menu-hamburger-border-size;
+                position: absolute;
+                left: -$menu-hamburger-border-size;
+                right: 0;
+                top: -$menu-hamburger-border-size;
+                border-top: $menu-hamburger-border-size solid;
+                z-index: 1;
+            }
+        }
+    }
+
+    .icon-indicator {
+        @extend %icon, %icon-arrow-right;
+        @include breakpoint(desktop) {
+            display: none;
+        }
+
+        @include hover(
+            $color-menu-hamburger-text-hover,
+            $color-menu-hamburger-bg-hover
+        );
+
+        &:focus {
+            outline: 0;
+        }
+    }
+}

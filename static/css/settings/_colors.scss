@@ -1,0 +1,121 @@
+/*
+==========================================================================
+   #Colors
+========================================================================== */
+// Navigation colors
+$color-navbg--level1: #ccc;
+$color-navbg--level1--hover: #191d1f;
+$color-navbg--level2: #ccc;
+$color-navbg--level2--hover: #303436;
+$color-navbg--level3: #ccc;
+$color-navbg--level3--hover: #686f73;
+
+// Basic colors
+$color-white: #fff;
+$color-gray: #696969;
+$color--white: #fff;
+$color--black: #191d1f;
+$color--black-2: #303436;
+
+// Heading colors
+$color-h1: #0c3c6a;
+$color-h2: #0c3c6a;
+$color-h3: #383d43;
+$color-h4: #0c3c6a;
+$color-h5: #383d43;
+$color-h6: #0c3c6a;
+
+// Focus color
+$color-focus: #1799d2;
+
+// Link colors
+$color-link-hover: #1799d2;
+$color-link-tertiary: #323232;
+
+// From element colors
+$color-form-element-border: #dedede;
+$color-form-element-disabled-bg: #f4f5f6;
+$color-form-element-disabled-border: #dee2e7;
+$color-form-element-text: #2a2525;
+$color-form-element-bg: #fff;
+$color-form-element-hover-bg: #f2f5f6;
+$color-form-element-focus-shadow: #66afe9;
+$color-select-bg: #fff;
+
+// Label colors
+$color-label-text: #2a2525;
+$color-label-disabled: #707070;
+
+// Radio colors
+$color-radio-bg: #fff;
+$color-radio-checked-bg: #000;
+$color-checkbox-checked-disabled: #707070;
+
+// Checkbox colors
+$color-checkbox-bg: #fff;
+$color-checkbox-tick: #000;
+$color-checkbox-tick-disabled: #707070;
+
+// Form error colors
+$color-form-error-text: #b94a48;
+$color-form-error-bg: #fff4f5;
+$color-form-border: #b94a48;
+
+// Button clolors
+$color-btn-focus-shadow-1: #fff;
+$color-btn-focus-shadow-2: #66afe9;
+$color-btn-primary-text: #fff;
+$color-btn-primary-bg: #324057;
+$color-btn-primary-text-hover: #fff;
+$color-btn-primary-bg-hover: #1e2634;
+$color-btn-secondary-text: #000;
+$color-btn-secondary-border: #000;
+$color-btn-secondary-bg: transparent;
+$color-btn-secondary-text-hover: #fff;
+$color-btn-secondary-bg-hover: #000;
+$color-btn-tertiary-text: #323232;
+$color-btn-tertiary-bg: #fff;
+$color-btn-tertiary-text-hover: #fc812f;
+$color-btn-tertiary-bg-hover: #fff;
+$color-btn-large-text: #fff;
+$color-btn-large-bg: #0000b6;
+$color-btn-large-text-hover: #fff;
+$color-btn-large-bg-hover: #01006d;
+
+// Accordion colors
+$color-accordion-border: #d6dee2;
+$color-accordion-bg: #4c5357;
+$color-accordion-text: #fff;
+$color-accordion-focus-text: #fff;
+$color-accordion-focus-bg: #0d4261;
+$color-accordion-arrow-border-left: #d6dee2;
+$color-accordion-arrow: #fff;
+$color-accordion-content-border-top: #d6dee2;
+
+// Table colors
+$color-table-border: #b6b6b6;
+$color-table-tr-odd-bg: #eee;
+$color-table-tr-even-bg: #fff;
+$color-table-th-border: #b6b6b6;
+$color-table-th-bg: #ccc;
+$color-table-th-text: #000;
+$color-table-td-border: #b6b6b6;
+$color-table-td-text: #000;
+
+// Error page colors
+$color-error-h1: #000;
+$color-error-h2: #000;
+
+// System Error Messages colors
+$color-system-alert-msg-text: #4b88c7;
+$color-system-alert-msg-bg: #d3e4f5;
+$color-system-alert-msg-border: #4b88c7;
+$color-system-alert-error-text: #f30045;
+$color-system-alert-error-bg: #ffd7e2;
+$color-system-alert-error-border: #f30045;
+$color-system-alert-notice-text: #bb8b00;
+$color-system-alert-notice-bg: #fffaed;
+$color-system-alert-notice-border: #ecb925;
+
+// hr
+$color-hr: #ccc;

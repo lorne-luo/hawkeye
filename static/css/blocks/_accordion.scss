@@ -1,0 +1,72 @@
+/*
+==========================================================================
+   #Slider
+========================================================================== */
+$accordion-transition-time: .5s;
+$accordion-border-width: 1px;
+$accordion-arrow-width: 59px;
+$accordion-arrow-border-width: 1px;
+$accordion-title-padding-v: 10px;
+$accordion-title-padding-h: 20px;
+$accordion-body-padding-v: 5px;
+$accordion-body-padding-h: 30px;
+$accordion-item-margin-v: 18px;
+
+.accordion-item {
+    border: $accordion-border-width solid $color-accordion-border;
+    margin: $accordion-item-margin-v 0;
+
+    &__title-container {
+        position: relative;
+        display: block;
+        background-color: $color-accordion-bg;
+        text-decoration: none;
+        color: $color-accordion-text;
+        font-weight: bold;
+        padding: $accordion-title-padding-v $accordion-title-padding-h;
+        transition: background-color $transition-time;
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            outline: 0;
+        }
+
+        @include hover($color-accordion-focus-text, $color-accordion-focus-bg);
+    }
+
+    &__arrow {
+        position: absolute;
+        width: $accordion-arrow-width;
+        height: 100%;
+        top: 0;
+        right: 0;
+        border-left: $accordion-arrow-border-width solid
+            $color-accordion-arrow-border-left;
+        @include font-size(10px, 10px);
+        text-align: center;
+
+        &:before {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            margin: auto;
+            transform: translateY(-50%);
+            transition: transform $accordion-transition-time;
+            color: $color-accordion-arrow;
+            @extend %icon-arrow-down;
+
+            .accordion-item__title-container--toggle-on & {
+                transform: translateY(-50%) rotate(180deg);
+                transition: transform $accordion-transition-time;
+            }
+        }
+    }
+
+    &__body-wrapper {
+        border-top: $accordion-border-width solid
+            $color-accordion-content-border-top;
+        padding: $accordion-body-padding-v $accordion-body-padding-h;
+    }
+}

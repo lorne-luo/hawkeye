@@ -1,0 +1,56 @@
+/*
+==========================================================================
+   #Develop
+========================================================================== */
+
+body:after {
+    color: $color--black;
+    background: $color--white;
+    padding: 5px;
+    font-size: 12px;
+    position: fixed;
+    z-index: z-index(viewport-size-tag);
+    top: 0;
+    left: 0;
+    opacity: .8;
+    display: none;
+}
+
+body:hover:after {
+    display: none;
+}
+
+@include breakpoint(desktop) {
+
+    body:after {
+        content: 'Desktop';
+    }
+}
+
+@include breakpoint(tablet) {
+
+    body:after {
+        content: 'Tablet';
+    }
+}
+
+@include breakpoint(mobile-landscape) {
+
+    body:after {
+        content: 'Mobile landscape';
+    }
+}
+
+@include breakpoint(mobile-portrait) {
+
+    body:after {
+        content: 'Mobile portrait';
+    }
+}
+
+code,
+kbd,
+pre,
+samp {
+    font-size: 12px;
+}

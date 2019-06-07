@@ -1,0 +1,14 @@
+{% load wagtailimages_tags %}
+<div class="progress-steps-block {{ content.block_class|default:"" }}" {% if content.block_id %}id="{{ content.block_id }}"{% endif %}>
+	<div class="wrapper">
+		<ol>
+			{% for list in content.progress_steps_blocks %}
+			<li>
+				{% image list.progress_steps_block_image original %}
+				<span class="progress-steps-block__heading">{{ list.progress_steps_block_heading }}</span>
+				<span class="progress-steps-block__text">{{ list.progress_steps_block_text }}</span>
+			</li>
+			{% endfor %}
+		</ol>
+	</div>
+</div>

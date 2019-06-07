@@ -1,0 +1,59 @@
+/*
+==========================================================================
+   #Layout
+========================================================================== */
+
+// TODO : Change min-height
+
+.page-content {
+    min-height: 500px;
+}
+
+.two_column_l {
+
+    .page-content-left,
+    .page-content-left-bottom {
+        @include breakpoint(desktop) {
+            float: left;
+            width: $side-menu-width;
+        }
+    }
+
+    .page-content-left {
+        position: relative;
+
+        @include breakpoint(not-desktop) {
+            display: none;
+        }
+
+        > * {
+            margin-bottom: 30px;
+        }
+    }
+
+    .page-content-main {
+        @include breakpoint(desktop) {
+            float: right;
+            width: calc(100% - #{$side-menu-width});
+            padding-left: 50px;
+        }
+    }
+
+    .page-content-left-bottom {
+        @include breakpoint(tablet) {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        @include breakpoint(mobile) {
+            margin-top: 30px;
+        }
+
+        > div {
+            @include breakpoint(tablet) {
+                width: calc(50% - 10px);
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+/*
+==========================================================================
+   #Page footer
+========================================================================== */
+// TODO : remove unused styles and make sure colors are using variables
+
+.page-footer {
+    border-top: 2px solid #ccc;
+    padding: 50px 0;
+
+    a {
+        font-weight: normal;
+        text-decoration: none;
+    }
+
+    .icon-butterfly {
+        position: relative;
+
+        &:before {
+            position: absolute;
+            left: 100%;
+        }
+    }
+}

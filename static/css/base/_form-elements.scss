@@ -1,0 +1,300 @@
+/*
+==========================================================================
+   #Form elements
+========================================================================== */
+$form-element-border-radius: 2px;
+$form-element-border-width: 1px;
+$form-element-padding-v: 5px;
+$form-element-padding-h: 15px;
+
+$select-padding-right: 50px;
+
+$textarea-padding-v: 10px;
+$textarea-padding-h: 15px;
+
+$checkbox-height: 40px;
+$checkbox-width: 40px;
+$checkbox-padding-left: 25px;
+$checkbox-tick-position-left: 14px;
+$checkbox-tick-size: 13px;
+$checkbox-border-width: 2px;
+
+$radio-size-inner: 20px;
+$radio-size-outer: 40px;
+$radio-padding-left: 25px;
+$radio-border-width: 2px;
+
+/**
+ * Placeholder
+ */
+
+/* stylelint-disable */
+
+::-webkit-input-placeholder {
+    color: inherit;
+    opacity: .6;
+}
+
+:-moz-placeholder {
+    /* Firefox 18- */
+    color: inherit;
+    opacity: .6;
+}
+
+::-moz-placeholder {
+    /* Firefox 19+ */
+    color: inherit;
+    opacity: .6;
+}
+
+:-ms-input-placeholder {
+    color: inherit;
+    opacity: .6;
+}
+/* stylelint-enable */
+
+/**
+ * Label
+ */
+
+label {
+    color: $color-label-text;
+}
+
+textarea {
+    padding: $textarea-padding-v $textarea-padding-h;
+    height: auto;
+    resize: vertical;
+}
+
+/**
+ * Select
+ */
+
+select {
+    appearance: none;
+    cursor: pointer;
+    padding-right: $select-padding-right;
+    background: transparent;
+
+    // Hide default select arrow in IE
+
+    &::-ms-expand {
+        display: none;
+    }
+
+    &:focus,
+    .no-touch &:hover {
+        background: transparent;
+    }
+}
+
+%input,
+input[type='email'],
+input[type='number'],
+input[type='password'],
+input[type='tel'],
+input[type='url'],
+input[type='text'],
+input[type='search'],
+textarea,
+select {
+    display: inline-block;
+    box-sizing: border-box;
+    color: $color-form-element-text;
+    border: $form-element-border-width solid currentColor;
+    border-radius: $form-element-border-radius;
+    padding: $form-element-padding-v $form-element-padding-h;
+    max-width: 100%;
+    background: $color-form-element-bg;
+    transition: background $transition-time, color $transition-time;
+    appearance: none; /* Remove ios text input inner shadow */
+
+    @include breakpoint(mobile) {
+        width: 100%;
+    }
+
+    &:focus {
+        outline: $focus-border-width solid $color-focus;
+    }
+
+    &:focus,
+    .no-touch &:hover {
+        background: $color-form-element-hover-bg;
+    }
+}
+
+/**
+ * Checkbox
+ */
+
+input[type='checkbox'] {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+
+    + label {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        padding-left: calc(#{$checkbox-width} + #{$checkbox-padding-left});
+        min-height: $checkbox-height;
+        margin-bottom: 10px;
+
+        &:after {
+            content: '';
+            position: absolute;
+            display: block;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: $checkbox-width;
+            height: $checkbox-height;
+            background-color: $color-checkbox-bg;
+            border: $checkbox-border-width solid $color-form-element-border;
+        }
+
+        @include breakpoint(mobile) {
+            margin-bottom: 22px;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &:checked {
+
+        + label {
+
+            &:before {
+                position: absolute;
+                left: $checkbox-tick-position-left;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: z-index(check-box);
+                color: $color-checkbox-tick;
+                font-size: $checkbox-tick-size;
+                transition: all $transition-time;
+                @extend %icon, %icon-tick;
+            }
+        }
+    }
+
+    &:focus + label:after {
+        outline: $focus-border-width solid $color-focus;
+    }
+
+    &:disabled + label {
+        color: $color-label-disabled;
+        cursor: default;
+
+        &:before {
+            color: $color-checkbox-tick-disabled;
+        }
+
+        &:after {
+            border-color: $color-form-element-disabled-border;
+            background-color: $color-form-element-disabled-bg;
+        }
+    }
+}
+
+/**
+* Radio
+*/
+
+input[type='radio'] {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+
+    + label {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        padding-left: calc(#{$radio-size-outer} + #{$radio-padding-left});
+        cursor: pointer;
+        margin-bottom: 10px;
+        margin-right: 15px;
+        box-sizing: border-box;
+        min-height: $radio-size-outer;
+
+        @include breakpoint(mobile) {
+            margin-bottom: 22px;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+        }
+
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: $radio-size-outer;
+            height: $radio-size-outer;
+            box-sizing: border-box;
+            background-color: $color-radio-bg;
+            border: $radio-border-width solid $color-form-element-border;
+            border-radius: 50%;
+        }
+    }
+
+    &:checked + label {
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: calc((#{$radio-size-outer} - #{$radio-size-inner}) / 2);
+            top: 50%;
+            transform: translateY(-50%);
+            height: $radio-size-inner;
+            width: $radio-size-inner;
+            z-index: z-index(radio);
+            background-color: $color-radio-checked-bg;
+            transition: all $transition-time;
+            border-radius: 50%;
+        }
+    }
+
+    &:focus + label {
+
+        &:after {
+            outline: $focus-border-width solid $color-focus;
+        }
+    }
+
+    &:disabled {
+
+        + label {
+            color: $color-label-disabled;
+            cursor: default;
+
+            &:after {
+                border-color: $color-form-element-disabled-border;
+                background-color: $color-form-element-disabled-bg;
+            }
+        }
+
+        &:checked + label:before {
+            background-color: $color-checkbox-checked-disabled;
+        }
+    }
+}
+
+/**
+ * Buttons
+ */
+
+%button,
+button,
+input[type='button'],
+input[type='reset'],
+input[type='submit'] {
+    border: 0;
+}

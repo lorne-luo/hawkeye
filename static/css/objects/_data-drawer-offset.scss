@@ -1,0 +1,41 @@
+/*
+==========================================================================
+   #Data Drawer Offset
+========================================================================== */
+$overlay-transition-time: .5s;
+$overlay-delay-time: .1s;
+
+body {
+
+    &:before {
+        position: absolute;
+        z-index: z-index(overlay);
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        background: rgba(0, 0, 0, .9);
+        content: '';
+        opacity: 0;
+        transition: opacity $overlay-transition-time, width $overlay-delay-time $overlay-transition-time, height $overlay-delay-time $overlay-transition-time;
+    }
+
+    &.toggled-drawer-offset-overlay:before {
+        width: 100%;
+        height: 100%;
+        opacity: .5;
+        transition: opacity $overlay-transition-time;
+    }
+}
+
+[data-drawer-offset] {
+    @include breakpoint(tablet) {
+        padding-top: device-map($head-height, tablet);
+    }
+
+    @include breakpoint(mobile) {
+        padding-top: device-map($head-height, mobile);
+    }
+}

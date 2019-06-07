@@ -1,0 +1,28 @@
+{% load wagtailimages_tags %}
+<div class="checklist-block {{ content.block_class|default:"" }} {% if content.checklist_style == 'full-checklist' %}full-width{% endif %}" {% if content.block_id %}id="{{ content.block_id }}"{% endif %}>
+	<div class="wrapper">
+		{% if content.checklist_heading %}
+			<h3 class="checklist-block__heading">{{ content.checklist_heading }}</h3>
+		{% endif %}
+		{% if content.checklist_style == 'image-checklist'  %}
+			<div class="checklist-block__image">{% image content.checklist_image original %}</div>
+		{% endif %}
+
+		<div class="checklist-block__content">
+			{% if content.checklist_text %}
+				<div class="checklist-block__">{{ content.checklist_text }}</div>
+			{% endif %}
+			<ul>
+			{% for list in content.checklist_lists %}
+				<li>{{ list.checklist_list }}</li>
+			{% endfor %}
+			</ul>
+
+			{% if content.checklist_button_name %}
+				<a class="checklist-block__btn btn btn-secondary" href="{% if content.checklist_button_url %}{{content.checklist_button_url}}{% endif %}">
+                    {{ content.checklist_button_name }}
+                </a>
+			{% endif %}
+		</div>
+	</div>
+</div>
