@@ -75,6 +75,9 @@ INSTALLED_APPS = [
     # 'cms.articles',
     # 'cms.contact',
     # 'cms.custom_settings',
+    'apps.asx',
+    'apps.prediction',
+    'apps.recommendation',
 ]
 
 # MIDDLEWARE CONFIGURATION
