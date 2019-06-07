@@ -236,6 +236,20 @@ WAGTAILEMBEDS_FINDERS = [
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = env('BASE_URL', default='http://example.com')
 
+# TELSTRA SMS API KEY
+# ------------------------------------------------------------------------------
+TELSTRA_CLIENT_KEY = env('TELSTRA_CLIENT_KEY', default='')
+TELSTRA_CLIENT_SECRET = env('TELSTRA_CLIENT_SECRET', default='')
+ADMIN_MOBILE_NUMBER = env('ADMIN_MOBILE_NUMBER', default='')
+
+# REDIS CONFIGURATION
+# ------------------------------------------------------------------------------
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
+CUSTOM_DB_CHANNEL = 0
+REDBEAT_DB_CHANNEL = 1
+CELERY_DB_CHANNEL = 2
+VERIFICATION_CODE_DB_CHANNEL = 3
 
 # PROJECT SETTINGS
 # ------------------------------------------------------------------------------
