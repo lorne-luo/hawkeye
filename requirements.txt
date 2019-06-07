@@ -19,7 +19,6 @@ Django==2.0.13
 wagtail==2.4
 psycopg2-binary==2.7.5
 django-environ==0.4.4
-mysqlclient==1.3.12
 django-filter==1.1.0
 djangorestframework==3.9.4
 elasticsearch==5.5.2
@@ -27,3 +26,5 @@ django-extensions==2.0.0
 wagtailstreamforms==3.5
 wagtailmenus==2.13
 wagtail-condensedinlinepanel==0.5.2
+git+https://github.com/Telstra/MessagingAPI-SDK-python.git
+redis==2.10.6
