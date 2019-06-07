@@ -110,4 +110,4 @@ if __name__ == '__main__':
         time.sleep(15)
 
     print(f'Download finished, done = {done}, failure = {failure}')
-    send_to_admin(f'Download finished, done = {done}, failure = {failure}')
+    send_to_admin(f'[Hawkeye] Download finished, done = {done}, failure = {failure}')

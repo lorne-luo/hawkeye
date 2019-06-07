@@ -180,6 +180,6 @@ if __name__ == '__main__':
             csvfile.flush()
             print(i, code, result)
 
-    print(f'Download finished, done = {done}, skipped = {skipped}, failure = {failure}')
+    print(f'Predict finished, done = {done}, skipped = {skipped}, failure = {failure}')
     print(result_path)
-    send_to_admin(f'Download finished, done = {done}, skipped = {skipped}, failure = {failure}')
+    send_to_admin(f'[Hawkeye] Predict finished, done = {done}, skipped = {skipped}, failure = {failure}')
