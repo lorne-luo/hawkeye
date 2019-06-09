@@ -175,17 +175,13 @@ def get_codes2():
 
 
 def get_all_codes():
-    codes1 = get_codes1()
     codes2 = get_codes2()
     df = get_asx_df()
     all_codes = list(df['ASX code'].values)
-    for code in codes1:
-        if code in all_codes:
-            all_codes.remove(code)
     for code in codes2:
         if code in all_codes:
             all_codes.remove(code)
-    return codes1 + codes2 + all_codes
+    return codes2 + all_codes
 
 
 if __name__ == '__main__':
