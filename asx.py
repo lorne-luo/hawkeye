@@ -178,7 +178,7 @@ def get_all_codes():
     codes1 = get_codes1()
     codes2 = get_codes2()
     df = get_asx_df()
-    all_codes = df['ASX code'].values
+    all_codes = list(df['ASX code'].values)
     for code in codes1:
         all_codes.remove(code)
     for code in codes2:
