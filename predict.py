@@ -159,6 +159,8 @@ if __name__ == '__main__':
 
             if code in done_codes:
                 # skip already done
+                skipped += 1
+                print(i, code, 'exist and skipped')
                 continue
 
             if not os.path.exists(path):
@@ -167,11 +169,6 @@ if __name__ == '__main__':
                 continue
 
             try:
-                pic_path = get_pic_path(code)
-                if not force and os.path.exists(pic_path):
-                    skipped += 1
-                    print(i, code, 'exist and skipped')
-                    continue
                 result = process_stock(code, name)
                 done += 1
             except Exception as ex:
