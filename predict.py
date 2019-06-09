@@ -1,17 +1,16 @@
 import sys
 
 import csv
-from datetime import datetime
-
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
-from decimal import Decimal
-from core.sms.telstra_api_v2 import send_to_admin
+from datetime import datetime
+
 import config.settings.local as settings
 from asx import get_asx_df, get_last_friday
+from core.sms.telstra_api_v2 import send_to_admin
 from download import get_csv_path
 from mcmc import monte_carlo_simulations
 
@@ -139,6 +138,12 @@ if __name__ == '__main__':
     df = get_asx_df()
     result_path = os.path.join(base_path, 'result.csv')
     result_exists = os.path.exists(result_path)
+    if result_exists:
+        result_df = pd.read_csv(result_path)
+        done_codes = result_df['code'].values
+    else:
+        done_codes = []
+
     with open(result_path, 'a') as csvfile:
         writer = csv.writer(csvfile)
         if not result_exists:
@@ -151,6 +156,10 @@ if __name__ == '__main__':
             code = df.iloc[i]['ASX code']
             name = df.iloc[i]['Company name']
             path = get_csv_path(code, friday)
+
+            if code in done_codes:
+                # skip already done
+                continue
 
             if not os.path.exists(path):
                 failure += 1
