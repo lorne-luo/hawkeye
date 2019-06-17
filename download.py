@@ -55,7 +55,7 @@ def get_codes(all=False):
 if __name__ == '__main__':
     date = get_last_friday()
     date = date.year * 10000 + date.month * 100 + date.day
-
+    sleep = 20
     done = 0
     failure = 0
 
@@ -101,13 +101,13 @@ if __name__ == '__main__':
         except Exception as ex:
             failure += 1
             print(f'{i}. {code} raise error: {ex}')
-            time.sleep(15)
+            time.sleep(sleep)
             continue
 
         if done > 495:
             break
 
-        time.sleep(15)
+        time.sleep(sleep)
 
     print(f'Download finished, done = {done}, failure = {failure}')
     send_to_admin(f'[Hawkeye] Download finished, done = {done}, failure = {failure}')
