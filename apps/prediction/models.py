@@ -74,13 +74,14 @@ class WeeklyPrediction(models.Model):
             'confidence_70': 'percent70',
             'confidence_60': 'percent60',
         }
-
+        counter = 0
         with open(result_csv, newline='') as csvfile:
             reader = csv.DictReader(csvfile, delimiter=',')
             for row in reader:
                 data = dict([(model_field, row[csv_field]) for model_field, csv_field in model_csv_map.items()])
                 WeeklyPrediction.objects.get_or_create(code=row['code'], week=week, defaults=data)
-                print(row['code'])
+                counter += 1
+        print(f'{counter} records created or updated.')
 
     @staticmethod
     def top_return(week, limit=20):
