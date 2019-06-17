@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Accounts{% endblock %}
+
+{% block content %}
+
+<div class="action-panel">
+    <div class="action-panel__buttons">
+    </div>
+    <div class="action-panel__filters">
+        <span class="action-panel__filters-wrapper">
+            <label for="status_filter">Filter Status:</label>
+            <select id="status_filter" class="select_link">
+                <option value="is_archived=">All</option>
+                <option value="is_archived=False" {% ifequal False is_archived %}selected{% endifequal %}>Active</option>
+                <option value="is_archived=True" {% ifequal True is_archived %}selected{% endifequal %}>Inactive</option>
+            </select>
+        </span>
+        <span class="action-panel__filters-wrapper">
+            <label for="platform_filter">Platform filter:</label>
+            <select id="platform_filter" class="select_link">
+                <option value="platform_id=">All</option>
+                {% for platform in active_platforms %}
+                    <option value="platform_id={{ platform.pk }}" {% if platform_id == platform.pk %}selected="true" {% endif %}>{{ platform.name }}</option>
+                {% endfor %}
+            </select>
+        </span>
+    </div>
+</div>
+
+
+<table>
+    <tr>
+        <th class="sm-col">Code</th>
+        <th class="sm-col">Platform ID</th>
+        <th class="lg-col">Account Name</th>
+        <th class="md-col">Platform</th>
+    </tr>
+    {% for prediction in object_list %}
+    <tr>
+        <td>{{ prediction.code }}</td>
+        <td>{{ prediction.account_id }}</td>
+        <td>
+            {{ prediction.name }}
+        </td>
+        <td>{{ prediction.plan }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% include 'includes/paginator.html' %}
+{% endblock %}
+
