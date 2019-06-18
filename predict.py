@@ -8,6 +8,8 @@ import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
 
+from dateutil.relativedelta import relativedelta
+
 import config.settings.local as settings
 from asx import get_asx_df, get_last_friday
 from core.sms.telstra_api_v2 import send_to_admin
@@ -15,8 +17,8 @@ from download import get_csv_path
 from mcmc import monte_carlo_simulations
 
 ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
-friday = get_last_friday()
-friday = friday.year * 10000 + friday.month * 100 + friday.day
+last_friday = get_last_friday()
+friday = last_friday.year * 10000 + last_friday.month * 100 + last_friday.day
 base_path = os.path.join(os.getcwd(), 'data', str(friday))
 pic_folder = os.path.join(base_path, 'pic')
 
@@ -43,6 +45,12 @@ def process_stock(code, name=None):
 
     if df is None or df.empty:
         print(f'{code} have no data, skipped.')
+        return None
+
+    # check datetime
+    date = datetime.strptime(df.index.max(), '%Y-%m-%d')
+    if date < last_friday - relativedelta(days=7):
+        print(f'{code} have no latest price, skipped. {df.index.max()}')
         return None
 
     df.drop(index=df[df['1. open'] == 0].index, inplace=True)
@@ -117,7 +125,9 @@ if __name__ == '__main__':
             friday = friday.year * 10000 + friday.month * 100 + friday.day
             friday = sys.argv[2] if len(sys.argv) > 2 else friday
             result = process_stock(code)
-            print((code,) + result)
+            if result:
+                print((code,) + result)
+            exit(0)
         else:
             friday = arg
             base_path = os.path.join(os.getcwd(), 'data', str(friday))
