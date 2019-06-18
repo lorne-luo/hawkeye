@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import django_filters
 from dateutil.relativedelta import relativedelta, FR
 from django.core.exceptions import ImproperlyConfigured
 from django.views.generic import ListView
@@ -10,29 +9,13 @@ from apps.prediction.models import WeeklyPrediction
 from asx import get_last_friday
 
 
-#
-# class AccountPlatformFilter(Filter):
-#     def filter(self, qs, value):
-#         if value:
-#             return qs.filter(week=value)
-#         return qs
-
-
-class WeeklyPredictionFilter(django_filters.FilterSet):
-    # week = WeeklyPredictionFilter(field_name='platform_id')
-
-    class Meta:
-        model = WeeklyPrediction
-        fields = ['week']
-
-
 class WeeklyPredictionListView(FilterView, ListView):
     model = WeeklyPrediction
     paginate_by = 20
     template_name_suffix = '_list'
 
     def get_filterset_kwargs(self, filterset_class):
-        week = self.kwargs.get('week') or self.get_get_last_friday()
+        week = self.get_query_week()
 
         kwargs = {
             'data': {'week': week},
@@ -57,11 +40,15 @@ class WeeklyPredictionListView(FilterView, ListView):
         friday = get_last_friday()
         return friday.year * 10000 + friday.month * 100 + friday.day
 
+    def get_query_week(self):
+        return self.kwargs.get('week') or self.request.GET.get('week') or self.get_get_last_friday()
+
     def get_week_options(self, first_week, last_week):
         weeks = [first_week]
         start_date = datetime.strptime(str(first_week), '%Y%m%d')
+        friday = start_date
         while (True):
-            friday = start_date + relativedelta(weekday=FR(2))
+            friday += relativedelta(weekday=FR(2))
             number = friday.year * 10000 + friday.month * 100 + friday.day
             if number > int(last_week):
                 break
@@ -70,9 +57,10 @@ class WeeklyPredictionListView(FilterView, ListView):
         return weeks
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        week = self.kwargs.get('week') or self.get_get_last_friday()
+        week = self.get_query_week()
         first_week = WeeklyPrediction.objects.all().order_by('week').first().week
-        weeks = self.get_week_options(first_week, week)
+        last_week = WeeklyPrediction.objects.all().order_by('week').last().week
+        weeks = self.get_week_options(first_week, last_week)
 
         context = super(WeeklyPredictionListView, self).get_context_data(object_list=object_list, **kwargs)
         context['all_weeks'] = weeks
