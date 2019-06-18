@@ -2,10 +2,14 @@ from __future__ import absolute_import, unicode_literals
 
 import csv
 import os
+from datetime import datetime
+
 from django.conf import settings
 from django.db import models
 from django.db.models.manager import Manager
 from django.utils.functional import cached_property
+
+from apps.asx.models import Company
 
 
 class WeeklyPredictionManager(Manager):
@@ -75,13 +79,27 @@ class WeeklyPrediction(models.Model):
             'confidence_60': 'percent60',
         }
         counter = 0
+        failed = 0
         with open(result_csv, newline='') as csvfile:
             reader = csv.DictReader(csvfile, delimiter=',')
             for row in reader:
                 data = dict([(model_field, row[csv_field]) for model_field, csv_field in model_csv_map.items()])
-                WeeklyPrediction.objects.get_or_create(code=row['code'], week=week, defaults=data)
+                try:
+                    WeeklyPrediction.objects.get_or_create(code=row['code'], week=week, defaults=data)
+
+                    # update last price and date
+                    date = datetime.strptime(data['last_price_date'], '%Y-%m-%d').date()
+                    com = Company.objects.get(code=row['code'])
+                    if com.last_price_date < date:
+                        com.last_price = data['current_price']
+                        com.last_price_date = date
+                        com.save()
+                except Exception as ex:
+                    failed += 1
+                    print(row['code'], str(ex))
+                    print(data)
                 counter += 1
-        print(f'{counter} records created or updated.')
+        print(f'{counter} records updated, {failed} failed.')
 
     @staticmethod
     def top_return(week, limit=20):
