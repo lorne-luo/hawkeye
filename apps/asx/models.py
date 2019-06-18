@@ -21,6 +21,9 @@ class Company(models.Model):
     industry = models.ForeignKey(Industry, blank=True, null=True, on_delete=models.SET_NULL)
     is_active = models.BooleanField(blank=False, null=False, default=True)
     asx_200 = models.BooleanField(blank=False, null=False, default=False)
+    last_price_date = models.DateField('last price date', auto_now_add=False, auto_now=False, editable=True, blank=True,
+                                       null=True)
+    last_price = models.DecimalField('last price', max_digits=10, decimal_places=4, blank=True, null=True)
 
     class Meta:
         ordering = ['code']
