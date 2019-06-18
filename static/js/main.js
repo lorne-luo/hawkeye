@@ -194,6 +194,30 @@
 
   /* End of content accordion*/
 
+  site.selectLink = function() {
+    $(".select_link").on("change", function() {
+      var params = new URL(document.location).searchParams;
+
+      var pair = $(this)
+        .val()
+        .split("=");
+      var key = pair[0].replace("&", "");
+      var value = pair[1];
+
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+
+      var location = window.location.origin + window.location.pathname;
+      if (params.toString()) {
+        location += "?" + params.toString();
+      }
+      window.location = location;
+    });
+  };
+
   site.init = function() {
     site.shadowScroller();
     site.recaptcha();
