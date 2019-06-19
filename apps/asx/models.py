@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+from dateutil.relativedelta import relativedelta, FR
+from django.conf import settings
 from django.db import models
 from django.utils.functional import cached_property
 
@@ -46,3 +48,19 @@ class Company(models.Model):
         asx_200 = get_asx_200_list()
         counter = Company.objects.filter(code__in=asx_200).update(asx_200=True)
         print(f'{counter} ASX 200 companies updated.')
+
+    @cached_property
+    def week(self):
+        return self.last_price_date + relativedelta(weekday=FR(-1))
+
+    @cached_property
+    def week_number(self):
+        return self.week.year * 10000 + self.week.month * 100 + self.week.day
+
+    @property
+    def simulation_pic_url(self):
+        return '%s%s/pic/%s.png' % (settings.MEDIA_URL, self.week_number, self.code)
+
+    @property
+    def line_pic_url(self):
+        return '%s%s/pic/%s_line.png' % (settings.MEDIA_URL, self.week_number, self.code)

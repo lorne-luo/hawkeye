@@ -4,6 +4,7 @@ import csv
 import os
 from datetime import datetime
 
+from dateutil.relativedelta import relativedelta, FR
 from django.conf import settings
 from django.db import models
 from django.db.models.manager import Manager
@@ -39,9 +40,12 @@ class WeeklyPrediction(models.Model):
     confidence_80 = models.DecimalField('confidence 80%', max_digits=10, decimal_places=4, blank=True, null=True)
     confidence_70 = models.DecimalField('confidence 70%', max_digits=10, decimal_places=4, blank=True, null=True)
     confidence_60 = models.DecimalField('confidence 60%', max_digits=10, decimal_places=4, blank=True, null=True)
+
+    # future changes
     future_week_price = models.DecimalField('future week price', max_digits=10, decimal_places=4, blank=True, null=True)
     future_week_return = models.DecimalField('future week return', max_digits=10, decimal_places=4, blank=True,
                                              null=True)
+    # csv_path = models.CharField('csv path', max_length=255, blank=True, null=False)
 
     objects = WeeklyPredictionManager()
 
@@ -50,7 +54,24 @@ class WeeklyPrediction(models.Model):
 
     @cached_property
     def company(self):
-        return ''
+        return Company.objects.filter(code=self.code).first()
+
+    @cached_property
+    def last_week_prediction(self):
+        last_week_date = self.last_week_date
+        last_week = last_week_date.year * 10000 + last_week_date.month * 100 + last_week_date.day
+        return WeeklyPrediction.objects.filter(code=self.code, week=last_week).first()
+
+    @property
+    def week_date(self):
+        return datetime.strptime(str(self.week), '%Y%m%d')
+
+    @property
+    def last_week_date(self):
+        if self.week_date.weekday() == 4:
+            return self.week_date - relativedelta(weekday=FR(-2))
+        else:
+            return self.week_date - relativedelta(weekday=FR(-1))
 
     @staticmethod
     def process_csv(week):
@@ -84,6 +105,7 @@ class WeeklyPrediction(models.Model):
             reader = csv.DictReader(csvfile, delimiter=',')
             for row in reader:
                 data = dict([(model_field, row[csv_field]) for model_field, csv_field in model_csv_map.items()])
+                data['csv_path'] = result_csv
                 try:
                     WeeklyPrediction.objects.get_or_create(code=row['code'], week=week, defaults=data)
 
@@ -102,5 +124,13 @@ class WeeklyPrediction(models.Model):
         print(f'{counter} records updated, {failed} failed.')
 
     @staticmethod
-    def top_return(week, limit=20):
+    def top_rank(week, limit=20):
         return WeeklyPrediction.objects.week(week).order_by('-sim_return')[:limit]
+
+    @property
+    def simulation_pic_url(self):
+        return '%s%s/pic/%s.png' % (settings.MEDIA_URL, self.week, self.code)
+
+    @property
+    def line_pic_url(self):
+        return '%s%s/pic/%s_line.png' % (settings.MEDIA_URL, self.week, self.code)
