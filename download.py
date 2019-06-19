@@ -1,3 +1,4 @@
+import random
 import sys
 import time
 
@@ -104,10 +105,10 @@ if __name__ == '__main__':
             time.sleep(sleep)
             continue
 
-        if done > 495:
+        if done > 495 or failure + done > 1000:
             break
 
-        time.sleep(sleep)
+        time.sleep(sleep + random.randint(0, 15))
 
     print(f'Download finished, done = {done}, failure = {failure}')
     send_to_admin(f'[Hawkeye] Download finished, done = {done}, failure = {failure}')
