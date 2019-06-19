@@ -116,6 +116,17 @@ def process_stock(code, name=None):
            volume_mean, return_mean, return_sigma, percent99, percent90, percent80, percent70, percent60
 
 
+def rank_prediction(csv_path):
+    df = pd.read_csv(csv_path, index_col='code')
+    df['return'] = round(df['sim_diff'] / df['start price'] * 100, 3)
+    df['return_rank'] = round(df['return'].rank(pct=True) * 100, 3)
+    df['risk_rank'] = round(df['VaR 99% Percent'].rank(pct=True) * 100, 3)
+    df['volume_rank'] = round(df['volume_mean'].rank(pct=True) * 100, 3)
+    df['return_mean_rank'] = round(df['return_mean'].rank(pct=True) * 100, 3)
+    df['return_sigma_rank'] = round(df['return_sigma'].rank(pct=True) * 100, 3)
+    df.to_csv(csv_path)
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         arg = sys.argv[1]
@@ -196,6 +207,7 @@ if __name__ == '__main__':
             csvfile.flush()
             print(i, code, result)
 
+    rank_prediction(result_path)
     print(f'Predict finished, done = {done}, skipped = {skipped}, failure = {failure}')
     print(result_path)
     send_to_admin(f'[Hawkeye] Predict finished, done = {done}, skipped = {skipped}, failure = {failure}')
