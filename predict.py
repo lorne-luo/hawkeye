@@ -117,6 +117,8 @@ def process_stock(code, name=None):
 
 
 def rank_prediction(csv_path):
+    if isinstance(csv_path, int):
+        csv_path = os.path.join('data', str(csv_path), 'result.csv')
     df = pd.read_csv(csv_path, index_col='code')
     df['return'] = round(df['sim_diff'] / df['start price'] * 100, 3)
     df['return_rank'] = round(df['return'].rank(pct=True) * 100, 3)

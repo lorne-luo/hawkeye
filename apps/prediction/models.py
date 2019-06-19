@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import csv
 import os
 from datetime import datetime
+from decimal import Decimal
 
 from dateutil.relativedelta import relativedelta, FR
 from django.conf import settings
@@ -40,12 +41,19 @@ class WeeklyPrediction(models.Model):
     confidence_80 = models.DecimalField('confidence 80%', max_digits=10, decimal_places=4, blank=True, null=True)
     confidence_70 = models.DecimalField('confidence 70%', max_digits=10, decimal_places=4, blank=True, null=True)
     confidence_60 = models.DecimalField('confidence 60%', max_digits=10, decimal_places=4, blank=True, null=True)
+    # rank
+    simulate_return = models.DecimalField('simulate return', max_digits=10, decimal_places=4, blank=True, null=True)
+    return_rank = models.DecimalField('return rank', max_digits=10, decimal_places=4, blank=True, null=True)
+    risk_rank = models.DecimalField('risk rank', max_digits=10, decimal_places=4, blank=True, null=True)
+    volume_rank = models.DecimalField('volume rank', max_digits=10, decimal_places=4, blank=True, null=True)
+    return_mean_rank = models.DecimalField('return mean rank', max_digits=10, decimal_places=4, blank=True, null=True)
+    return_sigma_rank = models.DecimalField('return sigma rank', max_digits=10, decimal_places=4, blank=True, null=True)
 
     # future changes
     future_week_price = models.DecimalField('future week price', max_digits=10, decimal_places=4, blank=True, null=True)
     future_week_return = models.DecimalField('future week return', max_digits=10, decimal_places=4, blank=True,
                                              null=True)
-    # csv_path = models.CharField('csv path', max_length=255, blank=True, null=False)
+    csv_path = models.CharField('csv path', max_length=255, blank=True, null=False)
 
     objects = WeeklyPredictionManager()
 
@@ -98,6 +106,12 @@ class WeeklyPrediction(models.Model):
             'confidence_80': 'percent80',
             'confidence_70': 'percent70',
             'confidence_60': 'percent60',
+            'simulate_return': 'return',
+            'return_rank': 'return_rank',
+            'risk_rank': 'risk_rank',
+            'volume_rank': 'volume_rank',
+            'return_mean_rank': 'return_mean_rank',
+            'return_sigma_rank': 'return_sigma_rank',
         }
         counter = 0
         failed = 0
@@ -107,12 +121,20 @@ class WeeklyPrediction(models.Model):
                 data = dict([(model_field, row[csv_field]) for model_field, csv_field in model_csv_map.items()])
                 data['csv_path'] = result_csv
                 try:
-                    WeeklyPrediction.objects.get_or_create(code=row['code'], week=week, defaults=data)
+                    prediction, created = WeeklyPrediction.objects.update_or_create(code=row['code'], week=week,
+                                                                                    defaults=data)
+                    last_prediction = prediction.last_week_prediction
+                    if last_prediction:
+                        last_prediction.future_week_price = data['current_price']
+                        last_prediction.future_week_return = (Decimal(
+                            data['current_price']) - last_prediction.current_price) / last_prediction.current_price
+                        last_prediction.future_week_return = round(last_prediction.future_week_return * 100, 3)
+                        last_prediction.save()
 
                     # update last price and date
                     date = datetime.strptime(data['last_price_date'], '%Y-%m-%d').date()
-                    com = Company.objects.get(code=row['code'])
-                    if com.last_price_date < date:
+                    com, created = Company.objects.get_or_create(code=row['code'])
+                    if not com.last_price_date or com.last_price_date < date:
                         com.last_price = data['current_price']
                         com.last_price_date = date
                         com.save()
