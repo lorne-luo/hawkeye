@@ -29,6 +29,7 @@ class Company(models.Model):
     last_price_date = models.DateField('last price date', auto_now_add=False, auto_now=False, editable=True, blank=True,
                                        null=True)
     last_price = models.DecimalField('last price', max_digits=10, decimal_places=4, blank=True, null=True)
+    daily_volume = models.DecimalField('daily volume', max_digits=10, decimal_places=4, blank=True, null=True)
 
     class Meta:
         ordering = ['code']
@@ -78,7 +79,8 @@ class Company(models.Model):
         with open(path, 'w') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(
-                ['code', 'name', 'industry', 'last_date', 'last_price', 'asx_200'])
+                ['code', 'name', 'industry', 'last_date', 'last_price', 'volume', 'asx_200'])
             for com in Company.objects.all():
                 writer.writerow(
-                    [com.code, com.name, com.industry_name, com.last_price_date, com.last_price, com.asx_200])
+                    [com.code, com.name, com.industry_name, com.last_price_date, com.last_price, com.daily_volume,
+                     com.asx_200])
