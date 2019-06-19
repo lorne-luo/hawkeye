@@ -29,7 +29,7 @@ class Company(models.Model):
     last_price_date = models.DateField('last price date', auto_now_add=False, auto_now=False, editable=True, blank=True,
                                        null=True)
     last_price = models.DecimalField('last price', max_digits=10, decimal_places=4, blank=True, null=True)
-    daily_volume = models.DecimalField('daily volume', max_digits=10, decimal_places=4, blank=True, null=True)
+    daily_volume = models.DecimalField('daily volume', max_digits=14, decimal_places=4, blank=True, null=True)
 
     class Meta:
         ordering = ['code']

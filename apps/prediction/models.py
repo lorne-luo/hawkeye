@@ -137,7 +137,7 @@ class WeeklyPrediction(models.Model):
                     if not com.last_price_date or com.last_price_date < date:
                         com.last_price = data['current_price']
                         com.last_price_date = date
-                        com.daily_volume = Decimal(data['current_price'])
+                        com.daily_volume = Decimal(str(data['volume_mean']))
                         com.save()
                 except Exception as ex:
                     failed += 1
