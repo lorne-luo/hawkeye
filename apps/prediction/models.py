@@ -126,8 +126,8 @@ class WeeklyPrediction(models.Model):
                     last_prediction = prediction.last_week_prediction
                     if last_prediction:
                         last_prediction.future_week_price = data['current_price']
-                        last_prediction.future_week_return = (Decimal(
-                            data['current_price']) - last_prediction.current_price) / last_prediction.current_price
+                        last_prediction.future_week_return = (Decimal(str(
+                            data['current_price'])) - last_prediction.current_price) / last_prediction.current_price
                         last_prediction.future_week_return = round(last_prediction.future_week_return * 100, 3)
                         last_prediction.save()
 
