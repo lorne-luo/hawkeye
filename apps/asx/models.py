@@ -1,5 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 
+import csv
+import os
+
 from dateutil.relativedelta import relativedelta, FR
 from django.conf import settings
 from django.db import models
@@ -54,6 +57,10 @@ class Company(models.Model):
         return self.last_price_date + relativedelta(weekday=FR(-1))
 
     @cached_property
+    def industry_name(self):
+        return self.industry.name if self.industry else ''
+
+    @cached_property
     def week_number(self):
         return self.week.year * 10000 + self.week.month * 100 + self.week.day
 
@@ -64,3 +71,14 @@ class Company(models.Model):
     @property
     def line_pic_url(self):
         return '%s%s/pic/%s_line.png' % (settings.MEDIA_URL, self.week_number, self.code)
+
+    @staticmethod
+    def export_csv():
+        path = os.path.join(settings.BASE_DIR, 'data', 'asx.csv')
+        with open(path, 'w') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(
+                ['code', 'name', 'industry', 'last_date', 'last_price', 'asx_200'])
+            for com in Company.objects.all():
+                writer.writerow(
+                    [com.code, com.name, com.industry_name, com.last_price_date, com.last_price, com.asx_200])
