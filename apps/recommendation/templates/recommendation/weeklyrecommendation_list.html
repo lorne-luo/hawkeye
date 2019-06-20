@@ -6,26 +6,18 @@
 
     <div class="action-panel">
         <div class="action-panel__buttons">
+
         </div>
         <div class="action-panel__filters">
-        <span class="action-panel__filters-wrapper">
-            <label for="status_filter">Filter Status:</label>
-            <select id="status_filter" class="select_link">
-                <option value="is_archived=">All</option>
-                <option value="is_archived=False"
-                        {% ifequal False is_archived %}selected{% endifequal %}>Active</option>
-                <option value="is_archived=True"
-                        {% ifequal True is_archived %}selected{% endifequal %}>Inactive</option>
-            </select>
-        </span>
+
             <span class="action-panel__filters-wrapper">
-            <label for="week_filter">Week:</label>prediction
-            <select id="week_filter" class="select_link">
-                {% for w in all_weeks %}
-                    <option value="week={{ w }}" {% if week == w %}selected="true" {% endif %}>{{ w }}</option>
-                {% endfor %}
-            </select>
-        </span>
+                <label for="week_filter">Week:</label>
+                <select id="week_filter" class="select_link">
+                    {% for w in all_weeks %}
+                        <option value="{% url 'recommendation:recommendation_list_week' w %}" {% if week == w %}selected="true" {% endif %}>{{ w }}</option>
+                    {% endfor %}
+                </select>
+            </span>
         </div>
     </div>
 
@@ -62,6 +54,6 @@
         {% endfor %}
     </table>
 
-    {% include 'includes/paginator.html' %}
+    {% include 'includes/paginator.html' with week=week %}
 {% endblock %}
 

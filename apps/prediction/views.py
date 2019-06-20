@@ -2,11 +2,19 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta, FR
 from django.core.exceptions import ImproperlyConfigured
-from django.views.generic import ListView
+from django.urls import reverse
+from django.views.generic import ListView, RedirectView
 from django_filters.views import FilterView
 
 from apps.prediction.models import WeeklyPrediction
 from asx import get_last_friday
+
+
+class WeeklyPredictionRedirectView(RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        week = WeeklyPredictionListView.get_get_last_friday()
+        return reverse('prediction:prediction_list_week', args=[week])
 
 
 class WeeklyPredictionListView(FilterView, ListView):
@@ -36,6 +44,7 @@ class WeeklyPredictionListView(FilterView, ListView):
                 raise ImproperlyConfigured(msg % args)
         return kwargs
 
+    @classmethod
     def get_get_last_friday(self):
         friday = get_last_friday()
         return friday.year * 10000 + friday.month * 100 + friday.day
