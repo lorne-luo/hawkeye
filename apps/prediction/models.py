@@ -64,13 +64,11 @@ class WeeklyPrediction(WeeklyModel):
     def company(self):
         return Company.objects.filter(code=self.code).first()
 
-
     def calculate_last(self):
         last_prediction = self.last
         if last_prediction:
             last_prediction.future_week_price = self.current_price
-            last_prediction.future_week_return = (
-                                                             self.current_price - last_prediction.current_price) / last_prediction.current_price
+            last_prediction.future_week_return = (self.current_price - last_prediction.current_price) / last_prediction.current_price
             last_prediction.future_week_return = round(last_prediction.future_week_return * 100, 3)
             last_prediction.save()
 

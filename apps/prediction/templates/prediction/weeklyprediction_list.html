@@ -17,7 +17,7 @@
             </select>
         </span>
         <span class="action-panel__filters-wrapper">
-            <label for="week_filter">Week:</label>{{ week }}
+            <label for="week_filter">Week:</label>
             <select id="week_filter" class="select_link">
                 {% for w in all_weeks %}
                     <option value="week={{ w }}" {% if week == w %}selected="true" {% endif %}>{{ w }}</option>
@@ -38,6 +38,7 @@
         <th class="sm-col">Risk</th>
         <th class="sm-col">Return Rank</th>
         <th class="sm-col">Risk Rank</th>
+        <th class="sm-col">Charts</th>
     </tr>
     {% for prediction in object_list %}
     <tr>
@@ -49,6 +50,10 @@
         <td>{{ prediction.var_99_percent }}</td>
         <td>{{ prediction.return_rank }}</td>
         <td>{{ prediction.risk_rank }}</td>
+        <td>
+            <a href="{{ prediction.sim_pic_url }}">Sim</a><br/>
+            <a href="{{ prediction.line_pic_url }}">Line</a>
+        </td>
     </tr>
     {% endfor %}
 </table>
