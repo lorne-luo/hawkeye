@@ -29,3 +29,4 @@ wagtail-condensedinlinepanel==0.5.2
 git+https://github.com/Telstra/MessagingAPI-SDK-python.git
 redis==2.10.6
 uWSGI==2.0.12
+ipython==7.5.0
