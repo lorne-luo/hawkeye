@@ -28,6 +28,6 @@ class ReturnRiskRank(Strategy):
         recommendations = ranked_queryset[:self.count]
 
         for rec in recommendations:
-            WeeklyRecommendation.objects.update_or_create(week=week, strategy=self.name, code=rec.code,
+            WeeklyRecommendation.objects.update_or_create(week=week, strategy=self.name, code=rec,
                                                           defaults={'rank': rec.rank})
         return recommendations

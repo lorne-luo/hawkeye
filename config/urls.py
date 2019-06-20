@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
 
     url(r'^', include(('apps.prediction.urls', 'prediction'), namespace='prediction')),
+    url(r'^', include(('apps.recommendation.urls', 'recommendation'), namespace='recommendation')),
 
     # url(r'^search/$', search_views.search, name='search'),
 
