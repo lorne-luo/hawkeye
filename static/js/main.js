@@ -225,6 +225,7 @@
     site.accordionMenu(site.elements.sideMenu);
     site.hamburgerMenu.init();
     site.accordion();
+    site.selectLink();
   };
 
   // Document ready
