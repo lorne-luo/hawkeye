@@ -50,8 +50,8 @@ class WeeklyPrediction(WeeklyModel):
     return_sigma_rank = models.DecimalField('return sigma rank', max_digits=10, decimal_places=4, blank=True, null=True)
 
     # future changes
-    future_week_price = models.DecimalField('future week price', max_digits=10, decimal_places=4, blank=True, null=True)
-    future_week_return = models.DecimalField('future week return', max_digits=10, decimal_places=4, blank=True,
+    next_week_price = models.DecimalField('next week price', max_digits=10, decimal_places=4, blank=True, null=True)
+    next_week_return = models.DecimalField('next week return', max_digits=10, decimal_places=4, blank=True,
                                              null=True)
     csv_path = models.CharField('csv path', max_length=255, blank=True, null=False)
 
@@ -67,9 +67,9 @@ class WeeklyPrediction(WeeklyModel):
     def calculate_last(self):
         last_prediction = self.last
         if last_prediction:
-            last_prediction.future_week_price = self.current_price
-            last_prediction.future_week_return = (self.current_price - last_prediction.current_price) / last_prediction.current_price
-            last_prediction.future_week_return = round(last_prediction.future_week_return * 100, 3)
+            last_prediction.next_week_price = self.current_price
+            last_prediction.next_week_return = (self.current_price - last_prediction.current_price) / last_prediction.current_price
+            last_prediction.next_week_return = round(last_prediction.next_week_return * 100, 3)
             last_prediction.save()
 
     @staticmethod
@@ -116,10 +116,10 @@ class WeeklyPrediction(WeeklyModel):
                                                                                     defaults=data)
                     last_prediction = prediction.last
                     if last_prediction:
-                        last_prediction.future_week_price = data['current_price']
-                        last_prediction.future_week_return = (Decimal(str(
+                        last_prediction.next_week_price = data['current_price']
+                        last_prediction.next_week_return = (Decimal(str(
                             data['current_price'])) - last_prediction.current_price) / last_prediction.current_price
-                        last_prediction.future_week_return = round(last_prediction.future_week_return * 100, 3)
+                        last_prediction.next_week_return = round(last_prediction.next_week_return * 100, 3)
                         last_prediction.save()
 
                     # update last price and date
