@@ -12,6 +12,7 @@ from django.db.models.manager import Manager
 from django.utils.functional import cached_property
 
 from apps.asx.models import Company
+from core.django.models import WeeklyModel
 
 
 class WeeklyPredictionManager(Manager):
@@ -19,17 +20,16 @@ class WeeklyPredictionManager(Manager):
         return super().get_queryset().filter(week=week)
 
 
-class WeeklyPrediction(models.Model):
+class WeeklyPrediction(WeeklyModel):
     """
     ['code', 'last_date', 'start price', 'sim_mean', 'sim_diff', 'VaR 99%', 'VaR 99% Percent','volume_mean',
     'return_mean', 'return_sigma', 'percent99', 'percent90', 'percent80', 'percent70', 'percent60'])
     """
-    week = models.IntegerField('week', blank=False, null=False)
     code = models.CharField('code', max_length=80, blank=False, null=False)
     last_price_date = models.DateField('last price date', blank=True, null=True)
     current_price = models.DecimalField('current price', max_digits=10, decimal_places=4, blank=True, null=True)
     sim_mean = models.DecimalField('sim mean', max_digits=10, decimal_places=4, blank=True, null=True)
-    sim_return = models.DecimalField('sim return', max_digits=10, decimal_places=4, blank=True, null=True)
+    sim_diff = models.DecimalField('sim return', max_digits=10, decimal_places=4, blank=True, null=True)
     var_99 = models.DecimalField('var 99%', max_digits=10, decimal_places=4, blank=True, null=True)
     var_99_percent = models.DecimalField('var 99% perent', max_digits=10, decimal_places=4, blank=True, null=True)
     volume_mean = models.DecimalField('volume mean', max_digits=12, decimal_places=4, blank=True, null=True)
@@ -42,7 +42,7 @@ class WeeklyPrediction(models.Model):
     confidence_70 = models.DecimalField('confidence 70%', max_digits=10, decimal_places=4, blank=True, null=True)
     confidence_60 = models.DecimalField('confidence 60%', max_digits=10, decimal_places=4, blank=True, null=True)
     # rank
-    simulate_return = models.DecimalField('simulate return', max_digits=10, decimal_places=4, blank=True, null=True)
+    sim_return = models.DecimalField('simulate return', max_digits=10, decimal_places=4, blank=True, null=True)
     return_rank = models.DecimalField('return rank', max_digits=10, decimal_places=4, blank=True, null=True)
     risk_rank = models.DecimalField('risk rank', max_digits=10, decimal_places=4, blank=True, null=True)
     volume_rank = models.DecimalField('volume rank', max_digits=10, decimal_places=4, blank=True, null=True)
@@ -64,28 +64,13 @@ class WeeklyPrediction(models.Model):
     def company(self):
         return Company.objects.filter(code=self.code).first()
 
-    @cached_property
-    def last_week_prediction(self):
-        last_week_date = self.last_week_date
-        last_week = last_week_date.year * 10000 + last_week_date.month * 100 + last_week_date.day
-        return WeeklyPrediction.objects.filter(code=self.code, week=last_week).first()
 
-    @property
-    def week_date(self):
-        return datetime.strptime(str(self.week), '%Y%m%d')
-
-    @property
-    def last_week_date(self):
-        if self.week_date.weekday() == 4:
-            return self.week_date - relativedelta(weekday=FR(-2))
-        else:
-            return self.week_date - relativedelta(weekday=FR(-1))
-
-    def calculate_last_week_return(self):
-        last_prediction = self.last_week_prediction
+    def calculate_last(self):
+        last_prediction = self.last
         if last_prediction:
             last_prediction.future_week_price = self.current_price
-            last_prediction.future_week_return = (self.current_price - last_prediction.current_price) / last_prediction.current_price
+            last_prediction.future_week_return = (
+                                                             self.current_price - last_prediction.current_price) / last_prediction.current_price
             last_prediction.future_week_return = round(last_prediction.future_week_return * 100, 3)
             last_prediction.save()
 
@@ -103,7 +88,7 @@ class WeeklyPrediction(models.Model):
             'last_price_date': 'last_date',
             'current_price': 'start price',
             'sim_mean': 'sim_mean',
-            'sim_return': 'sim_diff',
+            'sim_diff': 'sim_diff',
             'var_99': 'VaR 99%',
             'var_99_percent': 'VaR 99% Percent',
             'volume_mean': 'volume_mean',
@@ -114,7 +99,7 @@ class WeeklyPrediction(models.Model):
             'confidence_80': 'percent80',
             'confidence_70': 'percent70',
             'confidence_60': 'percent60',
-            'simulate_return': 'return',
+            'sim_return': 'return',
             'return_rank': 'return_rank',
             'risk_rank': 'risk_rank',
             'volume_rank': 'volume_rank',
@@ -131,7 +116,7 @@ class WeeklyPrediction(models.Model):
                 try:
                     prediction, created = WeeklyPrediction.objects.update_or_create(code=row['code'], week=week,
                                                                                     defaults=data)
-                    last_prediction = prediction.last_week_prediction
+                    last_prediction = prediction.last
                     if last_prediction:
                         last_prediction.future_week_price = data['current_price']
                         last_prediction.future_week_return = (Decimal(str(
@@ -159,7 +144,7 @@ class WeeklyPrediction(models.Model):
         return WeeklyPrediction.objects.week(week).order_by('-sim_return')[:limit]
 
     @property
-    def simulation_pic_url(self):
+    def sim_pic_url(self):
         return '%s%s/pic/%s.png' % (settings.MEDIA_URL, self.week, self.code)
 
     @property

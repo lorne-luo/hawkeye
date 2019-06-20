@@ -5,6 +5,7 @@ from django.db.models.manager import Manager
 from django.utils.functional import cached_property
 
 from apps.prediction.models import WeeklyPrediction
+from core.django.models import WeeklyModel
 
 
 class WeeklyRecommendationManager(Manager):
@@ -12,9 +13,8 @@ class WeeklyRecommendationManager(Manager):
         return super().get_queryset().filter(week=week, strategy=strategy)
 
 
-class WeeklyRecommendation(models.Model):
+class WeeklyRecommendation(WeeklyModel):
     strategy = models.CharField('strategy', max_length=80, blank=True, null=False)
-    week = models.IntegerField('week', blank=False, null=False)
     code = models.ForeignKey(WeeklyPrediction, blank=True, null=True, on_delete=models.SET_NULL)
     rank = models.DecimalField('rank', max_digits=10, decimal_places=4, blank=True, null=True)
     future_week_price = models.DecimalField('future week price', max_digits=10, decimal_places=4, blank=True, null=True)
