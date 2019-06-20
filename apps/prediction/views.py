@@ -14,7 +14,7 @@ class WeeklyPredictionRedirectView(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         week = WeeklyPredictionListView.get_get_last_friday()
-        return reverse('prediction:prediction_list_week', args=[week])
+        return reverse('prediction:prediction_list', args=[week])
 
 
 class WeeklyPredictionListView(FilterView, ListView):
