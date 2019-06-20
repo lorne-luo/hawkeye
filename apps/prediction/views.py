@@ -64,5 +64,5 @@ class WeeklyPredictionListView(FilterView, ListView):
 
         context = super(WeeklyPredictionListView, self).get_context_data(object_list=object_list, **kwargs)
         context['all_weeks'] = weeks
-        context['week'] = week
+        context['week'] = int(week)
         return context

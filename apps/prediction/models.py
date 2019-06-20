@@ -81,6 +81,14 @@ class WeeklyPrediction(models.Model):
         else:
             return self.week_date - relativedelta(weekday=FR(-1))
 
+    def calculate_last_week_return(self):
+        last_prediction = self.last_week_prediction
+        if last_prediction:
+            last_prediction.future_week_price = self.current_price
+            last_prediction.future_week_return = (self.current_price - last_prediction.current_price) / last_prediction.current_price
+            last_prediction.future_week_return = round(last_prediction.future_week_return * 100, 3)
+            last_prediction.save()
+
     @staticmethod
     def process_csv(week):
         result_csv = os.path.join(settings.BASE_DIR, 'data', str(week), 'result.csv')
