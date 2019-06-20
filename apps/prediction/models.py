@@ -114,13 +114,7 @@ class WeeklyPrediction(WeeklyModel):
                 try:
                     prediction, created = WeeklyPrediction.objects.update_or_create(code=row['code'], week=week,
                                                                                     defaults=data)
-                    last_prediction = prediction.last
-                    if last_prediction:
-                        last_prediction.next_week_price = data['current_price']
-                        last_prediction.next_week_return = (Decimal(str(
-                            data['current_price'])) - last_prediction.current_price) / last_prediction.current_price
-                        last_prediction.next_week_return = round(last_prediction.next_week_return * 100, 3)
-                        last_prediction.save()
+                    prediction.calculate_last()
 
                     # update last price and date
                     date = datetime.strptime(data['last_price_date'], '%Y-%m-%d').date()

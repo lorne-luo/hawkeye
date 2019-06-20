@@ -19,7 +19,7 @@
             </select>
         </span>
             <span class="action-panel__filters-wrapper">
-            <label for="week_filter">Week:</label>
+            <label for="week_filter">Week:</label>prediction
             <select id="week_filter" class="select_link">
                 {% for w in all_weeks %}
                     <option value="week={{ w }}" {% if week == w %}selected="true" {% endif %}>{{ w }}</option>
@@ -45,18 +45,18 @@
         </tr>
         {% for recommendation in object_list %}
             <tr>
-                <td>{{ recommendation.code.code }}</td>
-                <td>{{ recommendation.code.company.name }}</td>
-                <td>{{ recommendation.code.company.industry_name }}</td>
-                <td>{{ recommendation.code.current_price }}</td>
-                <td>{{ recommendation.code.sim_return }}</td>
-                <td>{{ recommendation.code.var_99_percent }}</td>
-                <td>{{ recommendation.code.return_rank }}</td>
-                <td>{{ recommendation.code.risk_rank }}</td>
+                <td>{{ recommendation.prediction.code }}</td>
+                <td>{{ recommendation.prediction.company.name }}</td>
+                <td>{{ recommendation.prediction.company.industry_name }}</td>
+                <td>{{ recommendation.prediction.current_price }}</td>
+                <td>{{ recommendation.prediction.sim_return }}</td>
+                <td>{{ recommendation.prediction.var_99_percent }}</td>
+                <td>{{ recommendation.prediction.return_rank }}</td>
+                <td>{{ recommendation.prediction.risk_rank }}</td>
                 <td>{{ recommendation.rank }}</td>
                 <td>
-                    <a href="{{ recommendation.code.sim_pic_url }}">Sim</a><br/>
-                    <a href="{{ recommendation.code.line_pic_url }}">Line</a>
+                    <a href="{{ recommendation.prediction.sim_pic_url }}">Sim</a><br/>
+                    <a href="{{ recommendation.prediction.line_pic_url }}">Line</a>
                 </td>
             </tr>
         {% endfor %}
