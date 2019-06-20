@@ -23,11 +23,12 @@
     <table>
         <tr>
             <th class="sm-col">Code</th>
-            <th class="sm-col">Name</th>
-            <th class="sm-col">Industry</th>
+{#            <th class="sm-col">Name</th>#}
+{#            <th class="sm-col">Industry</th>#}
             <th class="sm-col">Price</th>
             <th class="sm-col">Return</th>
-            <th class="sm-col">Risk</th>
+            <th class="sm-col">Risk 99%</th>
+            <th class="sm-col">Volume Rank</th>
             <th class="sm-col">Return Rank</th>
             <th class="sm-col">Risk Rank</th>
             <th class="sm-col">Charts</th>
@@ -35,11 +36,12 @@
         {% for prediction in object_list %}
             <tr>
                 <td>{{ prediction.code }}</td>
-                <td>{{ prediction.company.name }}</td>
-                <td>{{ prediction.company.industry_name }}</td>
+{#                <td>{{ prediction.company.name }}</td>#}
+{#                <td>{{ prediction.company.industry_name }}</td>#}
                 <td>{{ prediction.current_price }}</td>
                 <td>{{ prediction.sim_return }}</td>
                 <td>{{ prediction.var_99_percent }}</td>
+                <td>{{ prediction.volume_rank }}</td>
                 <td>{{ prediction.return_rank }}</td>
                 <td>{{ prediction.risk_rank }}</td>
                 <td>

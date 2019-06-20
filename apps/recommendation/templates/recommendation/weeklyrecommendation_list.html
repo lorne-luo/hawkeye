@@ -25,11 +25,12 @@
     <table>
         <tr>
             <th class="sm-col">Code</th>
-            <th class="sm-col">Name</th>
-            <th class="sm-col">Industry</th>
+{#            <th class="sm-col">Name</th>#}
+{#            <th class="sm-col">Industry</th>#}
             <th class="sm-col">Price</th>
             <th class="sm-col">Return</th>
-            <th class="sm-col">Risk</th>
+            <th class="sm-col">Risk 99%</th>
+            <th class="sm-col">Volume Rank</th>
             <th class="sm-col">Return Rank</th>
             <th class="sm-col">Risk Rank</th>
             <th class="sm-col">Rank</th>
@@ -38,11 +39,12 @@
         {% for recommendation in object_list %}
             <tr>
                 <td>{{ recommendation.prediction.code }}</td>
-                <td>{{ recommendation.prediction.company.name }}</td>
-                <td>{{ recommendation.prediction.company.industry_name }}</td>
+{#                <td>{{ recommendation.prediction.company.name }}</td>#}
+{#                <td>{{ recommendation.prediction.company.industry_name }}</td>#}
                 <td>{{ recommendation.prediction.current_price }}</td>
                 <td>{{ recommendation.prediction.sim_return }}</td>
                 <td>{{ recommendation.prediction.var_99_percent }}</td>
+                <td>{{ recommendation.prediction.volume_rank }}</td>
                 <td>{{ recommendation.prediction.return_rank }}</td>
                 <td>{{ recommendation.prediction.risk_rank }}</td>
                 <td>{{ recommendation.rank }}</td>
