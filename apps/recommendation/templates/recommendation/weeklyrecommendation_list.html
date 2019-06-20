@@ -14,13 +14,13 @@
                 <label for="week_filter">Week:</label>
                 <select id="week_filter" class="select_link">
                     {% for w in all_weeks %}
-                        <option value="{% url 'recommendation:recommendation_list' w %}" {% if week == w %}selected="true" {% endif %}>{{ w }}</option>
+                        <option value="{% url 'recommendation:recommendation_list' w %}"
+                                {% if week == w %}selected="true" {% endif %}>{{ w }}</option>
                     {% endfor %}
                 </select>
             </span>
         </div>
     </div>
-
 
     <table>
         <tr>
