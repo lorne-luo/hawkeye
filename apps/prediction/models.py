@@ -99,7 +99,7 @@ class WeeklyPrediction(WeeklyModel):
         df = pd.read_csv(self.code_csv_path, index_col='date', parse_dates=[0], date_parser=parser)
         df = df.dropna()
 
-        df['4. close'].plot()
+        plt.plot(df.index, df['4. close'])
         plt.legend(['Code'], loc='upper right')
         plt.title(f"{self.code} price movement.", weight='bold')
         plt.axvline(x=previous.week_date, linewidth=1, color='r')
