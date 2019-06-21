@@ -51,6 +51,9 @@
                 <td>
                     <a href="{{ recommendation.prediction.sim_pic_url }}">Sim</a><br/>
                     <a href="{{ recommendation.prediction.line_pic_url }}">Line</a>
+                    {% if recommendation.prediction.future_pic_url %}
+                        <a href="{{ recommendation.prediction.future_pic_url }}">Future</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

@@ -89,6 +89,8 @@ class WeeklyPrediction(WeeklyModel):
 
     def generate_future_pic(self, number=1):
         previous = self.previous(number)
+        if not previous:
+            return None
         parser = lambda date: pd.datetime.strptime(date, '%Y-%m-%d')
         path = os.path.join(previous.pic_folder, f'{self.code}_future.png')
         df = pd.read_csv(self.code_csv_path, index_col='date', parse_dates=[0], date_parser=parser)
@@ -154,6 +156,10 @@ class WeeklyPrediction(WeeklyModel):
                                                                                     defaults=data)
                     prediction.calculate_last()
 
+                    for i in range(4):
+                        # generate future pics for previous 4 week's prediction
+                        prediction.generate_future_pic(i + 1)
+
                     # update last price and date
                     date = datetime.strptime(data['last_price_date'], '%Y-%m-%d').date()
                     com, created = Company.objects.get_or_create(code=row['code'])
@@ -180,3 +186,9 @@ class WeeklyPrediction(WeeklyModel):
     @property
     def line_pic_url(self):
         return '%s%s/pic/%s_line.png' % (settings.MEDIA_URL, self.week, self.code)
+
+    @property
+    def future_pic_url(self):
+        path = os.path.join(self.pic_folder, f'{self.code}_future.png')
+        if os.path.exists(path):
+            return '%s%s/pic/%s_future.png' % (settings.MEDIA_URL, self.week, self.code)
