@@ -33,7 +33,7 @@
 
         {# Header Bloack #}
         {% block header %}
-            {% include "includes/header.html" with parent=site_root calling_page=self %}
+{#            {% include "includes/header.html" with parent=site_root calling_page=self %}#}
         {% endblock header %}
 
         {# Content Bloack #}
@@ -43,7 +43,7 @@
 
         {# Footer Block #}
         {% block footer %}
-            {% include "includes/footer.html" %}
+{#            {% include "includes/footer.html" %}#}
         {% endblock footer %}
 
         {# Global javascript #}
@@ -57,6 +57,6 @@
             {# Override this in templates to add extra javascript #}
         {% endblock %}
 
-        {% wagtailuserbar %}
+{#        {% wagtailuserbar %}#}
     </body>
 </html>
