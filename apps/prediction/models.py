@@ -188,13 +188,12 @@ class WeeklyPrediction(WeeklyModel):
 
     @property
     def line_pic_url(self):
-        return '%s%s/pic/%s_line.png' % (settings.MEDIA_URL, self.week, self.code)
+        return f'/prediction/{self.week}/{self.code}_line.png'
 
     @property
     def future_pic_url(self):
-        path = os.path.join(self.pic_folder, f'{self.code}_future.png')
-        if os.path.exists(path):
-            return '%s%s/pic/%s_future.png' % (settings.MEDIA_URL, self.week, self.code)
+        if self.next(4) or self.next(3) or self.next(2) or self.next(1):
+            return f'/prediction/{self.week}/{self.code}_future.png'
 
     @staticmethod
     def batch_future_pics():
