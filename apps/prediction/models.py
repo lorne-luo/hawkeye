@@ -5,7 +5,6 @@ import os
 from datetime import datetime
 from decimal import Decimal
 
-from dateutil.relativedelta import relativedelta, FR
 from django.conf import settings
 from django.db import models
 from django.db.models.manager import Manager
@@ -51,8 +50,8 @@ class WeeklyPrediction(WeeklyModel):
 
     # future changes
     next_week_price = models.DecimalField('next week price', max_digits=10, decimal_places=4, blank=True, null=True)
-    next_week_return = models.DecimalField('next week return', max_digits=10, decimal_places=4, blank=True,
-                                             null=True)
+    next_month_price = models.DecimalField('next month price', max_digits=10, decimal_places=4, blank=True,
+                                           null=True)
     csv_path = models.CharField('csv path', max_length=255, blank=True, null=False)
 
     objects = WeeklyPredictionManager()
@@ -68,8 +67,6 @@ class WeeklyPrediction(WeeklyModel):
         last_prediction = self.last
         if last_prediction:
             last_prediction.next_week_price = self.current_price
-            last_prediction.next_week_return = (self.current_price - last_prediction.current_price) / last_prediction.current_price
-            last_prediction.next_week_return = round(last_prediction.next_week_return * 100, 3)
             last_prediction.save()
 
     @staticmethod
