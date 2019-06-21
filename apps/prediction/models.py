@@ -98,6 +98,7 @@ class WeeklyPrediction(WeeklyModel):
         parser = lambda date: pd.datetime.strptime(date, '%Y-%m-%d')
         df = pd.read_csv(self.code_csv_path, index_col='date', parse_dates=[0], date_parser=parser)
         df = df.dropna()
+        df.drop(index=df[df['1. open'] == 0].index, inplace=True)
 
         plt.plot(df.index, df['4. close'])
         plt.legend(['Code'], loc='upper right')
