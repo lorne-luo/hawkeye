@@ -8,6 +8,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.functional import cached_property
 
+from apps.utils.helper import date_to_int
 from asx import get_asx_df, get_asx_200_list
 
 
@@ -63,7 +64,7 @@ class Company(models.Model):
 
     @cached_property
     def week_number(self):
-        return self.week.year * 10000 + self.week.month * 100 + self.week.day
+        return date_to_int(self.week)
 
     @property
     def simulation_pic_url(self):

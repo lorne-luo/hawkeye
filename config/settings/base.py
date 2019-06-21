@@ -196,7 +196,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = root('staticfiles')
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = root('media')
+MEDIA_ROOT = root('data')
 MEDIA_URL = '/media/'
 
 # WAGTAIL SETTINGS
