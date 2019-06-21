@@ -4,6 +4,9 @@ import csv
 import os
 from datetime import datetime
 from decimal import Decimal
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 from django.conf import settings
 from django.db import models
@@ -65,7 +68,7 @@ class WeeklyPrediction(WeeklyModel):
 
     @property
     def next_week_return(self):
-        previous=self.previous(1)
+        previous = self.previous(1)
         if previous:
             next_week_return = (self.current_price - previous.current_price) / previous.current_price
             return round(next_week_return * 100, 3)
@@ -75,6 +78,37 @@ class WeeklyPrediction(WeeklyModel):
         if last_prediction:
             last_prediction.next_week_price = self.current_price
             last_prediction.save()
+
+    @property
+    def code_csv_path(self):
+        return os.path.join(settings.MEDIA_ROOT, str(self.week), 'csv', f'{self.code}.csv')
+
+    @property
+    def pic_folder(self):
+        return os.path.join(settings.MEDIA_ROOT, str(self.week), 'pic')
+
+    def generate_future_pic(self, number=1):
+        previous = self.previous(number)
+        parser = lambda date: pd.datetime.strptime(date, '%Y-%m-%d')
+        path = os.path.join(previous.pic_folder, f'{self.code}_future.png')
+        df = pd.read_csv(self.code_csv_path, index_col='date', parse_dates=[0], date_parser=parser)
+        df = df.dropna()
+
+        df['4. close'].plot()
+        plt.legend(['Code'], loc='upper right')
+        plt.title(f"{self.code} price movement.", weight='bold')
+        plt.axvline(x=previous.week_date, linewidth=1, color='r')
+        ax = plt.gca()
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=20))
+        ax.xaxis.set_label_text('')
+        # for tick in ax.get_xticklabels():
+        #     tick.set_rotation(90)
+        # plt.xlabel('xlabel', fontsize=5)
+        plt.savefig(path, format='png')
+        plt.clf()
+        plt.cla()
+        plt.close()
+        return path
 
     @staticmethod
     def process_csv(week):

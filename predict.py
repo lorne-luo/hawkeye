@@ -2,6 +2,7 @@ import sys
 
 import csv
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import numpy as np
 import os
 import pandas as pd
@@ -22,11 +23,13 @@ friday = last_friday.year * 10000 + last_friday.month * 100 + last_friday.day
 base_path = os.path.join(os.getcwd(), 'data', str(friday))
 pic_folder = os.path.join(base_path, 'pic')
 
+parser = lambda date: pd.datetime.strptime(date, '%Y-%m-%d')
+
 
 def get_csv(code, download=False):
     path = get_csv_path(code, friday)
     if os.path.exists(path):
-        df = pd.read_csv(path, index_col='date')
+        df = pd.read_csv(path, index_col='date', parse_dates=[0], date_parser=parser)
     elif download:
         df, meta_data = ts.get_daily_adjusted(symbol=f'{code}.AUS')
         df.to_csv(path)
@@ -63,6 +66,9 @@ def process_stock(code, name=None):
     df['4. close'].plot()
     plt.legend(['code'], loc='upper right')
     plt.title(f"{code} price movement.", weight='bold')
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=20))
+    ax.xaxis.set_label_text('')
     plt.savefig(os.path.join(pic_folder, f'{code}_line.png'), format='png')
     plt.clf()
     plt.cla()
@@ -103,7 +109,7 @@ def process_stock(code, name=None):
     plt.axvline(x=percent80, linewidth=1, color='r')
     plt.axvline(x=percent70, linewidth=1, color='r')
     plt.axvline(x=percent60, linewidth=1, color='r')
-    plt.title(f"Price distribution for {name} after {days} days", weight='bold')
+    plt.title(f"{code} price distribution after {days} days", weight='bold')
 
     pic_path = get_pic_path(code)
     plt.savefig(pic_path, format='png')
