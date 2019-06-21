@@ -87,12 +87,15 @@ class WeeklyPrediction(WeeklyModel):
     def pic_folder(self):
         return os.path.join(settings.MEDIA_ROOT, str(self.week), 'pic')
 
-    def generate_future_pic(self, number=1):
+    def generate_future_pic(self, number=1, force=True):
         previous = self.previous(number)
         if not previous:
             return None
-        parser = lambda date: pd.datetime.strptime(date, '%Y-%m-%d')
         path = os.path.join(previous.pic_folder, f'{self.code}_future.png')
+        if os.path.exists(path) and not force:
+            return path
+
+        parser = lambda date: pd.datetime.strptime(date, '%Y-%m-%d')
         df = pd.read_csv(self.code_csv_path, index_col='date', parse_dates=[0], date_parser=parser)
         df = df.dropna()
 
@@ -192,3 +195,11 @@ class WeeklyPrediction(WeeklyModel):
         path = os.path.join(self.pic_folder, f'{self.code}_future.png')
         if os.path.exists(path):
             return '%s%s/pic/%s_future.png' % (settings.MEDIA_URL, self.week, self.code)
+
+    @staticmethod
+    def batch_future_pics():
+        for p in WeeklyPrediction.objects.all().order_by('-week'):
+            for i in range(4):
+                r = p.generate_future_pic(i + 1, force=False)
+                if r:
+                    print(p.week, i + 1, r)
