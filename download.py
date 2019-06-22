@@ -105,7 +105,7 @@ if __name__ == '__main__':
             time.sleep(sleep)
             continue
 
-        if done > 495 or failure + done > 1000:
+        if done > 495 or failure  > 200:
             break
 
         time.sleep(sleep + random.randint(0, 15))
