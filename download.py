@@ -8,9 +8,9 @@ from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
 from core.sms.telstra_api_v2 import send_to_admin
 import config.settings.local as settings
-from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes
+from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes, get_alpha_vantage_api_key
 
-ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
+ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date', retries=3)
 base_path = os.path.join(os.getcwd(), 'data')
 
 

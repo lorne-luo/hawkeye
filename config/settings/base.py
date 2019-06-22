@@ -250,6 +250,7 @@ VERIFICATION_CODE_DB_CHANNEL = 3
 
 # All your project settings go here
 ALPHA_VANTAGE_API_KEY = os.environ.get('ALPHA_VANTAGE_API_KEY', default='')
+ALPHA_VANTAGE_API_KEY2 = os.environ.get('ALPHA_VANTAGE_API_KEY2', default='')
 AWS_REGION = os.environ.get('AWS_REGION', default='')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', default='')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', default='')

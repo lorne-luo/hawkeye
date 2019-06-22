@@ -1,16 +1,21 @@
 import io
-import os
+from datetime import datetime
+
 import pandas as pd
 import requests
 from alpha_vantage.timeseries import TimeSeries
-from datetime import datetime
 from dateutil.relativedelta import relativedelta, FR
+
 import config.settings.local as settings
-from aws import dynamodb, dynamodb_batch_push
+from aws import dynamodb_batch_push
 
 BATCH_LIMIT = 25
 
-ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date')
+
+def get_alpha_vantage_api_key():
+    return settings.ALPHA_VANTAGE_API_KEY2 if datetime.now().weekday() % 2 else settings.ALPHA_VANTAGE_API_KEY
+
+ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date')
 
 
 def get_asx_df():

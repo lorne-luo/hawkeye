@@ -12,12 +12,12 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 import config.settings.local as settings
-from asx import get_asx_df, get_last_friday
+from asx import get_asx_df, get_last_friday, get_alpha_vantage_api_key
 from core.sms.telstra_api_v2 import send_to_admin
 from download import get_csv_path
 from mcmc import monte_carlo_simulations
 
-ts = TimeSeries(key=settings.ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date', retries=3)
+ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date', retries=3)
 last_friday = get_last_friday()
 friday = last_friday.year * 10000 + last_friday.month * 100 + last_friday.day
 base_path = os.path.join(os.getcwd(), 'data', str(friday))
