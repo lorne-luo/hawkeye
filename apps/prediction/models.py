@@ -4,10 +4,10 @@ import csv
 import os
 from datetime import datetime
 from decimal import Decimal
-import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import pandas as pd
 from django.conf import settings
 from django.db import models
 from django.db.models.manager import Manager
@@ -68,9 +68,16 @@ class WeeklyPrediction(WeeklyModel):
 
     @property
     def next_week_return(self):
-        previous = self.previous(1)
-        if previous:
-            next_week_return = (self.current_price - previous.current_price) / previous.current_price
+        next_week = self.next(1)
+        if next_week:
+            next_week_return = (next_week.current_price - self.current_price) / self.current_price
+            return round(next_week_return * 100, 3)
+
+    @property
+    def next_month_return(self):
+        next_week = self.next(4)
+        if next_week:
+            next_week_return = (next_week.current_price - self.current_price) / self.current_price
             return round(next_week_return * 100, 3)
 
     def calculate_last(self):
