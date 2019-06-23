@@ -1,14 +1,14 @@
+import os
 import random
 import sys
 import time
+from datetime import datetime
 
-import os
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
-from datetime import datetime
-from core.sms.telstra_api_v2 import send_to_admin
-import config.settings.local as settings
+
 from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes, get_alpha_vantage_api_key
+from core.sms.telstra_api_v2 import send_to_admin
 
 ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date', retries=3)
 base_path = os.path.join(os.getcwd(), 'data')
@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
     if len(sys.argv) > 1:
         arg = sys.argv[1]
-        if (len(arg) == 3):
+        if (len(arg) == 3 and arg != 'all'):
             code = arg.upper()
             download_csv(code, force=True)
             path = get_csv_path(code)
@@ -105,7 +105,7 @@ if __name__ == '__main__':
             time.sleep(sleep)
             continue
 
-        if failure  > 200:
+        if failure > 300:
             break
 
         time.sleep(sleep + random.randint(0, 15))
