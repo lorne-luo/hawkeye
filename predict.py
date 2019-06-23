@@ -51,7 +51,7 @@ def process_stock(code, name=None):
         return None
 
     # check datetime
-    date = datetime.strptime(df.index.max(), '%Y-%m-%d')
+    date = df.index.max()
     if date < last_friday - relativedelta(days=7):
         print(f'{code} have no latest price, skipped. {df.index.max()}')
         return None
