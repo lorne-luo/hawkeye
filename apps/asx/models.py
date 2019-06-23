@@ -31,6 +31,7 @@ class Company(models.Model):
                                        null=True)
     last_price = models.DecimalField('last price', max_digits=10, decimal_places=4, blank=True, null=True)
     daily_volume = models.DecimalField('daily volume', max_digits=14, decimal_places=4, blank=True, null=True)
+    create_at = models.DateTimeField('create at', auto_now_add=True, auto_now=False)
 
     class Meta:
         ordering = ['code']
@@ -49,7 +50,9 @@ class Company(models.Model):
             Company.objects.update_or_create(code=code, name=name, defaults={'industry': industry, 'is_active': True})
             counter += 1
 
-        print(f'{counter} companies updated.')
+        inactived = Company.objects.exclude(code__in=list(df['ASX code'])).update(is_active=False)
+
+        print(f'{counter} companies updated, {inactived} inacitived')
         asx_200 = get_asx_200_list()
         counter = Company.objects.filter(code__in=asx_200).update(asx_200=True)
         print(f'{counter} ASX 200 companies updated.')
