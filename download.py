@@ -72,6 +72,9 @@ if __name__ == '__main__':
             date = int(arg)
 
     codes = get_codes(all=True) if 'all' in sys.argv else get_codes()
+    if 'reverse' in sys.argv:
+        codes.reverse()
+
     folder = os.path.join(base_path, str(date))
     if not os.path.isdir(folder):
         os.makedirs(folder)
