@@ -58,7 +58,7 @@ class Company(models.Model):
         return f'{self.code}'
 
     @staticmethod
-    def update():
+    def sync():
         df = get_asx_df()
         counter = 0
         for i in range(len(df)):

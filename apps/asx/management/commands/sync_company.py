@@ -7,4 +7,4 @@ class Command(BaseCommand):
     help = 'Sync company data with ASX official.'
 
     def handle(self, *args, **options):
-        Company.update()
+        Company.sync()
