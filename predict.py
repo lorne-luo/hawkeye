@@ -42,6 +42,20 @@ def get_pic_path(code):
     return os.path.join(pic_folder, f'{code}.png')
 
 
+def draw_line_pic(code, df):
+    # draw price line chart
+    df['4. close'].plot()
+    plt.legend(['code'], loc='upper right')
+    plt.title(f"{code} price movement.", weight='bold')
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=20))
+    ax.xaxis.set_label_text('')
+    plt.savefig(os.path.join(pic_folder, f'{code}_line.png'), format='png')
+    plt.clf()
+    plt.cla()
+    plt.close()
+
+
 def process_stock(code, name=None):
     name = name or code
     df = get_csv(code)
@@ -62,17 +76,7 @@ def process_stock(code, name=None):
     if len(df) < 60:
         return None
 
-    # draw price line chart
-    df['4. close'].plot()
-    plt.legend(['code'], loc='upper right')
-    plt.title(f"{code} price movement.", weight='bold')
-    ax = plt.gca()
-    ax.xaxis.set_major_locator(mdates.DayLocator(interval=20))
-    ax.xaxis.set_label_text('')
-    plt.savefig(os.path.join(pic_folder, f'{code}_line.png'), format='png')
-    plt.clf()
-    plt.cla()
-    plt.close()
+    # draw_line_pic(code, df)
 
     volume_mean = df['6. volume'].mean()
     return_mean = df['return'].mean()
