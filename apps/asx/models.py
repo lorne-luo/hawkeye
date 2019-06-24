@@ -25,6 +25,15 @@ class CompanyManager(Manager):
     def dead(self):
         return super().get_queryset().filter(last_price__isnull=True)
 
+    def avtive(self):
+        return super().get_queryset().filter(is_active=True)
+
+    def non_trash(self):
+        return super().get_queryset().filter(is_trash=False)
+
+    def trash(self):
+        return super().get_queryset().filter(is_trash=True)
+
 
 class Company(models.Model):
     """Company name,ASX code,GICS industry group"""
@@ -38,6 +47,7 @@ class Company(models.Model):
     last_price = models.DecimalField('last price', max_digits=10, decimal_places=4, blank=True, null=True)
     daily_volume = models.DecimalField('daily volume', max_digits=14, decimal_places=4, blank=True, null=True)
     create_at = models.DateTimeField('create at', auto_now_add=True, auto_now=False)
+    is_trash = models.BooleanField(blank=False, null=False, default=False)
 
     objects = CompanyManager()
 
