@@ -50,13 +50,13 @@ def get_codes(all=False):
     else:
         # return all
         df = get_asx_df()
-        return df['ASX code'].values
+        return list(df['ASX code'].values)
 
 
 if __name__ == '__main__':
     date = get_last_friday()
     date = date.year * 10000 + date.month * 100 + date.day
-    sleep = 20
+    sleep = 15
     done = 0
     failure = 0
 
@@ -111,7 +111,7 @@ if __name__ == '__main__':
         if failure > 300:
             break
 
-        time.sleep(sleep + random.randint(0, 15))
+        time.sleep(sleep + random.randint(0, 5))
 
     print(f'Download finished, done = {done}, failure = {failure}')
     send_to_admin(f'[Hawkeye] Download finished, done = {done}, failure = {failure}')
