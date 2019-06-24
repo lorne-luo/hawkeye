@@ -190,6 +190,9 @@ class WeeklyPrediction(WeeklyModel):
                     failed += 1
                     print(row['code'], str(ex))
                     print(data)
+
+                if not (counter + failed) % 100:
+                    print(f'{counter+failed} processed.')
         print(f'{counter} records updated, {failed} failed.')
 
     @staticmethod
