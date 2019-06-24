@@ -47,7 +47,11 @@
                 <td>{{ recommendation.prediction.volume_rank }}</td>
                 <td>{{ recommendation.prediction.return_rank }}</td>
                 <td>{{ recommendation.prediction.risk_rank }}</td>
-                <td>{{ recommendation.rank }}</td>
+                <td>
+                    <a href="{% url 'prediction:rank_trend_image' recommendation.code %}">
+                        {{ recommendation.rank }}
+                    </a>
+                </td>
                 <td>
                     <a href="{{ recommendation.prediction.sim_pic_url }}">Sim</a>
                     <a href="{{ recommendation.prediction.line_pic_url }}">Line</a>

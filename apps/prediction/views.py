@@ -1,9 +1,12 @@
 import os
+from datetime import datetime
 from io import StringIO, BytesIO
 
 import pandas as pd
 import matplotlib.pyplot as plt
+from pandas.plotting import register_matplotlib_converters
 import matplotlib.dates as mdates
+from dateutil.relativedelta import relativedelta
 
 from django.conf import settings
 from django.http import HttpResponse, Http404
@@ -78,6 +81,33 @@ def future_image(request, week, code):
     # for tick in ax.get_xticklabels():
     #     tick.set_rotation(90)
     # plt.xlabel('xlabel', fontsize=5)
+    io = BytesIO()
+    plt.savefig(io, format='png')
+    plt.clf()
+    plt.cla()
+    plt.close()
+    io.seek(0)
+
+    return HttpResponse(io.read(), content_type="image/png")
+
+
+def rank_trend_image(request, code):
+    register_matplotlib_converters()
+
+    weeks_age = datetime.now() - relativedelta(weeks=53)
+    week_number = int(weeks_age.strftime('%Y%m%d'))
+    predictions = WeeklyPrediction.objects.filter(code=code.upper(), week__gte=week_number).order_by('week')
+
+    x = [str(x) for x in predictions.values_list('week', flat=True)]
+    plt.plot(x, predictions.values_list('return_rank', flat=True), label="Return Rank")
+
+    plt.plot(x, predictions.values_list('risk_rank', flat=True), label="Risk Rank")
+
+    # plt.legend(['Return Rank', 'Risk Rank'], loc='mid left')
+    plt.legend(loc='center left')
+    plt.title(f"{code} price movement.", weight='bold')
+    ax = plt.gca()
+    ax.xaxis.set_label_text('')
     io = BytesIO()
     plt.savefig(io, format='png')
     plt.clf()

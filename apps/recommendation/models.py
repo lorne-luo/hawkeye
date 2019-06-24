@@ -27,3 +27,7 @@ class WeeklyRecommendation(WeeklyModel):
     @cached_property
     def company(self):
         return self.prediction.company
+
+    @cached_property
+    def code(self):
+        return self.prediction.code
