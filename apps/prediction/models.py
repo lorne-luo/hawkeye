@@ -174,9 +174,9 @@ class WeeklyPrediction(WeeklyModel):
                                                                                     defaults=data)
                     prediction.calculate_last()
 
-                    for i in range(4):
+                    # for i in range(4):
                         # generate future pics for previous 4 week's prediction
-                        prediction.generate_future_pic(i + 1)
+                        # prediction.generate_future_pic(i + 1)
 
                     # update last price and date
                     com, created = Company.objects.get_or_create(code=row['code'])
@@ -206,7 +206,7 @@ class WeeklyPrediction(WeeklyModel):
 
     @property
     def future_pic_url(self):
-        if self.next(4) or self.next(3) or self.next(2) or self.next(1):
+        if self.has_next():
             return f'/prediction/{self.week}/{self.code}_future.png'
 
     @staticmethod

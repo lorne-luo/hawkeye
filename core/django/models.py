@@ -38,3 +38,10 @@ class WeeklyModel(models.Model):
     def next(self, number=1):
         next_week = date_to_int(self.get_next_week(number))
         return self.__class__.objects.filter(code=self.code, week=next_week).first()
+
+    def has_previous(self):
+        return self.__class__.objects.filter(code=self.code, week__lt=self.week).exists()
+
+
+    def has_next(self):
+        return self.__class__.objects.filter(code=self.code, week__gt=self.week).exists()
