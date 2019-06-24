@@ -15,6 +15,7 @@ BATCH_LIMIT = 25
 def get_alpha_vantage_api_key():
     return settings.ALPHA_VANTAGE_API_KEY2 if datetime.now().weekday() % 2 else settings.ALPHA_VANTAGE_API_KEY
 
+
 ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date')
 
 
@@ -246,6 +247,31 @@ def get_codes2():
                              'MIL', 'KAM', 'DAF', 'MRG', 'SEQ', 'TRT', 'BNR', 'TTM', 'EDE', 'AVL', 'AUC', 'HLX', 'RAN',
                              'DAV', 'AZY', 'RMX']
     return list(set(codes2))
+
+
+dead_codes = ['IRL', 'KAI', 'SM9', 'BKM', 'LVE', 'TKF', 'TGS', 'INH', 'MOT', 'NMI', 'JKA', 'WSZ', 'BGR', 'XQL', 'SAY', 'EOR',
+        'MZC', 'GSL', 'SF1', 'SAZ', 'AOW', 'IMK', 'PUU', 'AOR', 'ZOR', 'RT2', 'QIN', 'AOJ', 'LI4', 'NRO', 'SXB', 'TT7',
+        'ELK', 'RT9', 'TES', 'QBC', 'KNH', 'MZA', 'ANW', 'FGF', 'QSS', 'MZI', 'RFB', 'AHZ', 'ZTA', 'SHU', 'ATA', 'PLC',
+        'KOP', 'WSQ', 'SKY', 'HTB', 'CM1', 'MPZ', 'E88', 'DAM', 'XCL', 'IFX', 'CDU', 'NFN', 'D13', 'IMQ', 'STL', 'REK',
+        'CU1', 'EGS', 'LC1', 'NIB', 'USR', 'TCO', 'KFW', 'IMG', 'SVH', 'PUZ', 'WSH', 'RUB', 'OGX', 'SAC', 'MBT', 'SKP',
+        'FSI', 'BMH', 'AXP', 'CDG', 'RBX', 'BSN', 'DGF', 'GBI', 'CAS', 'NXR', 'CHU', 'IQ3', 'INB', 'IB8', 'KGM', 'CBL',
+        'OXX', 'MIG', 'MBL', 'MZF', 'MEQ', 'CNX', 'LO1', 'DXA', 'RFE', 'MXU', 'B2Y', 'PKA', 'VRI', 'SBU', 'SFV', 'WSC',
+        'AZT', 'ACL', 'EPA', 'AMO', 'VTH', 'SXX', 'DAZ', 'BPB', 'APV', 'IMX', 'QST', 'AIY', 'S3R', 'GFI', 'TTZ', 'LGR',
+        'IBN', 'TRA', 'WFE', 'NIO', 'NIU', 'SDL', 'MLL', 'LTN', 'RNL', 'SSN', 'ANS', 'CD1', 'DMA', 'LMW', 'MZB', 'WEJ',
+        'LCT', 'SAM', 'MIH', 'CLY', 'RTD', 'PUK', 'SAS', 'TNB', 'TMG', 'OOK', 'SBK', 'SVA', 'SGL', 'SHZ', 'MCH', 'GBA',
+        'REZ', 'SS7', 'SIX', 'MZT', 'TB8', 'KIG', 'ZAM', 'FIG', 'FDX', 'ATB', 'CHJ', '360', 'GBM', 'KPC', 'WEF', 'VIA',
+        'BHD', 'CCE', 'RF1', 'LI1', 'FCG', 'WLC', 'ENB', 'ABW', 'CSK', 'AXL', 'IXC', 'SMG', 'PUJ', 'RNY', 'GFS', 'AFT',
+        'AOK', 'PCI', 'BMP', 'KRS', 'MMG', 'WSO', 'TNJ', 'WE1', 'ICB', 'IAN', 'KEB', 'AOL', 'RFC', 'TT9', 'GO2', 'JCI',
+        'EMI', 'WEK', 'SGU', 'RT1', 'RTC', 'LTF', 'IMN', 'IDF', 'SCW', 'GPS', 'PES', 'PPZ', 'CU2', 'PEP', 'PUO', 'XVG',
+        'MAX', 'NAJ', 'DAE', 'RCR', 'MGZ', 'JVG', 'LSX', 'TEX', 'AO3', 'TIH', 'RMM', 'RDA', 'VCD', 'MAR', 'IHR', 'JIP',
+        'KP2', 'NAO', 'BPG', 'LHM', 'PUV', 'ECT', 'VPC', 'MBJ', 'BSP', 'RRS', 'ANV', 'INN', 'CTL', 'BBR', 'WPG', 'HDX',
+        'LAA', 'VPG', 'AN1', 'TOZ', 'LI2', 'NAH', 'WEN', 'IOR', 'LCN', 'LAM', 'AO2', 'LSR', 'SUM', 'DA1', 'IMO', 'OEQ',
+        'RVA', 'CSD', 'PUB', 'IPT', 'HOG', 'QFE', 'LIN', 'POB', 'IDH', 'XTV', 'LCE', 'MZN', 'LER', 'MDZ', 'AEB', 'NMM',
+        'MZ2', 'LT1', 'OTR', 'DAQ', 'MZ1', 'HCS', 'MAS', 'AQM', 'WNS', 'HAR', 'CCZ', 'SRF', 'TNF', 'IOT', 'IEQ', 'IDJ',
+        'HDY', 'SSF', 'PEL', 'BCL', 'POV', 'MPO', 'PER', 'KIK', 'TTS', 'PEU', 'WLF', 'MMR', 'STC', 'WSN', 'PUQ', 'CVT',
+        'HMO', 'SBI', 'IAB', 'MHD', 'LI5', 'ACP', 'CIZ', 'ODN', 'GCN', 'SS6', 'POT', 'CEL', 'SSE', 'WEH', 'ZYB', 'AYG',
+        'KMT', 'IND', 'KYK', 'SMT', 'LGO', 'ICU', 'TNH', 'CCB', 'MPX', 'QNB', 'NAF', 'CGB', 'MED', 'AJY', 'WSJ', 'WSD',
+        'SYS', 'SCA', 'AYU', 'ANQ', 'NRM', 'KKO', 'HML', 'VIV']
 
 
 def get_all_codes():

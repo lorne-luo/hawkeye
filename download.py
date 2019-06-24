@@ -7,7 +7,8 @@ from datetime import datetime
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 
-from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes, get_alpha_vantage_api_key
+from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes, get_alpha_vantage_api_key, \
+    dead_codes
 from core.sms.telstra_api_v2 import send_to_admin
 
 ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date', retries=3)
@@ -90,7 +91,7 @@ if __name__ == '__main__':
         code = codes[i]
         path = get_csv_path(code, date)
 
-        if os.path.exists(path):
+        if os.path.exists(path) or code in dead_codes:
             continue
 
         try:
