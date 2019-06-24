@@ -6,6 +6,7 @@ import os
 from dateutil.relativedelta import relativedelta, FR
 from django.conf import settings
 from django.db import models
+from django.db.models.manager import Manager
 from django.utils.functional import cached_property
 
 from apps.utils.helper import date_to_int
@@ -20,6 +21,11 @@ class Industry(models.Model):
         return self.company_set.count()
 
 
+class CompanyManager(Manager):
+    def dead(self):
+        return super().get_queryset().filter(last_price__isnull=True)
+
+
 class Company(models.Model):
     """Company name,ASX code,GICS industry group"""
     name = models.CharField('name', max_length=80, blank=False, null=False)
@@ -32,6 +38,8 @@ class Company(models.Model):
     last_price = models.DecimalField('last price', max_digits=10, decimal_places=4, blank=True, null=True)
     daily_volume = models.DecimalField('daily volume', max_digits=14, decimal_places=4, blank=True, null=True)
     create_at = models.DateTimeField('create at', auto_now_add=True, auto_now=False)
+
+    objects = CompanyManager()
 
     class Meta:
         ordering = ['code']
