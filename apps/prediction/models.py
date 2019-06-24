@@ -12,6 +12,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models.manager import Manager
 from django.utils.functional import cached_property
+from pandas.plotting import register_matplotlib_converters
 
 from apps.asx.models import Company
 from core.django.models import WeeklyModel
@@ -95,6 +96,8 @@ class WeeklyPrediction(WeeklyModel):
         return os.path.join(settings.MEDIA_ROOT, str(self.week), 'pic')
 
     def generate_future_pic(self, number=1, force=True):
+        register_matplotlib_converters()
+
         previous = self.previous(number)
         if not previous:
             return None
@@ -130,6 +133,7 @@ class WeeklyPrediction(WeeklyModel):
             print(f'{result_csv} not exist.')
             return
 
+        print(f'Start process {result_csv}')
         # ['code', 'last_date', 'start price', 'sim_mean', 'sim_diff', 'VaR 99%', 'VaR 99% Percent', 'volume_mean',
         #  'return_mean', 'return_sigma', 'percent99', 'percent90', 'percent80', 'percent70', 'percent60'])
 
@@ -162,6 +166,9 @@ class WeeklyPrediction(WeeklyModel):
             for row in reader:
                 data = dict([(model_field, row[csv_field]) for model_field, csv_field in model_csv_map.items()])
                 data['csv_path'] = result_csv
+                date = datetime.strptime(data['last_price_date'], '%Y-%m-%d %H:%M:%S').date()
+
+                data['last_price_date'] = str(date)
                 try:
                     prediction, created = WeeklyPrediction.objects.update_or_create(code=row['code'], week=week,
                                                                                     defaults=data)
@@ -172,18 +179,17 @@ class WeeklyPrediction(WeeklyModel):
                         prediction.generate_future_pic(i + 1)
 
                     # update last price and date
-                    date = datetime.strptime(data['last_price_date'], '%Y-%m-%d').date()
                     com, created = Company.objects.get_or_create(code=row['code'])
                     if not com.last_price_date or com.last_price_date < date:
                         com.last_price = data['current_price']
                         com.last_price_date = date
                         com.daily_volume = Decimal(str(data['volume_mean']))
                         com.save()
+                    counter += 1
                 except Exception as ex:
                     failed += 1
                     print(row['code'], str(ex))
                     print(data)
-                counter += 1
         print(f'{counter} records updated, {failed} failed.')
 
     @staticmethod
