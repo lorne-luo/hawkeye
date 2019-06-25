@@ -1,0 +1,45 @@
+/*
+==========================================================================
+   # Action Panel : Top Navigation buttons + filters panel;
+========================================================================== */
+
+.action-panel {
+
+    &__buttons {
+        text-align: right;
+
+        .btn {
+            margin: 0 0 20px 20px;
+        }
+
+        .btn-large,
+        .btn-cancel {
+            margin: 0 0 20px 20px;
+            padding: 15px 35px;
+            min-width: 150px;
+        }
+    }
+
+    &__filters {
+        margin-bottom: 30px;
+
+        label {
+            @include font(roboto, semi-bold);
+            padding-right: 8px;
+            min-width: auto;
+            width: auto;
+        }
+
+        &-wrapper {
+            margin-right: 10px;
+
+            &.no-margin {
+                margin: 0 5px 0 0;
+            }
+        }
+
+        .btn {
+            margin: 20px 0 0;
+        }
+    }
+}
