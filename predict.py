@@ -103,11 +103,11 @@ def process_stock(code, name=None):
     # Using plt.figtext to fill in some additional information onto the plot
 
     # Starting Price
-    plt.figtext(0.6, 0.8, s="Start price: $%.2f" % start_price)
+    plt.figtext(0.6, 0.8, s="Start price: $%.4f" % start_price)
     # Mean ending price
-    plt.figtext(0.6, 0.7, "Mean final price: $%.2f" % sim_mean)
-    plt.figtext(0.6, 0.6, "VaR(0.99): $%.2f" % (var,))
-    plt.figtext(0.15, 0.6, "q(0.99): $%.2f" % percent99)
+    plt.figtext(0.6, 0.7, "Mean final price: $%.4f" % sim_mean)
+    plt.figtext(0.6, 0.6, "VaR(0.99): $%.4f" % (var,))
+    plt.figtext(0.15, 0.6, "q(0.99): $%.4f" % percent99)
     plt.axvline(x=percent99, linewidth=1, color='r')
     plt.axvline(x=percent90, linewidth=1, color='r')
     plt.axvline(x=percent80, linewidth=1, color='r')
