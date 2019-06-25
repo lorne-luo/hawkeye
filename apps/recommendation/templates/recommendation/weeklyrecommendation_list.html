@@ -24,6 +24,7 @@
 
     <table>
         <tr>
+            <th class="sm-col">No.</th>
             <th class="sm-col">Code</th>
             {#            <th class="sm-col">Name</th>#}
             {#            <th class="sm-col">Industry</th>#}
@@ -38,7 +39,10 @@
         </tr>
         {% for recommendation in object_list %}
             <tr>
-                <td>{{ recommendation.prediction.code }}</td>
+                <td>{{ forloop.counter }}</td>
+                <td>
+                    <a target="_blank" href="https://www.asx.com.au/asx/share-price-research/company/{{ recommendation.prediction.code }}">{{ recommendation.prediction.code }}</a>
+                </td>
                 {#                <td>{{ recommendation.prediction.company.name }}</td>#}
                 {#                <td>{{ recommendation.prediction.company.industry_name }}</td>#}
                 <td>{{ recommendation.prediction.current_price }}</td>
@@ -64,16 +68,18 @@
         {% if avg_week_return %}
             <tfoot>
             {% if avg_month_return %}
-                <td colspan="3"></td>
+                <td colspan="4"></td>
                 <th colspan="3">Future Avg. Month Return: {{ avg_month_return }}</th>
             {% else %}
-                <td colspan="6"></td>
+                <td colspan="7"></td>
             {% endif %}
 
             <th colspan="3">Future Avg. Week Return: {{ avg_week_return }}</th>
             </tfoot>
         {% endif %}
     </table>
+
+    <img src="/media/{{ week }}/pic/top_rank_scatter.png"/>
 
     {% include 'includes/paginator.html' with week=week %}
 {% endblock %}
