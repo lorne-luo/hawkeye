@@ -1,18 +1,14 @@
-import os
 from datetime import datetime
-from io import StringIO, BytesIO
+from io import BytesIO
 
-import pandas as pd
 import matplotlib.pyplot as plt
-from pandas.plotting import register_matplotlib_converters
-import matplotlib.dates as mdates
+import pandas as pd
 from dateutil.relativedelta import relativedelta
-
-from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.urls import reverse
 from django.views.generic import ListView, RedirectView
 from django_filters.views import FilterView
+from pandas.plotting import register_matplotlib_converters
 
 from apps.prediction.models import WeeklyPrediction
 from core.django.views import WeekViewMixin
@@ -30,6 +26,14 @@ class WeeklyPredictionListView(WeekViewMixin, FilterView, ListView):
     model = WeeklyPrediction
     paginate_by = 20
     template_name_suffix = '_list'
+    ordering = '-return_rank'
+
+    def get_queryset(self):
+        code = self.request.GET.get('q')
+        if code:
+            return WeeklyPrediction.objects.filter(code=code)
+        else:
+            return super(WeeklyPredictionListView, self).get_queryset()
 
 
 def line_image(request, week, code):

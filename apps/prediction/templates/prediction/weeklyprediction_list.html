@@ -17,14 +17,19 @@
                 {% endfor %}
             </select>
         </span>
+            <span class="action-panel__filters-wrapper">
+                <label for="search_input">Search:</label>
+                <input id="search_input" type="" text/>
+                <button id="search_submit">Go</button>
+            </span>
         </div>
     </div>
 
     <table>
         <tr>
             <th class="sm-col">Code</th>
-{#            <th class="sm-col">Name</th>#}
-{#            <th class="sm-col">Industry</th>#}
+            {#            <th class="sm-col">Name</th>#}
+            {#            <th class="sm-col">Industry</th>#}
             <th class="sm-col">Price</th>
             <th class="sm-col">Return</th>
             <th class="sm-col">Risk 99%</th>
@@ -36,8 +41,8 @@
         {% for prediction in object_list %}
             <tr>
                 <td>{{ prediction.code }}</td>
-{#                <td>{{ prediction.company.name }}</td>#}
-{#                <td>{{ prediction.company.industry_name }}</td>#}
+                {#                <td>{{ prediction.company.name }}</td>#}
+                {#                <td>{{ prediction.company.industry_name }}</td>#}
                 <td>{{ prediction.current_price }}</td>
                 <td>{{ prediction.sim_return }}</td>
                 <td>{{ prediction.var_99_percent }}</td>
@@ -53,5 +58,30 @@
     </table>
 
     {% include 'includes/paginator.html' with week=week %}
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#search_input').keypress(function (e) {
+                if (e.which == 13) {
+                    $('#search_submit').trigger('click');
+                    return false;    //<---- Add this line
+                }
+            });
+
+            $('#search_submit').on('click', function (e) {
+                var code = $('#search_input').val();
+                var location = window.location.origin + window.location.pathname;
+                if (!code) {
+                    window.location = location;
+                    return;
+                }
+                location += "?q=" + code.toUpperCase();
+                window.location = location;
+            });
+
+        });
+    </script>
 {% endblock %}
 
