@@ -166,7 +166,10 @@ class WeeklyPrediction(WeeklyModel):
             for row in reader:
                 data = dict([(model_field, row[csv_field]) for model_field, csv_field in model_csv_map.items()])
                 data['csv_path'] = result_csv
-                date = datetime.strptime(data['last_price_date'], '%Y-%m-%d %H:%M:%S').date()
+                if len(data['last_price_date'])>10:
+                    date = datetime.strptime(data['last_price_date'], '%Y-%m-%d %H:%M:%S').date()
+                else:
+                    date = datetime.strptime(data['last_price_date'], '%Y-%m-%d').date()
 
                 data['last_price_date'] = str(date)
                 try:
