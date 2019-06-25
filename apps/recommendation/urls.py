@@ -7,6 +7,6 @@ from . import views
 
 urlpatterns = (
     # urls for Plan
-    url(r'^recommendation/$', views.WeeklyRecommendationRedirectView.as_view(), name='recommendation_index'),
-    url(r'^recommendation/(?P<week>[\d]+)/$', views.WeeklyRecommendationListView.as_view(), name='recommendation_list'),
+    url(r'^$', views.WeeklyRecommendationRedirectView.as_view(), name='recommendation_index'),
+    url(r'^(?P<week>[\d]+)/$', views.WeeklyRecommendationListView.as_view(), name='recommendation_list'),
 )

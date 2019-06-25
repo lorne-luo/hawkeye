@@ -19,6 +19,7 @@ class WeeklyRecommendationListView(WeekViewMixin, FilterView, ListView):
     model = WeeklyRecommendation
     paginate_by = 20
     template_name_suffix = '_list'
+    ordering = '-rank'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(WeeklyRecommendationListView, self).get_context_data(object_list=object_list, **kwargs)

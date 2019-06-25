@@ -42,6 +42,9 @@ class WeeklyRecommendation(WeeklyModel):
         image_path = os.path.join(settings.MEDIA_ROOT, str(week), 'pic', 'top_rank_scatter.png')
 
         items = WeeklyRecommendation.objects.filter(week=week)
+        if not items:
+            return None
+
         plt.figure(figsize=(16, 8))
         plt.ylim(bottom=60, top=100)
         plt.xlim(left=0, right=35)
