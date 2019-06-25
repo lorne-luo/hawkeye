@@ -111,11 +111,11 @@ class WeeklyPrediction(WeeklyModel):
         df.drop(index=df[df['1. open'] == 0].index, inplace=True)
 
         plt.plot(df.index, df['4. close'])
-        plt.legend(['Code'], loc='upper right')
+        plt.legend([self.code], loc='upper left')
         plt.title(f"{self.code} price movement.", weight='bold')
         plt.axvline(x=previous.week_date, linewidth=1, color='r')
         ax = plt.gca()
-        ax.xaxis.set_major_locator(mdates.DayLocator(interval=20))
+        # ax.xaxis.set_major_locator(mdates.DayLocator(interval=20))
         ax.xaxis.set_label_text('')
         # for tick in ax.get_xticklabels():
         #     tick.set_rotation(90)

@@ -53,7 +53,7 @@ def process_stock(code, name=None):
 
     # draw price line chart
     df['4. close'].plot()
-    plt.legend(['code'], loc='upper right')
+    plt.legend([code], loc='upper left')
     plt.title(f"{code} price movement.", weight='bold')
     plt.savefig(os.path.join(pic_folder, f'{code}_line.png'), format='png')
     plt.clf()

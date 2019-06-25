@@ -45,10 +45,10 @@ def get_pic_path(code):
 def draw_line_pic(code, df):
     # draw price line chart
     df['4. close'].plot()
-    plt.legend(['code'], loc='upper right')
+    plt.legend([code], loc='upper left')
     plt.title(f"{code} price movement.", weight='bold')
     ax = plt.gca()
-    ax.xaxis.set_major_locator(mdates.DayLocator(interval=20))
+    # ax.xaxis.set_major_locator(mdates.DayLocator(interval=20))
     ax.xaxis.set_label_text('')
     plt.savefig(os.path.join(pic_folder, f'{code}_line.png'), format='png')
     plt.clf()
