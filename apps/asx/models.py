@@ -3,9 +3,11 @@ from __future__ import absolute_import, unicode_literals
 import csv
 import os
 
+import numpy as np
 from dateutil.relativedelta import relativedelta, FR
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 from django.db.models.manager import Manager
 from django.utils.functional import cached_property
 
@@ -106,3 +108,21 @@ class Company(models.Model):
                 writer.writerow(
                     [com.code, com.name, com.industry_name, com.last_price_date, com.last_price, com.daily_volume,
                      com.asx_200])
+
+    @staticmethod
+    def price_percentile(percent):
+        prices = Company.objects.filter(last_price__isnull=False).values_list('last_price', flat=True)
+        prices = [float(x) for x in prices]
+        return np.percentile(prices, percent)
+
+    @staticmethod
+    def volume_percentile(percent):
+        volume = Company.objects.filter(daily_volume__isnull=False).values_list('daily_volume', flat=True)
+        volume = [float(x) for x in volume]
+        return np.percentile(volume, percent)
+
+    @staticmethod
+    def exclude_trash(percent):
+        v = Company.volume_percentile(percent)
+        p = Company.price_percentile(percent)
+        return Company.objects.exclude(last_price__isnull=True).exclude(Q(daily_volume__lt=v) | Q(last_price__lt=p))
