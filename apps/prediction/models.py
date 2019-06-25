@@ -5,7 +5,6 @@ import os
 from datetime import datetime
 from decimal import Decimal
 
-import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas as pd
 from django.conf import settings
@@ -166,7 +165,7 @@ class WeeklyPrediction(WeeklyModel):
             for row in reader:
                 data = dict([(model_field, row[csv_field]) for model_field, csv_field in model_csv_map.items()])
                 data['csv_path'] = result_csv
-                if len(data['last_price_date'])>10:
+                if len(data['last_price_date']) > 10:
                     date = datetime.strptime(data['last_price_date'], '%Y-%m-%d %H:%M:%S').date()
                 else:
                     date = datetime.strptime(data['last_price_date'], '%Y-%m-%d').date()
@@ -178,8 +177,8 @@ class WeeklyPrediction(WeeklyModel):
                     prediction.calculate_last()
 
                     # for i in range(4):
-                        # generate future pics for previous 4 week's prediction
-                        # prediction.generate_future_pic(i + 1)
+                    # generate future pics for previous 4 week's prediction
+                    # prediction.generate_future_pic(i + 1)
 
                     # update last price and date
                     com, created = Company.objects.get_or_create(code=row['code'])
@@ -222,3 +221,8 @@ class WeeklyPrediction(WeeklyModel):
                 r = p.generate_future_pic(i + 1, force=False)
                 if r:
                     print(p.week, i + 1, r)
+
+    @staticmethod
+    def weeks():
+        weeks = list(WeeklyPrediction.objects.values_list('week', flat=True).distinct())
+        return weeks
