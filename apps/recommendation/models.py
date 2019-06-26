@@ -5,11 +5,14 @@ from io import BytesIO
 
 import matplotlib.pyplot as plt
 from django.conf import settings
+from datetime import datetime
+
 from django.db import models
+from django.db.models import Count
 from django.db.models.manager import Manager
 from django.utils.functional import cached_property
+from dateutil.relativedelta import relativedelta
 
-from apps.asx.models import Company
 from apps.prediction.models import WeeklyPrediction
 from core.django.models import WeeklyModel
 
@@ -77,3 +80,10 @@ class WeeklyRecommendation(WeeklyModel):
             plt.close()
             io.seek(0)
             return io
+
+    @staticmethod
+    def get_frequence(weeks=1):
+        weeks_age = datetime.now() - relativedelta(weeks=weeks)
+        week_number = int(weeks_age.strftime('%Y%m%d'))
+        return WeeklyRecommendation.objects.filter(week__gt=week_number).values('prediction__code').annotate(
+            count=Count('pk', distinct=True)).order_by('-count')
