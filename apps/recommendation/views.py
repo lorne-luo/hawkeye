@@ -1,3 +1,8 @@
+from io import BytesIO
+
+import matplotlib.pyplot as plt
+from django.db.models import Max, Min
+from django.http import HttpResponse
 from django.urls import reverse
 from django.views.generic import ListView, RedirectView
 from django_filters.views import FilterView
@@ -45,3 +50,48 @@ class WeeklyRecommendationListView(WeekViewMixin, FilterView, ListView):
         if next_month_counter:
             context['avg_month_return'] = round(next_month_return / next_month_counter, 3)
         return context
+
+
+def top_rank_scatter(request, week):
+    items = WeeklyRecommendation.objects.filter(week=week)
+    if not items:
+        return None
+
+    plt.figure(figsize=(16, 8))
+    plt.ylim(bottom=60, top=100)
+    plt.xlim(left=0, right=35)
+
+    vol = WeeklyRecommendation.objects.filter(week=week).aggregate(Max('prediction__volume_mean'),
+                                                                   Min('prediction__volume_mean'))
+    minm = float(vol.get('prediction__volume_mean__min'))
+    maxm = vol.get('prediction__volume_mean__max')
+    print(minm)
+    print(maxm)
+
+    for item in items:
+        code = item.code
+        return_rank = float(item.prediction.return_rank)
+        risk_rank = float(item.prediction.risk_rank)
+        volume_mean = float(item.prediction.volume_mean)
+        size = volume_mean / minm * 5
+        plt.scatter(risk_rank, return_rank, s=size, alpha=0.4)
+        plt.annotate(code,
+                     xy=(risk_rank, return_rank),
+                     xytext=(20, 20),
+                     textcoords='offset points',
+                     ha='right',
+                     va='bottom',
+                     arrowprops=dict(arrowstyle='-', connectionstyle='arc3,rad=-0.3'))
+
+    plt.title(f"{week} # Return vs Risk vs Volume for top rank")
+    plt.xlabel("RISK")
+    plt.ylabel("RETURN")
+
+    io = BytesIO()
+    plt.savefig(io, format='png')
+    plt.clf()
+    plt.cla()
+    plt.close()
+    io.seek(0)
+
+    return HttpResponse(io.read(), content_type="image/png")
