@@ -39,7 +39,7 @@
         </tr>
         {% for recommendation in object_list %}
             <tr>
-                <td>{{ forloop.counter }}</td>
+                <td>{{ forloop.counter|add:start }}</td>
                 <td>
                     <a target="_blank"
                        href="https://www.asx.com.au/asx/share-price-research/company/{{ recommendation.prediction.code }}">{{ recommendation.prediction.code }}</a>

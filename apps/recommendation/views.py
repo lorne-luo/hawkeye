@@ -49,6 +49,10 @@ class WeeklyRecommendationListView(WeekViewMixin, FilterView, ListView):
             context['avg_week_return'] = round(next_week_return / next_week_counter, 3)
         if next_month_counter:
             context['avg_month_return'] = round(next_month_return / next_month_counter, 3)
+
+        page = self.request.GET.get('page')
+        page = int(page) if page else 1
+        context['start'] = (page - 1) * self.paginate_by
         return context
 
 
@@ -61,12 +65,9 @@ def top_rank_scatter(request, week):
     plt.ylim(bottom=60, top=100)
     plt.xlim(left=0, right=35)
 
-    vol = WeeklyRecommendation.objects.filter(week=week).aggregate(Max('prediction__volume_mean'),
-                                                                   Min('prediction__volume_mean'))
+    vol = items.aggregate(Max('prediction__volume_mean'), Min('prediction__volume_mean'))
     minm = float(vol.get('prediction__volume_mean__min'))
     maxm = vol.get('prediction__volume_mean__max')
-    print(minm)
-    print(maxm)
 
     for item in items:
         code = item.code
