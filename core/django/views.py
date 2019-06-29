@@ -32,7 +32,7 @@ class WeekViewMixin:
         return self.kwargs.get('week') or self.request.GET.get('week') or self.get_weeks()[-1]
 
     def get_weeks(self):
-        return [x.week for x in self.model.objects.all().distinct('week').order_by('week')]
+        return [x.week for x in self.model.objects.all().distinct('week').order_by('-week')]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         week = self.get_query_week()
