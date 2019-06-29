@@ -62,8 +62,8 @@ def top_rank_scatter(request, week):
         return None
 
     plt.figure(figsize=(16, 8))
-    plt.ylim(bottom=60, top=100)
-    plt.xlim(left=0, right=35)
+    # plt.ylim(bottom=60, top=100)
+    # plt.xlim(left=0, right=35)
 
     vol = items.aggregate(Max('prediction__volume_mean'), Min('prediction__volume_mean'))
     minm = float(vol.get('prediction__volume_mean__min'))
@@ -72,8 +72,8 @@ def top_rank_scatter(request, week):
 
     for item in items:
         code = item.code
-        return_rank = float(item.prediction.return_rank)
-        risk_rank = float(item.prediction.risk_rank)
+        return_rank = float(item.prediction.sim_return)
+        risk_rank = float(item.prediction.var_99_percent)
         volume_mean = float(item.prediction.volume_mean)
         size = volume_mean * factor
         size = 1 if size < 1 else size
