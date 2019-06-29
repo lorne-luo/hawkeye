@@ -226,3 +226,13 @@ class WeeklyPrediction(WeeklyModel):
     def weeks():
         weeks = list(WeeklyPrediction.objects.values_list('week', flat=True).distinct())
         return weeks
+
+    @staticmethod
+    def min_week():
+        weeks = list(WeeklyPrediction.objects.values_list('week', flat=True).distinct())
+        return min(weeks)
+
+    @staticmethod
+    def max_week():
+        weeks = list(WeeklyPrediction.objects.values_list('week', flat=True).distinct())
+        return max(weeks)
