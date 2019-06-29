@@ -33,5 +33,4 @@ class ReturnRiskRank(Strategy):
         for rec in recommendations:
             WeeklyRecommendation.objects.update_or_create(week=week, strategy=self.name, prediction=rec,
                                                           defaults={'rank': rec.rank})
-        WeeklyRecommendation.generate_scatter(week)
         return recommendations

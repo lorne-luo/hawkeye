@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
         except Exception as ex:
             failure += 1
-            print(f'{i}. {code} raise error: {ex}')
+            print(i, f'{code} raise error: {ex}')
             time.sleep(sleep)
             continue
 

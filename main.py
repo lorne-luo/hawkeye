@@ -164,12 +164,12 @@ if __name__ == '__main__':
                 done += 1
             except Exception as ex:
                 failure += 1
-                print(f'{i}. {code} raise error: {ex}')
+                print(i, f'{code} raise error: {ex}')
                 continue
 
             if not result:
                 failure += 1
-                print(f'{i}. {code} got None')
+                print(i, f'{code} got None')
                 continue
 
             writer = csv.writer(csvfile)
