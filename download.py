@@ -1,5 +1,6 @@
 import os
 import random
+import subprocess
 import sys
 import time
 from datetime import datetime
@@ -53,6 +54,12 @@ def get_codes(all=False):
         df = get_asx_df()
         return list(df['ASX code'].values)
 
+def scp(path, week):
+    try:
+        cmd = f'scp {path} luotao@luotao:/opt/hawkeye/data/{week}/csv/'
+        subprocess.run(cmd, shell=True, check=True)
+    except Exception as ex:
+        print(f'scp error: {ex}')
 
 if __name__ == '__main__':
     date = get_last_friday()
@@ -102,6 +109,7 @@ if __name__ == '__main__':
             else:
                 done += 1
                 print(i, code, path, 'Done')
+                # scp(path, date)
 
         except Exception as ex:
             failure += 1

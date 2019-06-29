@@ -57,7 +57,7 @@ class WeeklyRecommendationListView(WeekViewMixin, FilterView, ListView):
 
 
 def top_rank_scatter(request, week):
-    items = WeeklyRecommendation.objects.filter(week=week)
+    items = WeeklyRecommendation.objects.filter(week=week).order_by('prediction__volume_mean')
     if not items:
         return None
 
@@ -67,14 +67,16 @@ def top_rank_scatter(request, week):
 
     vol = items.aggregate(Max('prediction__volume_mean'), Min('prediction__volume_mean'))
     minm = float(vol.get('prediction__volume_mean__min'))
-    maxm = vol.get('prediction__volume_mean__max')
+    maxm = float(vol.get('prediction__volume_mean__max'))
+    factor = 1600 / maxm
 
     for item in items:
         code = item.code
         return_rank = float(item.prediction.return_rank)
         risk_rank = float(item.prediction.risk_rank)
         volume_mean = float(item.prediction.volume_mean)
-        size = volume_mean / minm * 5
+        size = volume_mean * factor
+        size = 1 if size < 1 else size
         plt.scatter(risk_rank, return_rank, s=size, alpha=0.4)
         plt.annotate(code,
                      xy=(risk_rank, return_rank),

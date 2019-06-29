@@ -1,14 +1,12 @@
-import sys
-
 import csv
+import os
+import sys
 from datetime import datetime
 
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
-from decimal import Decimal
 
 import config.settings.local as settings
 from asx import get_asx_df, get_last_friday
