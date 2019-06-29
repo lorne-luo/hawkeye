@@ -91,7 +91,7 @@ if __name__ == '__main__':
         code = codes[i]
         path = get_csv_path(code, date)
 
-        if os.path.exists(path) or code in dead_codes:
+        if os.path.exists(path):# or code in dead_codes:
             continue
 
         try:

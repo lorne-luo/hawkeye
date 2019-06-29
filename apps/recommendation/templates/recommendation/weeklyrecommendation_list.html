@@ -48,10 +48,10 @@
                 {#                <td>{{ recommendation.prediction.company.industry_name }}</td>#}
                 <td>{{ recommendation.prediction.current_price }}</td>
                 <td>{{ recommendation.prediction.sim_return }}</td>
-                <td>{{ recommendation.prediction.var_99_percent }}</td>
-                <td>{{ recommendation.prediction.volume_rank }}</td>
-                <td>{{ recommendation.prediction.return_rank }}</td>
-                <td>{{ recommendation.prediction.risk_rank }}</td>
+                <td>{{ recommendation.prediction.var_99_percent }}%</td>
+                <td>{{ recommendation.prediction.volume_rank }}%</td>
+                <td>{{ recommendation.prediction.return_rank }}%</td>
+                <td>{{ recommendation.prediction.risk_rank }}%</td>
                 <td>
                     <a target="_blank" href="{% url 'prediction:rank_trend_image' recommendation.code %}">
                         {{ recommendation.rank }}
