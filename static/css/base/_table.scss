@@ -38,3 +38,11 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
     background: $color-table-tr-odd-bg;
 }
+
+span.red {
+    color: #f00;
+}
+
+span.green {
+    color: #1a5;
+}
