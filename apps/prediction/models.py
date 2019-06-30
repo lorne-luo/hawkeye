@@ -112,6 +112,12 @@ class WeeklyPrediction(WeeklyModel):
             return self.var_99_percent - self.previous.var_99_percent
         return None
 
+    @cached_property
+    def volume_change(self):
+        if self.previous:
+            return (self.volume_mean - self.previous.volume_mean) / self.previous.volume_mean*100
+        return None
+
     def generate_future_pic(self, number=1, force=True):
         register_matplotlib_converters()
 

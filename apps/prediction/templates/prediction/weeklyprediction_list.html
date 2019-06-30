@@ -58,7 +58,10 @@
                     {% if prediction.risk_change > 0 %}+{% endif %}{{ prediction.risk_change|floatformat:3 }}
                     </span>
                 </td>
-                <td>{{ prediction.volume_rank|floatformat:3 }}%</td>
+                <td>{{ prediction.volume_rank|floatformat:3 }}%<br/>
+                    <span class="{% if prediction.volume_change > 0 %}red{% else %}green{% endif %}">
+                    {% if prediction.volume_change > 0 %}+{% endif %}{{ prediction.volume_change|floatformat:2 }}
+                    </span></td>
                 <td>{{ prediction.return_rank|floatformat:3 }}%</td>
                 <td>{{ prediction.risk_rank|floatformat:3 }}%</td>
                 <td>

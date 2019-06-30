@@ -58,7 +58,10 @@
                     {% if recommendation.prediction.risk_change > 0 %}+{% endif %}{{ recommendation.prediction.risk_change|floatformat:4 }}
                     </span>
                 </td>
-                <td>{{ recommendation.prediction.volume_rank|floatformat:3 }}%</td>
+                <td>{{ recommendation.prediction.volume_rank|floatformat:3 }}%<br/>
+                    <span class="{% if recommendation.prediction.volume_change > 0 %}red{% else %}green{% endif %}">
+                    {% if recommendation.prediction.volume_change > 0 %}+{% endif %}{{ recommendation.prediction.volume_change|floatformat:2 }}
+                    </span></td>
                 <td>{{ recommendation.prediction.return_rank|floatformat:3 }}%</td>
                 <td>{{ recommendation.prediction.risk_rank|floatformat:3 }}%</td>
                 <td>
