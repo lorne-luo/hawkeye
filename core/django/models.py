@@ -31,17 +31,24 @@ class WeeklyModel(models.Model):
         else:
             return self.week_date - relativedelta(weekday=FR(number))
 
-    def previous(self, number=1):
+    def get_previous(self, number=1):
         last_week = date_to_int(self.get_previous_week(number))
         return self.__class__.objects.filter(code=self.code, week=last_week).first()
 
-    def next(self, number=1):
+    @cached_property
+    def previous(self):
+        return self.get_previous(1)
+
+    def get_next(self, number=1):
         next_week = date_to_int(self.get_next_week(number))
         return self.__class__.objects.filter(code=self.code, week=next_week).first()
 
+    @cached_property
+    def next(self):
+        return self.get_next(1)
+
     def has_previous(self):
         return self.__class__.objects.filter(code=self.code, week__lt=self.week).exists()
-
 
     def has_next(self):
         return self.__class__.objects.filter(code=self.code, week__gt=self.week).exists()

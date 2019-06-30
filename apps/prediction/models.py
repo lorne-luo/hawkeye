@@ -68,20 +68,20 @@ class WeeklyPrediction(WeeklyModel):
 
     @property
     def next_week_return(self):
-        next_week = self.next(1)
+        next_week = self.get_next(1)
         if next_week:
             next_week_return = (next_week.current_price - self.current_price) / self.current_price
             return round(next_week_return * 100, 3)
 
     @property
     def next_month_return(self):
-        next_week = self.next(4)
+        next_week = self.get_next(4)
         if next_week:
             next_week_return = (next_week.current_price - self.current_price) / self.current_price
             return round(next_week_return * 100, 3)
 
     def calculate_last(self):
-        last_prediction = self.previous(1)
+        last_prediction = self.get_previous(1)
         if last_prediction:
             last_prediction.next_week_price = self.current_price
             last_prediction.save()
@@ -97,7 +97,7 @@ class WeeklyPrediction(WeeklyModel):
     def generate_future_pic(self, number=1, force=True):
         register_matplotlib_converters()
 
-        previous = self.previous(number)
+        previous = self.get_previous(number)
         if not previous:
             return None
         path = os.path.join(previous.pic_folder, f'{self.code}_future.png')

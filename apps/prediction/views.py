@@ -66,7 +66,7 @@ def line_image(request, week, code):
 
 def future_image(request, week, code):
     prediction = WeeklyPrediction.objects.get(week=week, code=code.upper())
-    next_pre = prediction.next(4) or prediction.next(3) or prediction.next(2) or prediction.next(1) or None
+    next_pre = prediction.get_next(4) or prediction.get_next(3) or prediction.get_next(2) or prediction.get_next(1) or None
     if not next_pre:
         raise Http404
 

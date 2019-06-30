@@ -35,8 +35,8 @@ class WeeklyRecommendationListView(WeekViewMixin, FilterView, ListView):
         next_week_return = 0
         next_month_return = 0
         for rec in recommendations:
-            next_week = rec.prediction.next(1)
-            next_month = rec.prediction.next(4)
+            next_week = rec.prediction.get_next(1)
+            next_month = rec.prediction.get_next(4)
             if next_week:
                 print(next_week.code, return_percent(next_week.current_price, rec.prediction.current_price))
                 next_week_counter += 1
