@@ -40,18 +40,30 @@
         </tr>
         {% for prediction in object_list %}
             <tr>
-                <td>{{ prediction.code }}</td>
-                {#                <td>{{ prediction.company.name }}</td>#}
-                {#                <td>{{ prediction.company.industry_name }}</td>#}
-                <td>{{ prediction.current_price }}</td>
-                <td>{{ prediction.sim_return }}</td>
-                <td>{{ prediction.var_99_percent }}%</td>
-                <td>{{ prediction.volume_rank }}%</td>
-                <td>{{ prediction.return_rank }}%</td>
-                <td>{{ prediction.risk_rank }}%</td>
                 <td>
-                    <a href="{{ prediction.sim_pic_url }}">Sim</a>
-                    <a href="{{ prediction.line_pic_url }}">Line</a>
+                    <a target="_blank" href="https://www.asx.com.au/asx/share-price-research/company/{{ prediction.code }}">{{ prediction.code }}</a>
+                </td>
+                <td>{{ prediction.current_price|floatformat:3 }} <br/>
+                    <span class="{% if prediction.price_change > 0 %}red{% else %}green{% endif %}">
+                    {% if prediction.price_change > 0 %}+{% endif %}{{ prediction.price_change|floatformat:3 }}
+                    </span>
+                </td>
+                <td>{{ prediction.sim_return|floatformat:3 }}% <br/>
+                    <span class="{% if prediction.return_change > 0 %}red{% else %}green{% endif %}">
+                    {% if prediction.return_change > 0 %}+{% endif %}{{ prediction.return_change|floatformat:3 }}
+                    </span>
+                </td>
+                <td>{{ prediction.var_99_percent }}% <br/>
+                    <span class="{% if prediction.risk_change > 0 %}red{% else %}green{% endif %}">
+                    {% if prediction.risk_change > 0 %}+{% endif %}{{ prediction.risk_change|floatformat:3 }}
+                    </span>
+                </td>
+                <td>{{ prediction.volume_rank|floatformat:3 }}%</td>
+                <td>{{ prediction.return_rank|floatformat:3 }}%</td>
+                <td>{{ prediction.risk_rank|floatformat:3 }}%</td>
+                <td>
+                    <a target="_blank" href="{{ prediction.sim_pic_url }}">Sim</a>
+                    <a target="_blank" href="{{ prediction.line_pic_url }}">Line</a>
                 </td>
             </tr>
         {% endfor %}

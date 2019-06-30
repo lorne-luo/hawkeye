@@ -29,11 +29,11 @@ class WeeklyPrediction(WeeklyModel):
     """
     code = models.CharField('code', max_length=80, blank=False, null=False)
     last_price_date = models.DateField('last price date', blank=True, null=True)
-    current_price = models.DecimalField('current price', max_digits=10, decimal_places=4, blank=True, null=True)
+    current_price = models.DecimalField('current price', max_digits=10, decimal_places=3, blank=True, null=True)
     sim_mean = models.DecimalField('sim mean', max_digits=10, decimal_places=4, blank=True, null=True)
     sim_diff = models.DecimalField('sim return', max_digits=10, decimal_places=4, blank=True, null=True)
     var_99 = models.DecimalField('var 99%', max_digits=10, decimal_places=4, blank=True, null=True)
-    var_99_percent = models.DecimalField('var 99% perent', max_digits=10, decimal_places=4, blank=True, null=True)
+    var_99_percent = models.DecimalField('var 99% perent', max_digits=10, decimal_places=3, blank=True, null=True)
     volume_mean = models.DecimalField('volume mean', max_digits=12, decimal_places=4, blank=True, null=True)
     return_mean = models.DecimalField('return mean', max_digits=12, decimal_places=9, blank=True, null=True)
     return_sigma = models.DecimalField('return sigma', max_digits=12, decimal_places=9, blank=True, null=True)
@@ -44,12 +44,12 @@ class WeeklyPrediction(WeeklyModel):
     confidence_70 = models.DecimalField('confidence 70%', max_digits=10, decimal_places=4, blank=True, null=True)
     confidence_60 = models.DecimalField('confidence 60%', max_digits=10, decimal_places=4, blank=True, null=True)
     # rank
-    sim_return = models.DecimalField('simulate return', max_digits=10, decimal_places=4, blank=True, null=True)
-    return_rank = models.DecimalField('return rank', max_digits=10, decimal_places=4, blank=True, null=True)
-    risk_rank = models.DecimalField('risk rank', max_digits=10, decimal_places=4, blank=True, null=True)
-    volume_rank = models.DecimalField('volume rank', max_digits=10, decimal_places=4, blank=True, null=True)
-    return_mean_rank = models.DecimalField('return mean rank', max_digits=10, decimal_places=4, blank=True, null=True)
-    return_sigma_rank = models.DecimalField('return sigma rank', max_digits=10, decimal_places=4, blank=True, null=True)
+    sim_return = models.DecimalField('simulate return', max_digits=10, decimal_places=3, blank=True, null=True)
+    return_rank = models.DecimalField('return rank', max_digits=10, decimal_places=3, blank=True, null=True)
+    risk_rank = models.DecimalField('risk rank', max_digits=10, decimal_places=3, blank=True, null=True)
+    volume_rank = models.DecimalField('volume rank', max_digits=10, decimal_places=3, blank=True, null=True)
+    return_mean_rank = models.DecimalField('return mean rank', max_digits=10, decimal_places=3, blank=True, null=True)
+    return_sigma_rank = models.DecimalField('return sigma rank', max_digits=10, decimal_places=3, blank=True, null=True)
 
     # future changes
     next_week_price = models.DecimalField('next week price', max_digits=10, decimal_places=4, blank=True, null=True)
@@ -93,6 +93,24 @@ class WeeklyPrediction(WeeklyModel):
     @property
     def pic_folder(self):
         return os.path.join(settings.MEDIA_ROOT, str(self.week), 'pic')
+
+    @cached_property
+    def price_change(self):
+        if self.previous:
+            return self.current_price - self.previous.current_price
+        return None
+
+    @cached_property
+    def return_change(self):
+        if self.previous:
+            return self.sim_return - self.previous.sim_return
+        return None
+
+    @cached_property
+    def risk_change(self):
+        if self.previous:
+            return self.var_99_percent - self.previous.var_99_percent
+        return None
 
     def generate_future_pic(self, number=1, force=True):
         register_matplotlib_converters()
