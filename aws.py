@@ -5,7 +5,6 @@ from random import random
 import boto3
 import config.settings.local as settings
 
-
 BATCH_LIMIT = 25
 
 dynamodb = boto3.resource('dynamodb',
@@ -46,3 +45,7 @@ def kinesis_put_records(stream_name, items):
     records = [{'Data': bytes(json.dumps(item), 'utf-8'), 'PartitionKey': get_partition_key(item)} for item in items]
     print(base64.b64encode(bytes(json.dumps(items[0]), 'utf-8')))
     kinesis.put_records(StreamName=stream_name, Records=records)
+
+
+def get_dynamodb_table(table_name):
+    return dynamodb.Table(table_name)
