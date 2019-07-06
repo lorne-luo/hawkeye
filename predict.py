@@ -14,7 +14,6 @@ from dateutil.relativedelta import relativedelta
 import config.settings.local as settings
 from asx import get_asx_df, get_last_friday, get_alpha_vantage_api_key
 from core.sms.telstra_api_v2 import send_to_admin
-from download import get_csv_path
 from mcmc import monte_carlo_simulations
 
 ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date', retries=3)
@@ -22,8 +21,18 @@ last_friday = get_last_friday()
 friday = last_friday.year * 10000 + last_friday.month * 100 + last_friday.day
 base_path = os.path.join(os.getcwd(), 'data', str(friday))
 pic_folder = os.path.join(base_path, 'pic')
+result_path = os.path.join(base_path, 'result.csv')
 
 parser = lambda date: pd.datetime.strptime(date, '%Y-%m-%d')
+
+
+def get_csv_path(code, date=None):
+    date = date or 'price'
+    folder = os.path.join(base_path, 'csv')
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+    path = os.path.join(folder, f'{code}.csv')
+    return path
 
 
 def get_csv(code, download=False):
@@ -39,6 +48,8 @@ def get_csv(code, download=False):
 
 
 def get_pic_path(code):
+    if not os.path.exists(pic_folder):
+        os.mkdir(pic_folder)
     return os.path.join(pic_folder, f'{code}.png')
 
 
@@ -56,7 +67,7 @@ def draw_line_pic(code, df):
     plt.close()
 
 
-def process_stock(code, name=None):
+def calculate_stock(code, name=None):
     name = name or code
     df = get_csv(code)
 
@@ -138,6 +149,26 @@ def rank_prediction(csv_path):
     df['return_sigma_rank'] = round(df['return_sigma'].rank(pct=True) * 100, 3)
     df.to_csv(csv_path)
 
+def process_stock(code):
+    result_exists = os.path.exists(result_path)
+    with open(result_path, 'a') as csvfile:
+        writer = csv.writer(csvfile)
+        if not result_exists:
+            writer.writerow(
+                ['code', 'last_date', 'start price', 'sim_mean', 'sim_diff', 'VaR 99%', 'VaR 99% Percent',
+                 'volume_mean',
+                 'return_mean', 'return_sigma', 'percent99', 'percent90', 'percent80', 'percent70', 'percent60'])
+
+        path = get_csv_path(code, friday)
+        try:
+            result = calculate_stock(code)
+            print(result)
+            writer = csv.writer(csvfile)
+            writer.writerow((code,) + result)
+        except Exception as ex:
+            print(f'{code} predict failed: {ex}.')
+
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -147,7 +178,7 @@ if __name__ == '__main__':
             friday = get_last_friday()
             friday = friday.year * 10000 + friday.month * 100 + friday.day
             friday = sys.argv[2] if len(sys.argv) > 2 else friday
-            result = process_stock(code)
+            result = calculate_stock(code)
             if result:
                 print((code,) + result)
             exit(0)
@@ -169,7 +200,6 @@ if __name__ == '__main__':
         os.makedirs(pic_folder)
 
     df = get_asx_df()
-    result_path = os.path.join(base_path, 'result.csv')
     result_exists = os.path.exists(result_path)
     if result_exists:
         result_df = pd.read_csv(result_path)
@@ -202,7 +232,7 @@ if __name__ == '__main__':
                 continue
 
             try:
-                result = process_stock(code, name)
+                result = calculate_stock(code, name)
                 done += 1
             except Exception as ex:
                 failure += 1

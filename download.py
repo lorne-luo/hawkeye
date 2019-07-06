@@ -8,21 +8,14 @@ from datetime import datetime
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 
+from predict import get_csv_path, process_stock
 from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes, get_alpha_vantage_api_key, \
     dead_codes
 from core.sms.telstra_api_v2 import send_to_admin
 
 ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date', retries=3)
 base_path = os.path.join(os.getcwd(), 'data')
-
-
-def get_csv_path(code, date=None):
-    date = date or 'price'
-    folder = os.path.join(base_path, str(date), 'csv')
-    if not os.path.isdir(folder):
-        os.makedirs(folder)
-    path = os.path.join(folder, f'{code}.csv')
-    return path
+print(base_path)
 
 
 def download_csv(code, path=None, force=False):
@@ -107,6 +100,7 @@ if __name__ == '__main__':
                 failure += 1
                 print(i, code, path, 'Empty')
             else:
+                process_stock(code)
                 done += 1
                 print(i, code, path, 'Done')
                 # scp(path, date)
@@ -120,7 +114,7 @@ if __name__ == '__main__':
         if failure > 300:
             break
 
-        time.sleep(sleep + random.randint(0, 5))
+        time.sleep(sleep + random.randint(0, 2))
 
     print(f'Download finished, done = {done}, failure = {failure}')
     send_to_admin(f'[Hawkeye] Download finished, done = {done}, failure = {failure}')
