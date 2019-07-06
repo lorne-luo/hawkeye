@@ -11,11 +11,19 @@ from wagtail.documents import urls as wagtaildocs_urls
 # from cms.search import views as search_views
 # from cms.articles.api import urls as article_api_urls
 
+# REST API
+api_urlpatterns = [
+    url(r'^asx/', include('apps.asx.api.urls')),
+]
+
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
 
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
+
+     # REST API
+    url(r'^api/', include(api_urlpatterns, namespace='api')),
 
     url(r'^', include(('apps.prediction.urls', 'prediction'), namespace='prediction')),
     url(r'^', include(('apps.recommendation.urls', 'recommendation'), namespace='recommendation')),
