@@ -38,7 +38,7 @@ def download_csv(code, path=None, force=False):
 def get_codes(all=False):
     if all:
         df = get_asx_df()
-        return df['ASX code'].values
+        return list(df['ASX code'].values)
     elif datetime.now().weekday() == 4:
         # return high value stocks
         return get_codes1()
