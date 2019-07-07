@@ -18,7 +18,7 @@ class WeeklyPredictionRedirectView(WeekViewMixin, RedirectView):
     model = WeeklyPrediction
 
     def get_redirect_url(self, *args, **kwargs):
-        week = self.get_weeks()[-1]
+        week = self.get_weeks()[0]
         return reverse('prediction:prediction_list', args=[week])
 
 
