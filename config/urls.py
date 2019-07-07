@@ -1,48 +1,40 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.conf import settings
-from django.conf.urls import include, url
+from django.conf.urls import url
 from django.contrib import admin
-
+from django.urls import path, include
 from wagtail.admin import urls as wagtailadmin_urls
-from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 # from cms.search import views as search_views
 # from cms.articles.api import urls as article_api_urls
 
 # REST API
-api_urlpatterns = [
-    url(r'^asx/', include('apps.asx.api.urls')),
+api_v1_urlpatterns = [
+    path(r'api/v1/asx/', include('apps.asx.api.urls', namespace='api')),
 ]
 
-urlpatterns = [
+urlpatterns = api_v1_urlpatterns + [
     url(r'^django-admin/', admin.site.urls),
 
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
 
-     # REST API
-    url(r'^api/', include(api_urlpatterns, namespace='api')),
-
-    url(r'^', include(('apps.prediction.urls', 'prediction'), namespace='prediction')),
-    url(r'^', include(('apps.recommendation.urls', 'recommendation'), namespace='recommendation')),
+    url(r'^', include('apps.prediction.urls', namespace='prediction')),
+    url(r'^', include('apps.recommendation.urls', namespace='recommendation')),
 
     # url(r'^search/$', search_views.search, name='search'),
-
-    # API
-    # url(r'^api/', include(article_api_urls)),
 
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
     # the list:
-    url(r'', include(wagtail_urls)),
+    # url(r'', include(wagtail_urls)),
 
     # Alternatively, if you want Wagtail pages to be served from a subpath
     # of your site, rather than the site root:
     #    url(r'^pages/', include(wagtail_urls)),
 ]
-
 
 if settings.DEBUG:
     from django.conf.urls.static import static

@@ -1,10 +1,10 @@
-from rest_framework import serializers
-from core.api.serializers import BaseSerializer
+from rest_framework.serializers import ModelSerializer
+
 from ..models import Company
 
 
 # Serializer for address
-class CompanySerializer(BaseSerializer):
+class CompanySerializer(ModelSerializer):
     class Meta:
         model = Company
         fields = ['pk', 'code', 'name'] + \

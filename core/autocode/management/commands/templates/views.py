@@ -1,6 +1,6 @@
 VIEWS_HEADER = '''# coding=utf-8
 from django.views.generic import ListView, CreateView, UpdateView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from braces.views import MultiplePermissionsRequiredMixin, PermissionRequiredMixin
 from .models import <% ALL_MODELS %>
 from . import forms
