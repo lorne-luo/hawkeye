@@ -11,8 +11,9 @@ from django.db.models import Q
 from django.db.models.manager import Manager
 from django.utils.functional import cached_property
 
+from apps.utils.csv_data import get_csv_folder
 from apps.utils.helper import date_to_int
-from asx import get_asx_df, get_asx_200_list
+from asx import get_asx_df, get_asx_200_list, get_last_friday
 
 
 class Industry(models.Model):
@@ -92,6 +93,19 @@ class Company(models.Model):
     @property
     def simulation_pic_url(self):
         return '%s%s/pic/%s.png' % (settings.MEDIA_URL, self.week_number, self.code)
+
+    @property
+    def last_csv_path(self):
+        return os.path.join(get_csv_folder(self.week_number), f'{self.code}.csv')
+
+    @property
+    def this_week_csv(self):
+        last_fridy = get_last_friday()
+        last_fridy_number = date_to_int(last_fridy)
+        path = os.path.join(get_csv_folder(last_fridy_number), f'{self.code}.csv')
+        if os.path.exists(path):
+            return path
+        return False
 
     @property
     def line_pic_url(self):

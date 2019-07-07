@@ -11,4 +11,4 @@ def get_result_path(week):
 
 
 def get_csv_folder(week):
-    return os.path.join(get_week_folder(week), str(week), 'csv')
+    return os.path.join(get_week_folder(week), 'csv')
