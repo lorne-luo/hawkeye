@@ -1,13 +1,11 @@
-from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
-from . import views
+
+from apps.asx.api.views import CompanyViewSet
 
 router = DefaultRouter()
-router.include_root_view = False
+router.register(r'company', CompanyViewSet, basename='company')
 
-# reverse('api:company-list'), reverse('api:company-detail', kwargs={'pk': 1})
-router.register(r'company', views.CompanyViewSet, base_name='company')
-
+app_name = 'asx'
 urlpatterns = [
 
 ]

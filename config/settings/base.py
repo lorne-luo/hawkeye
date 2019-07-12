@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     'rest_framework',
+    'django_filters',
 
     # LOCAL_APPS
     'cms.home',
@@ -198,6 +199,14 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = root('data')
 MEDIA_URL = '/media/'
+
+
+# REST API
+# ------------------------------------------------------------------------------
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20
+}
 
 # WAGTAIL SETTINGS
 # ------------------------------------------------------------------------------

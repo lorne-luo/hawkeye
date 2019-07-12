@@ -16,7 +16,7 @@ class WeeklyRecommendationRedirectView(WeekViewMixin, RedirectView):
     model = WeeklyRecommendation
 
     def get_redirect_url(self, *args, **kwargs):
-        week = self.get_weeks()[-1]
+        week = self.get_weeks()[0]
         return reverse('recommendation:recommendation_list', args=[week])
 
 

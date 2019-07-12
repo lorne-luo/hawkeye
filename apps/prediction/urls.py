@@ -5,6 +5,7 @@ from . import views
 
 # router = routers.DefaultRouter()
 
+app_name = 'perdiction'
 urlpatterns = (
     # urls for Plan
     url(r'^prediction/$', views.WeeklyPredictionRedirectView.as_view(), name='prediction_index'),

@@ -6,6 +6,7 @@ from . import views
 
 # router = routers.DefaultRouter()
 
+app_name = 'recommendation'
 urlpatterns = (
     # urls for Plan
     url(r'^$', views.WeeklyRecommendationRedirectView.as_view(), name='recommendation_index'),
