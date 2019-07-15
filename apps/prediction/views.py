@@ -3,6 +3,7 @@ from io import BytesIO
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 from dateutil.relativedelta import relativedelta
 from django.http import HttpResponse, Http404
 from django.urls import reverse
@@ -12,6 +13,7 @@ from pandas.plotting import register_matplotlib_converters
 
 from apps.prediction.models import WeeklyPrediction
 from core.django.views import WeekViewMixin
+from core.matplotlib import add_arrow
 
 
 class WeeklyPredictionRedirectView(WeekViewMixin, RedirectView):
@@ -66,7 +68,8 @@ def line_image(request, week, code):
 
 def future_image(request, week, code):
     prediction = WeeklyPrediction.objects.get(week=week, code=code.upper())
-    next_pre = prediction.get_next(4) or prediction.get_next(3) or prediction.get_next(2) or prediction.get_next(1) or None
+    next_pre = prediction.get_next(4) or prediction.get_next(3) or prediction.get_next(2) or prediction.get_next(
+        1) or None
     if not next_pre:
         raise Http404
 
@@ -112,6 +115,51 @@ def rank_trend_image(request, code):
     plt.title(f"{code} price movement.", weight='bold')
     ax = plt.gca()
     ax.xaxis.set_label_text('')
+    io = BytesIO()
+    plt.savefig(io, format='png')
+    plt.clf()
+    plt.cla()
+    plt.close()
+    io.seek(0)
+
+    return HttpResponse(io.read(), content_type="image/png")
+
+
+def rank_trend_image2(request, code):
+    register_matplotlib_converters()
+
+    weeks_age = datetime.now() - relativedelta(weeks=8)  # past 1 year
+    week_number = int(weeks_age.strftime('%Y%m%d'))
+    predictions = WeeklyPrediction.objects.filter(code=code.upper(), week__gte=week_number).order_by('week')
+
+    factor = 400 / max(predictions.values_list('volume_mean', flat=True))
+    previous_pred = None
+
+    # max_risk = float(max(predictions.values_list('var_99_percent', flat=True)))
+    # max_return = float(max(predictions.values_list('sim_return', flat=True)))
+    # plt.ylim(bottom=0, top=max_return)
+    # plt.xlim(left=0, right=max_risk)
+
+    for pred in predictions:
+        # size = float(pred.volume_mean * factor)
+        # plt.scatter(pred.var_99_percent, pred.sim_return, s=size, alpha=0.4)
+        plt.annotate(str(pred.week)[4:],
+                     xy=(pred.var_99_percent, pred.sim_return),
+                     xytext=(0, -20),
+                     textcoords='offset points',
+                     ha='right',
+                     va='bottom')
+
+        plt.title(f"# Return vs Risk vs Volume trend for {code}")
+        plt.xlabel("RISK")
+        plt.ylabel("RETURN")
+
+        if previous_pred:
+            x1, y1 = [previous_pred.var_99_percent, pred.var_99_percent], [previous_pred.sim_return, pred.sim_return]
+            line = plt.plot(x1, y1, marker='o')[0]
+            add_arrow(line)
+        previous_pred = pred
+
     io = BytesIO()
     plt.savefig(io, format='png')
     plt.clf()

@@ -4,7 +4,8 @@
 
 {% block content %}
 
-    <div class="action-panel">
+    <div class="recommend_content">
+    <div class="action-panel recommend_form">
         <div class="action-panel__buttons">
 
         </div>
@@ -22,7 +23,7 @@
 
     </div>
 
-    <table>
+    <table class="recommend_form">
         <tr>
             <th class="sm-col">Code</th>
             {#            <th class="sm-col">Name</th>#}
@@ -72,6 +73,7 @@
                 <td>
                     <a target="_blank" href="{{ recommendation.prediction.sim_pic_url }}">Sim</a>
                     <a target="_blank" href="{{ recommendation.prediction.line_pic_url }}">Line</a>
+                    <a target="_blank" href="{% url 'prediction:rank_trend_image' recommendation.code %}">Trend</a>
                     {% if recommendation.prediction.future_pic_url %}
                         <a target="_blank" href="{{ recommendation.prediction.future_pic_url }}">Future</a>
                     {% endif %}
@@ -81,10 +83,10 @@
         {% if avg_week_return %}
             <tfoot>
             {% if avg_month_return %}
-                <td colspan="4"></td>
+                <td colspan="3"></td>
                 <th colspan="3">Future Avg. Month Return: {{ avg_month_return }}</th>
             {% else %}
-                <td colspan="7"></td>
+                <td colspan="6"></td>
             {% endif %}
 
             <th colspan="3">Future Avg. Week Return: {{ avg_week_return }}</th>
@@ -95,4 +97,5 @@
     <img src="/{{ week }}/top_rank_scatter.png"/>
 
     {% include 'includes/paginator.html' with week=week %}
+    </div>
 {% endblock %}
