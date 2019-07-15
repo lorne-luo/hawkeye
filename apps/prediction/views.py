@@ -135,10 +135,10 @@ def rank_trend_image2(request, code):
     factor = 400 / max(predictions.values_list('volume_mean', flat=True))
     previous_pred = None
 
-    # max_risk = float(max(predictions.values_list('var_99_percent', flat=True)))
-    # max_return = float(max(predictions.values_list('sim_return', flat=True)))
-    # plt.ylim(bottom=0, top=max_return)
-    # plt.xlim(left=0, right=max_risk)
+    max_risk = float(max(predictions.values_list('var_99_percent', flat=True)))
+    max_return = float(max(predictions.values_list('sim_return', flat=True)))
+    plt.ylim(bottom=0, top=max_return + 0.1)
+    plt.xlim(left=0, right=max_risk + 0.1)
 
     for pred in predictions:
         # size = float(pred.volume_mean * factor)
