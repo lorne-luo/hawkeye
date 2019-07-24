@@ -20,6 +20,7 @@ urlpatterns = api_v1_urlpatterns + [
 
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
+    url(r'', include('autocode.urls', namespace='autocode')),
 
     url(r'^', include('apps.prediction.urls', namespace='prediction')),
     url(r'^', include('apps.recommendation.urls', namespace='recommendation')),

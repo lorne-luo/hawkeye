@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'apps.asx',
     'apps.prediction',
     'apps.recommendation',
+    'autocode',
 ]
 
 # MIDDLEWARE CONFIGURATION
