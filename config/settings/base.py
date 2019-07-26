@@ -170,7 +170,7 @@ LANGUAGE_CODE = 'en-us'
 
 LANGUAGES = [
     ('en', _('English')),
-    ('de', _('DE')),
+    ('cn', _('Chinese')),
 ]
 LOCALE_PATHS = [root('locale')]
 
