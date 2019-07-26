@@ -31,3 +31,4 @@ redis==2.10.6
 uWSGI==2.0.12
 ipython==7.5.0
 git+https://github.com/lorne-luo/django-autocode.git
+django-rosetta==0.9.3

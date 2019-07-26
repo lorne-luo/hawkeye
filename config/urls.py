@@ -24,6 +24,7 @@ urlpatterns = api_v1_urlpatterns + [
 
     url(r'^', include('apps.prediction.urls', namespace='prediction')),
     url(r'^', include('apps.recommendation.urls', namespace='recommendation')),
+    url(r'^rosetta/', include('rosetta.urls')),
 
     # url(r'^search/$', search_views.search, name='search'),
 

@@ -13,6 +13,7 @@ from __future__ import absolute_import, unicode_literals
 import environ
 import os
 from wagtail.embeds.oembed_providers import youtube, vimeo
+from django.utils.translation import ugettext_lazy as _
 
 root = environ.Path(__file__) - 3  # (wagtail-standard/config/settings/base.py - 3 = wagtail-standard/)
 
@@ -30,6 +31,7 @@ BASE_DIR = root()
 
 # AUTH & USER
 AUTH_USER_MODEL = 'users.user'
+LOGIN_URL='/django-admin/login/'
 
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -68,6 +70,7 @@ INSTALLED_APPS = [
     'taggit',
     'rest_framework',
     'django_filters',
+    'rosetta',
 
     # LOCAL_APPS
     'cms.home',
@@ -164,6 +167,13 @@ ADMINS = env.list('ADMINS', default=['dev@luotao.net'])
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('de', _('DE')),
+]
+LOCALE_PATHS = [root('locale')]
+
 
 TIME_ZONE = 'UTC'
 
