@@ -41,3 +41,11 @@ AU_CITY_CHOICES = (
     (AU_DARWIN, AU_DARWIN),
     (AU_CANBERRA, AU_CANBERRA),
 )
+
+COUNTRY_CHOICES = (
+    ('Australia', 'Australia'),
+    ('United States', 'United States'),
+    ('Japan', 'Japan'),
+    ('Hong Kong', 'Hong Kong'),
+
+)
