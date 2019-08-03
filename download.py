@@ -8,10 +8,9 @@ from datetime import datetime
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 
-from predict import get_csv_path, process_stock
-from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes, get_alpha_vantage_api_key, \
-    dead_codes
+from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_codes, get_alpha_vantage_api_key
 from core.sms.telstra_api_v2 import send_to_admin
+from predict import get_csv_path, process_stock
 
 ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date', retries=3)
 base_path = os.path.join(os.getcwd(), 'data')
@@ -65,7 +64,7 @@ if __name__ == '__main__':
 
     if len(sys.argv) > 1:
         arg = sys.argv[1]
-        if (len(arg) == 3 and arg != 'all'):
+        if (len(arg) == 3 and arg not in ['all', 'reverse', 'scp']):
             code = arg.upper()
             download_csv(code, force=True)
             path = get_csv_path(code)
@@ -105,9 +104,10 @@ if __name__ == '__main__':
                 # process_stock(code)
                 done += 1
                 print(i, code, path, 'Done')
+
+                # scp to server 
                 if 'scp' in sys.argv:
                     scp(path, date)
-
         except Exception as ex:
             failure += 1
             print(i, f'{code} raise error: {ex}')
