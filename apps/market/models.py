@@ -11,8 +11,8 @@ class Market(models.Model):
     total_value = models.DecimalField('total value', max_digits=12, decimal_places=4, blank=True,
                                       null=True)  # billion usd
     currency = models.CharField('currency', max_length=80, blank=True, null=False)
-    open_time = models.SmallIntegerField('open time', blank=True, null=True)
-    close_time = models.SmallIntegerField('close time', blank=True, null=True)
+    open_time = models.SmallIntegerField('open time', blank=True, null=True)  # utc time
+    close_time = models.SmallIntegerField('close time', blank=True, null=True)  # utc
 
     @cached_property
     def company_count(self):
