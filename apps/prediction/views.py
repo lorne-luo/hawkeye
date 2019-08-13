@@ -150,7 +150,7 @@ def rank_trend_image2(request, code):
                      ha='right',
                      va='bottom')
 
-        plt.title(f"# Return vs Risk vs Volume trend for {code}")
+        plt.title(f"# Return vs Risk trend for {code}")
         plt.xlabel("RISK")
         plt.ylabel("RETURN")
 
