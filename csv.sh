@@ -1,5 +1,5 @@
 if [ "$1" != "" ]; then
-    echo "cd /opt/hawkeye/data/$1/ && zip csv.zip -qr csv/"
+    mkdir -p data/$1
     ssh -t luotao@luotao "cd /opt/hawkeye/data/$1/ && zip csv.zip -qr csv/"
     scp luotao@luotao:/opt/hawkeye/data/$1/csv.zip ./data/$1/
     ssh -t luotao@luotao "rm -rf /opt/hawkeye/data/$1/csv.zip"
