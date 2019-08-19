@@ -68,7 +68,8 @@ class Company(models.Model):
             name, code, industry_name = df.iloc[i]['Company name'], df.iloc[i]['ASX code'], df.iloc[i][
                 'GICS industry group']
             industry, create = Industry.objects.get_or_create(name=industry_name)
-            Company.objects.update_or_create(code=code, name=name, defaults={'industry': industry, 'is_active': True})
+            Company.objects.update_or_create(code=code,
+                                             defaults={'name': name, 'industry': industry, 'is_active': True})
             counter += 1
 
         inactived = Company.objects.exclude(code__in=list(df['ASX code'])).update(is_active=False)
