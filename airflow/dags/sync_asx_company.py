@@ -14,14 +14,13 @@ default_args = {
     'email_on_retry': False,
     # 'retries': 1,
     'retry_delay': timedelta(minutes=5),
-    'schedule_interval': '@weekly',
     # 'queue': 'bash_queue',
     # 'pool': 'backfill',
     # 'priority_weight': 10,
     # 'end_date': datetime(2016, 1, 1),
 }
 
-dag = DAG('sync_asx_company', default_args=default_args, schedule_interval=timedelta(days=1))
+dag = DAG('sync_asx_company', default_args=default_args, schedule_interval=timedelta(weeks=1))
 
 # {{ ds_nodash }} the execution date as YYYYMMDD
 sync_asx_company = BashOperator(
