@@ -1,0 +1,31 @@
+from datetime import datetime, timedelta
+
+from airflow.operators.bash_operator import BashOperator
+
+from airflow import DAG
+from .config import ENV_DIR, BASE_DIR
+
+
+default_args = {
+    'owner': 'luotao',
+    'depends_on_past': False,
+    'start_date': datetime(2019, 8, 16),
+    'email': ['dev@luotao.net'],
+    'email_on_failure': False,
+    'email_on_retry': False,
+    # 'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+    'schedule_interval': '@weekly',
+    # 'queue': 'bash_queue',
+    # 'pool': 'backfill',
+    # 'priority_weight': 10,
+    # 'end_date': datetime(2016, 1, 1),
+}
+
+dag = DAG('sync_asx_company', default_args=default_args, schedule_interval=timedelta(days=1))
+
+# {{ ds_nodash }} the execution date as YYYYMMDD
+sync_asx_company = BashOperator(
+    task_id='sync_asx_company',
+    bash_command=f'cd {BASE_DIR} && {ENV_DIR}python manage.py sync_company',
+    dag=dag)
