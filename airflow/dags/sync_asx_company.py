@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
-
 from airflow.operators.bash_operator import BashOperator
-
 from airflow import DAG
-from .config import ENV_DIR, BASE_DIR
 
+ENV_DIR = '/home/luotao/venv/hawkeye/bin/'
+BASE_DIR = '/opt/hawkeye'
 
 default_args = {
     'owner': 'luotao',
