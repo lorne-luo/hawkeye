@@ -24,5 +24,5 @@ dag = DAG('asx_sync_company', default_args=default_args, schedule_interval=timed
 
 sync_asx_company = BashOperator(
     task_id='asx_sync_company',
-    bash_command=f'cd {{ var.value.HAWKEYE_DIR }} && {{ var.value.HAWKEYE_PYTHON }} manage.py sync_company',
+    bash_command='cd {{ var.value.HAWKEYE_DIR }} && {{ var.value.HAWKEYE_PYTHON }} manage.py sync_company',
     dag=dag)
