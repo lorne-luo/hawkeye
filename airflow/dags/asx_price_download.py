@@ -27,7 +27,7 @@ dag_friday = DAG('asx_price_download_friday', default_args=args_friday, schedule
 # {{ ds_nodash }} the execution date as YYYYMMDD
 asx_price_download_friday = BashOperator(
     task_id='asx_price_download_friday',
-    bash_command='cd {{ var.value.HAWKEYE_DIR }}',  # && {{ var.value.HAWKEYE_PYTHON }} download.py all
+    bash_command=download_cmd,
     dag=dag_friday)
 
 args_saturday = copy.deepcopy(args_friday)
@@ -36,7 +36,7 @@ dag_saturday = DAG('asx_price_download_saturday', default_args=args_saturday, sc
 
 asx_price_download_saturday = BashOperator(
     task_id='asx_price_download_saturday',
-    bash_command='cd {{ var.value.HAWKEYE_DIR }}',  # && {{ var.value.HAWKEYE_PYTHON }} download.py all
+    bash_command=download_cmd,
     dag=dag_saturday)
 
 args_sunday = copy.deepcopy(args_friday)
@@ -45,5 +45,5 @@ dag_sunday = DAG('asx_price_download_sunday', default_args=args_sunday, schedule
 
 asx_price_download_sunday = BashOperator(
     task_id='asx_price_download_sunday',
-    bash_command='cd {{ var.value.HAWKEYE_DIR }}',  # && {{ var.value.HAWKEYE_PYTHON }} download.py all
+    bash_command=download_cmd,
     dag=dag_sunday)
