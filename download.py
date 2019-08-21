@@ -47,12 +47,14 @@ def get_codes(all=False):
         df = get_asx_df()
         return list(df['ASX code'].values)
 
+
 def scp(path, week):
     try:
         cmd = f'scp {path} luotao@luotao:/opt/hawkeye/data/{week}/csv/'
         subprocess.run(cmd, shell=True, check=True)
     except Exception as ex:
         print(f'scp error: {ex}')
+
 
 if __name__ == '__main__':
     date = get_last_friday()
@@ -91,7 +93,7 @@ if __name__ == '__main__':
         code = codes[i]
         path = get_csv_path(code, date)
 
-        if os.path.exists(path):# or code in dead_codes:
+        if os.path.exists(path):  # or code in dead_codes:
             continue
 
         try:
@@ -100,10 +102,11 @@ if __name__ == '__main__':
                 failure += 1
                 print(i, code, path, 'Empty')
             else:
-                process_stock(code)
+                # process_stock(code)
                 done += 1
                 print(i, code, path, 'Done')
-                # scp(path, date)
+                if 'scp' in sys.argv:
+                    scp(path, date)
 
         except Exception as ex:
             failure += 1
