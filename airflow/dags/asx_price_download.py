@@ -1,6 +1,8 @@
 import copy
 from datetime import datetime, timedelta
+
 from airflow.operators.bash_operator import BashOperator
+
 from airflow import DAG
 
 PYTHON = '/home/luotao/venv/hawkeye/bin/python'
@@ -9,7 +11,7 @@ BASE_DIR = '/opt/hawkeye'
 args_friday = {
     'owner': 'luotao',
     'depends_on_past': False,
-    'start_date': datetime(2019, 5, 17, 19, 0),
+    'start_date': datetime(2019, 8, 30, 19, 0),
     'email': ['dev@luotao.net'],
     'email_on_failure': False,
     'email_on_retry': False,
@@ -31,7 +33,7 @@ asx_price_download_friday = BashOperator(
     dag=dag_friday)
 
 args_saturday = copy.deepcopy(args_friday)
-args_saturday['start_date'] = datetime(2019, 5, 18, 10, 0)
+args_saturday['start_date'] = datetime(2019, 8, 31, 10, 0)
 dag_saturday = DAG('asx_price_download_saturday', default_args=args_saturday, schedule_interval=timedelta(weeks=1))
 
 asx_price_download_saturday = BashOperator(
@@ -40,7 +42,7 @@ asx_price_download_saturday = BashOperator(
     dag=dag_saturday)
 
 args_sunday = copy.deepcopy(args_friday)
-args_sunday['start_date'] = datetime(2019, 5, 19, 10, 0)
+args_sunday['start_date'] = datetime(2019, 9, 1, 10, 0)
 dag_sunday = DAG('asx_price_download_sunday', default_args=args_sunday, schedule_interval=timedelta(weeks=1))
 
 asx_price_download_sunday = BashOperator(

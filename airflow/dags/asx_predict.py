@@ -8,7 +8,7 @@ BASE_DIR = '/opt/hawkeye'
 default_args = {
     'owner': 'luotao',
     'depends_on_past': False,
-    'start_date': datetime(2019, 5, 19, 15, 0),
+    'start_date': datetime(2019, 8, 25, 15, 0),
     'email': ['dev@luotao.net'],
     'email_on_failure': False,
     'email_on_retry': False,
