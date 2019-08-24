@@ -24,5 +24,5 @@ dag = DAG('asx_predict', default_args=default_args, schedule_interval=timedelta(
 
 asx_predict = BashOperator(
     task_id='asx_predict',
-    bash_command='cd {{ var.value.HAWKEYE_DIR }} && {{ var.value.HAWKEYE_PYTHON }} download.py all',
+    bash_command='cd {{ var.value.HAWKEYE_DIR }} && {{ var.value.HAWKEYE_PYTHON }} predict.py all',
     dag=dag)
