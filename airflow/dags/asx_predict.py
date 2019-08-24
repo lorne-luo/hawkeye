@@ -32,5 +32,5 @@ dag = DAG('asx_predict', default_args=default_args, schedule_interval='35 15 * *
 
 asx_predict = BashOperator(
     task_id='asx_predict',
-    bash_command='cd {{ var.value.HAWKEYE_DIR }} && {{ var.value.HAWKEYE_PYTHON }} predict.py all',
+    bash_command=f'cd {BASE_DIR} && {PYTHON} predict.py all',
     dag=dag)

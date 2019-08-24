@@ -29,7 +29,7 @@ args_friday = {
     # 'end_date': datetime(2016, 1, 1),
 }
 
-download_cmd = 'cd {{ var.value.HAWKEYE_DIR }} && {{ var.value.HAWKEYE_PYTHON }} download.py all'
+download_cmd = f'cd {BASE_DIR} && {PYTHON} download.py all'
 
 dag_friday = DAG('asx_price_download_friday', default_args=args_friday, schedule_interval='35 18 * * 5')
 # {{ ds_nodash }} the execution date as YYYYMMDD
