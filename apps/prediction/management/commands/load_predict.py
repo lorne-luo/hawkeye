@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options.get('week'):
-            week = options['week'][0]
+            week = options['week']
         else:
             week = self.get_last_friday()
 
