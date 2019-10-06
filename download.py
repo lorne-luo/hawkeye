@@ -59,7 +59,7 @@ def scp(path, week):
 if __name__ == '__main__':
     date = get_last_friday()
     date = date.year * 10000 + date.month * 100 + date.day
-    sleep = 15
+    sleep = 25
     done = 0
     failure = 0
 
