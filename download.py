@@ -13,7 +13,7 @@ from asx import get_asx_df, get_codes1, get_codes2, get_last_friday, get_all_cod
     dead_codes
 from core.sms.telstra_api_v2 import send_to_admin
 
-ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date', retries=3)
+ts = TimeSeries(key=get_alpha_vantage_api_key(), output_format='pandas', indexing_type='date')
 base_path = os.path.join(os.getcwd(), 'data')
 print(base_path)
 
